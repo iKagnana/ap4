@@ -7,12 +7,12 @@
         <form class="align-center" action="index.php?controller=login&action=askLogin" method="post">
             <div class="textfield">
                 <span>Email</span>
-                <input class="textfield-input" type="text" name="email" id="">
+                <input class="textfield-input" type="email" name="email" id="">
             </div>
             <br>
             <div class="textfield">
                 <span>Mot de passe</span>
-                <input class="textfield-input" type="text" name="password" id="">
+                <input class="textfield-input" type="password" name="password" id="">
             </div>
             <br>
             <input type="submit" value="Valider">

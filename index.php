@@ -21,9 +21,12 @@ include("views/header_view.php");
 switch ($controller) {
     case "login":
         include("controllers/login_controller.php");
+        break;
+    case "product":
+        include("controllers/product_controller.php");
+        break;
     default:
         break;
 }
 #html footer
-include("views/footer.php");
-?>
+include("views/footer_view.php");

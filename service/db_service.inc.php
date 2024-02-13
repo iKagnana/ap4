@@ -4,6 +4,7 @@
  * selfService is the unique instance for the class. Use method getSelfService to get the value
  */
 
+include("models/product_model.php");
 class DbService
 {
     private static $host = "mysql:host=db";
@@ -26,6 +27,7 @@ class DbService
 
     /**
      * Get selfService, only instance for this class
+     * @return DbService
      */
     public static function getSelfService()
     {
@@ -36,8 +38,8 @@ class DbService
     }
 
     /** function that will be used for user login
-     * @param $email
-     * @param $password
+     * @param string
+     * @param string
      * @return bool true if connected
      */
     public function login($email, $password)
@@ -60,5 +62,46 @@ class DbService
             return false;
         }
     }
+
+    ############ PRODUCTS
+
+    /** Function to retreive all the products 
+     */
+    public function getProducts()
+    {
+        try {
+            $req = "SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories WHERE products.id_cat = categories.id_cat";
+            $stmt = DbService::$service->prepare($req);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            $allProducts = [];
+            for ($i = 0; $i < count($result); $i++) {
+                $product = new Product(
+                    $result[$i]["name_p"],
+                    $result[$i]["price"],
+                    $result[$i]["stock"],
+                    $result[$i]["access_level"],
+                    $result[$i]["name_cat"],
+                    $result[$i]["id_p"],
+                );
+                array_push($allProducts, $product);
+            }
+            return $allProducts;
+        } catch (PDOException $exception) {
+            echo "Couldn't get products beacause of error : " . $exception->getMessage();
+            return [];
+        }
+    }
+
+    /** Function to create product ressource
+     * @param Product
+     */
+    public function createProduct($data)
+    {
+        try {
+        } catch (PDOException $exception) {
+            echo "Couldn't add product because of error :" . $exception->getMessage();
+        }
+    }
 }
-?>
