@@ -11,12 +11,19 @@ if (!isset($_REQUEST["action"]) && isset($_SESSION["userId"])) {
 }
 
 $controller = $_REQUEST["controller"];
+
+# hhtml header
+include("views/header_view.php");
+
 # handle controller. 
 # Controller is like a router and make connexion between db and view
+
 switch ($controller) {
     case "login":
         include("controllers/login_controller.php");
     default:
         break;
 }
+#html footer
+include("views/footer.php");
 ?>
