@@ -23,10 +23,19 @@ body {
     flex-direction: column;
 }
 
+.dashboard-item {
+    border: 1px solid #000000;
+    border-radius: 5%;
+    width: 15rem;
+    height: 15rem;
+}
+
 /* page layout */
 .page-container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
+    justify-content: center;
 }
 
 .left-side {

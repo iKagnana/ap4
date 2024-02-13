@@ -15,7 +15,7 @@
                 alt="image entrepôt">
         </div>
         <div class="right-side">
-            <form class="align-center" action="index.php?page=login" method="post">
+            <form class="align-center" action="index.php?controller=login&action=askLogin" method="post">
                 <div class="textfield">
                     <span>Email</span>
                     <input class="textfield-input" type="text" name="email" id="">
