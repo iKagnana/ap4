@@ -1,5 +1,5 @@
 <?php
-include("app/core/db.class.php");
+require_once("../app/core/Database.php");
 
 /**
  * Class user

@@ -8,7 +8,8 @@ services:
     ports:
       - "8089:80"
     volumes:
-      - ./:/var/www/html
+      - ./public:/var/www/html
+      - ./app:/var/www/app
     depends_on:
       - db
     networks:

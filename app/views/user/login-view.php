@@ -4,7 +4,7 @@
             alt="image entrepôt">
     </div>
     <div class="right-side">
-        <form class="align-center" action="index.php?controller=login&action=askLogin" method="post">
+        <form class="align-center" action="login/askLogin" method="post">
             <div class="textfield">
                 <label for="email">Email</label>
                 <input class="textfield-input" type="email" name="email" id="email">
