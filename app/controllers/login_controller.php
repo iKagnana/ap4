@@ -1,8 +1,10 @@
 <?php
+include("app/models/user.class.php");
+$user = new User();
 
 switch ($_REQUEST["action"]) {
     case "goToLogin":
-        include("views/login_view.php");
+        include("app/views/user/login_view.php");
         break;
     case "askLogin":
         $email = $_POST["email"] ?? "";
@@ -10,9 +12,9 @@ switch ($_REQUEST["action"]) {
 
         # if field are not empty 
         if ($email != "" && $password != "") {
-            $res = $dbService->login($email, $password);
+            $res = $user->login($email, $password);
             if ($res) {
-                include("views/dashboard_view.php");
+                include("app/views/user/dashboard_view.php");
             } else {
                 echo "Connexion échouée";
             }
