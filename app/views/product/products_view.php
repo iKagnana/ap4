@@ -14,18 +14,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <?php
-                    foreach ($allProducts as $product) {
-                        echo "<th> $product->id </th>";
-                        echo "<td> $product->name </td>";
-                        echo "<td> $product->price </td>";
-                        echo "<td> $product->stock </td>";
-                        echo "<td> $product->access_level </td>";
-                        echo "<td> $product->category </td>";
-                    }
-                    ?>
-                </tr>
+                <?php
+                foreach ($allProducts as $product) {
+                    echo "<tr>";
+                    echo "<th> $product->id </th>";
+                    echo "<td> $product->name </td>";
+                    echo "<td> $product->price </td>";
+                    echo "<td> $product->stock </td>";
+                    echo "<td> $product->access_level </td>";
+                    echo "<td> $product->category </td>";
+                    echo "</td>";
+                }
+                ?>
             </tbody>
         </table>
     </div>
