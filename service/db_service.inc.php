@@ -4,6 +4,7 @@
  * selfService is the unique instance for the class. Use method getSelfService to get the value
  */
 
+include("models/user_model.php");
 include("models/product_model.php");
 class DbService
 {
@@ -46,12 +47,22 @@ class DbService
     {
 
         try {
-            $req = "SELECT id_u FROM users WHERE email_u=:email and password=:password";
+            $req = "SELECT * FROM users WHERE email_u=:email and password=:password";
             $stmt = DbService::$service->prepare($req);
             $stmt->execute(["email" => $email, "password" => $password]);
 
             $result = $stmt->fetch();
             if (count($result) > 0) {
+                $user = new User(
+                    $result[1],
+                    $result[2],
+                    $result[3],
+                    $result[4],
+                    $result[5],
+                    $result[0],
+                );
+
+                $_SESSION["user"] = $user;
                 return true;
             } else {
                 return false;
@@ -100,8 +111,27 @@ class DbService
     public function createProduct($data)
     {
         try {
+            $req = "INSERT INTO products (name_p, price, stock, access_level, id_cat) VALUES (:name, :price, :stock, :access_level, :cat)";
+            $stmt = DbService::$service->prepare($req);
+            $stmt->execute(["name" => $data->name, "price" => $data->price, "stock" => $data->stock, "access_level" => $data->access_level, "cat" => $data->category]);
+            $result = $stmt->fetch();
+            return true;
         } catch (PDOException $exception) {
             echo "Couldn't add product because of error :" . $exception->getMessage();
+            return false;
+        }
+    }
+
+    public function getCategories()
+    {
+        try {
+            $req = "SELECT * FROM categories";
+            $stmt = DbService::$service->prepare($req);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $exception) {
+            echo "Couldn't get categories : " . $exception->getMessage();
         }
     }
 }

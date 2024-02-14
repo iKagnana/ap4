@@ -12,7 +12,6 @@ switch ($_REQUEST["action"]) {
         if ($email != "" && $password != "") {
             $res = $dbService->login($email, $password);
             if ($res) {
-                $_SESSION["userId"] = $res;
                 include("views/dashboard_view.php");
             } else {
                 echo "Connexion échouée";

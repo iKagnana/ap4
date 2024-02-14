@@ -14,7 +14,7 @@ class Product
      * @param double $price
      * @param int $stock
      * @param int $access_level
-     * @param string $category
+     * @param string | int $category
      * @param int $id optionnal
      */
     public function __construct($name, $price, $stock, $access_level, $category, $id = null, )

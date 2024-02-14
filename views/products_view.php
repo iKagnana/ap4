@@ -1,8 +1,6 @@
 <div class="page-container">
     <div class="flex-col-container">
-        <button>
-            placeholder
-        </button>
+        <a href="index.php?controller=product&action=displayFormProduct">Ajouter</a>
 
         <table>
             <thead>

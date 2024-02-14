@@ -7,6 +7,16 @@ switch ($action) {
         # get product and display view
         include("views/products_view.php");
         break;
+    case "displayFormProduct":
+        ## test if the user has access
+        if ($_SESSION["user"]->role != 0) {
+            include("views/no_authorized_view.php");
+            break;
+        }
+        $allCategories = $dbService->getCategories();
+        # display form to add product
+        include("views/form_product_view.php");
+        break;
     case "createProduct":
         # force reload ? TODO :  test if needed
         include("views/products_view.php");
