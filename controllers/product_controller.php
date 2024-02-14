@@ -15,7 +15,8 @@ switch ($action) {
         $price = $_POST["price"];
         $stock = $_POST["stock"];
         $access_level = $_POST["access_level"];
-        $newProduct = new Product($name, $price, $stock, $access_level);
+        $category = $_POST["category"];
+        $newProduct = new Product($name, $price, $stock, $access_level, $category);
 
         $dbService->createProduct($newProduct);
 

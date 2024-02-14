@@ -19,11 +19,12 @@
                 <tr>
                     <?php
                     foreach ($allProducts as $product) {
-                        echo "<th> $product[0] </th>";
-                        echo "<td> $product[1] </td>";
-                        echo "<td> $product[2] </td>";
-                        echo "<td> $product[3] </td>";
-                        echo "<td> $product[4] </td>";
+                        echo "<th> $product->id </th>";
+                        echo "<td> $product->name </td>";
+                        echo "<td> $product->price </td>";
+                        echo "<td> $product->stock </td>";
+                        echo "<td> $product->access_level </td>";
+                        echo "<td> $product->category </td>";
                     }
                     ?>
                 </tr>

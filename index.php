@@ -5,7 +5,7 @@ session_start();
 $dbService = DbService::getSelfService();
 
 # controller to use
-if (!isset($_REQUEST["action"]) && isset($_SESSION["userId"])) {
+if (!isset($_REQUEST["action"])) {
     $_REQUEST["controller"] = "login";
     $_REQUEST["action"] = "goToLogin";
 }
