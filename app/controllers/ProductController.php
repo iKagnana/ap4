@@ -1,30 +1,38 @@
 <?php
 include("app/models/product.class.php");
-$product = new Product();
 
-switch ($_REQUEST["action"]) {
-    case "displayProductMenu":
-        $allProducts = $product->getProducts();
-        # get product and display view
-        include("app/views/product/products_view.php");
-        break;
-    case "displayFormProduct":
+class ProductController extends Controller
+{
+    private $product;
+    public function __construct()
+    {
+        $this->product = $this->model("Product");
+    }
+
+    public function index()
+    {
+        $allProducts = $this->product->getProducts();
+        $this->view("product/products-view", $allProducts);
+    }
+
+    public function displayForm()
+    {
         ## test if the user has access
         if (!isset($_SESSION["user"])) {
             echo "Pas d'utilisateur connecté";
         }
         if ($_SESSION["user"]->role != 0) {
-            include("app/views/no_authorized_view.php");
-            break;
+            $this->view("app/views/no_authorized_view.php");
+            return;
         }
-        $allCategories = $product->getCategories();
-        # display form to add product
-        include("app/views/product/form_product_view.php");
-        break;
-    case "createProduct":
-        # force reload ? TODO :  test if needed
-        include("app/views/product/products_view.php");
 
+        $allCategories = $this->product->getCategories();
+        # display form to add product
+        $this->view("product/form-product-view", $allCategories);
+    }
+
+    public function createProduct()
+    {
         $name = $_POST["name"];
         $price = $_POST["price"];
         $stock = $_POST["stock"];
@@ -33,5 +41,6 @@ switch ($_REQUEST["action"]) {
         $newProduct = new Product();
         $newProduct->setProduct($name, $price, $stock, $access_level, $category);
         $newProduct->createProduct();
+    }
 
 }
