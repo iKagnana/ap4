@@ -50,7 +50,7 @@ li a:hover {
     background-color: #111;
 }
 
-/* input styles */
+/*********input styles */
 
 .textfield {
     margin: 1rem;
@@ -58,14 +58,21 @@ li a:hover {
     flex-direction: column;
 }
 
-/* css item */
+/********* css item */
 .cover {
     object-fit: cover;
     width: 100%;
     height: 100%;
 }
 
-/* items layout */
+.flex-row-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/********* items layout */
 .align-center {
     display: flex;
     flex-direction: column;
@@ -78,7 +85,7 @@ li a:hover {
     height: 15rem;
 }
 
-/* page layout */
+/********* page layout */
 .page-container {
     display: flex;
     min-height: 100vh;

@@ -44,4 +44,14 @@ class ProductController extends Controller
         }
     }
 
+    public function searchProduct()
+    {
+        $search = $_POST["search"];
+
+        $productClass = new Product();
+        $allProducts = $productClass->getProducts();
+
+        $filteredData = $productClass->filterProduct($search, $allProducts);
+        $this->view("product/products-view", $filteredData);
+    }
 }

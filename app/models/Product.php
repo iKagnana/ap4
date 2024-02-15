@@ -66,6 +66,29 @@ class Product
         }
     }
 
+    public function filterProduct($searchName, $products)
+    {
+        return array_filter($products, function ($product) use ($searchName) {
+            return str_contains($product->name, $searchName);
+        });
+    }
+
+    public function getProductByCategory($category)
+    {
+        try {
+            $this->db->query("
+            SELECT id_p, name_p, stock, price, access_level, name_cat FROM products
+            INNER JOIN categories ON products.id_cat = categories.id_cat
+            WHERE products.id_cat = :cat");
+            $this->db->bind("cat", $category);
+            $res = $this->db->fetchAll();
+            return $res;
+        } catch (PDOException $exception) {
+            echo "Problème lors de la récupération des produits, due à l'erreur :" . $exception->getMessage();
+            return [];
+        }
+    }
+
     /** Function to create product ressource from the object itself
      */
     public function createProduct()

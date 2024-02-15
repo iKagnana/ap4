@@ -1,7 +1,17 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="flex-col-container">
-        <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
+        <div class="flex-row-container">
+            <form action="http://localhost:8089/product/searchProduct" method="POST">
+                <label for=" searchbar">Rechercher le nom</label>
+                <input type="text" name="search" id="searchbar">
+                <input type="submit" value="🔍">
+            </form>
+            <button>
+                <span>Trier par </span>
+            </button>
+            <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
+        </div>
 
         <table>
             <thead>
