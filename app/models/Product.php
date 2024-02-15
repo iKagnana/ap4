@@ -70,7 +70,7 @@ class Product
     public function createProduct()
     {
         try {
-            $this->db->query("INSERT INTO products (name_p, price, stock, access_level, id_cat) VALUES (:name, :price, :stock, :access_level, :cat)");
+            $this->db->query("INSERT INTO products (name_p, price, stock, access_level, id_cat) VALUES (:name, :price, :stock, :access_level, :category)");
             $this->db->bind("name", $this->name);
             $this->db->bind("price", $this->price);
             $this->db->bind("stock", $this->stock);

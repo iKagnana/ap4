@@ -1,5 +1,5 @@
 <div class="page-container">
-    <form action="product/createProduct" method="post">
+    <form action="http://localhost:8089/product/createProduct" method="post">
         <div class="textfield">
             <label for="name">Libellé du produit</label>
             <input type="text" name="name" id="name">

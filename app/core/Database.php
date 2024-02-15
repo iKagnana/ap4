@@ -50,9 +50,8 @@ class Database
                 $type = PDO::PARAM_STR;
                 break;
             default:
-                $type = PDO::PARAM_NULL;
+                $type = PDO::PARAM_STR;
         }
-
         $this->statement->bindValue($param, $value, $type);
     }
 
