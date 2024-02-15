@@ -42,6 +42,15 @@ class User
         $this->role = $role;
     }
 
+    public function saveInSession()
+    {
+        $_SESSION["userId"] = $this->id;
+        $_SESSION["userLastname"] = $this->lastname;
+        $_SESSION["userFirstname"] = $this->firstname;
+        $_SESSION["userEmail"] = $this->email;
+        $_SESSION["userRole"] = $this->role;
+    }
+
     ################ Request to db
 
     /** function that will be used for user login
@@ -66,8 +75,7 @@ class User
                     $result[5],
                     $result[0]
                 );
-                $_SESSION["user"] = $user;
-                echo $_SESSION["user"]->lastname;
+                $user->saveInSession();
                 return true;
             } else {
                 return false;

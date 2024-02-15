@@ -18,10 +18,7 @@ class ProductController extends Controller
     public function displayFormProduct()
     {
         ## test if the user has access
-        if (!isset($_SESSION["user"])) {
-            echo "Pas d'utilisateur connecté";
-        }
-        if ($_SESSION["user"]->role != 0) {
+        if ($_SESSION["userRole"] != 0) {
             $this->view("app/views/no_authorized_view.php");
             return;
         }
