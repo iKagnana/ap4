@@ -7,10 +7,24 @@
                 <input type="text" name="search" id="searchbar">
                 <input type="submit" value="🔍">
             </form>
+            <select name="filteredBy" id="">
+                <option value="">Trier par :</option>
+                <option value="category">Catégories</option>
+                <option value="name">Nom</option>
+                <option value="access_level">Le niveau d'accès</option>
+            </select>
             <button>
-                <span>Trier par </span>
+                <?php
+                if ($data["order"] == "asc") {
+                    echo "<span>↓</span>";
+                } else {
+                    echo "<span>↑</span>";
+                }
+                ?>
             </button>
-            <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
+            <button>
+                <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
+            </button>
         </div>
 
         <table>
@@ -26,7 +40,7 @@
             </thead>
             <tbody>
                 <?php
-                foreach ($data as $product) {
+                foreach ($data["products"] as $product) {
                     echo "<tr>";
                     echo "<th> $product->id </th>";
                     echo "<td> $product->name </td>";

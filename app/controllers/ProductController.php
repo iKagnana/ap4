@@ -4,6 +4,7 @@ require_once("../app/models/Product.php");
 class ProductController extends Controller
 {
     private $product;
+    private $filterOrder = "asc";
     public function __construct()
     {
         $this->product = $this->model("Product");
@@ -12,7 +13,8 @@ class ProductController extends Controller
     public function index()
     {
         $allProducts = $this->product->getProducts();
-        $this->view("product/products-view", $allProducts);
+        $data = ["products" => $allProducts, "order" => $this->filterOrder];
+        $this->view("product/products-view", $data);
     }
 
     public function displayFormProduct()
@@ -40,7 +42,8 @@ class ProductController extends Controller
         $res = $newProduct->createProduct();
         if ($res == null) {
             $allProducts = $newProduct->getProducts();
-            $this->view("product/products-view", $allProducts);
+            $data = ["products" => $allProducts, "order" => $this->filterOrder];
+            $this->view("product/products-view", $data);
         }
     }
 
@@ -52,6 +55,7 @@ class ProductController extends Controller
         $allProducts = $productClass->getProducts();
 
         $filteredData = $productClass->filterProduct($search, $allProducts);
-        $this->view("product/products-view", $filteredData);
+        $data = ["products" => $filteredData, "order" => $this->filterOrder];
+        $this->view("product/products-view", $data);
     }
 }
