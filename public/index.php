@@ -12,6 +12,4 @@ require_once("../app/core/Controller.php");
 require_once("../app/controllers/LoginController.php");
 require_once("../app/controllers/ProductController.php");
 
-include("../app/views/header-view.php");
 $app = new App();
-include("../app/views/footer-view.php");

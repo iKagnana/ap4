@@ -78,6 +78,7 @@ class Product
             $this->db->bind("access_level", $this->access_level);
             $this->db->bind("category", $this->category);
             $result = $this->db->fetch();
+            echo $result;
             return $result;
         } catch (PDOException $exception) {
             echo "Couldn't add product because of error :" . $exception->getMessage();

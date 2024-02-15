@@ -1,3 +1,4 @@
+<?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="flex-col-container">
         <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
@@ -30,3 +31,4 @@
         </table>
     </div>
 </div>
+<?php require_once("../app/views/footer-view.php"); ?>

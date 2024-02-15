@@ -15,6 +15,9 @@ class LoginController extends Controller
         $this->view("user/login-view");
     }
 
+    /** Connect user
+     * 
+     */
     public function askLogin()
     {
         $email = $_POST["email"] ?? "";
@@ -23,12 +26,21 @@ class LoginController extends Controller
         # if field are not empty 
         if ($email != "" && $password != "") {
             $res = $this->user->login($email, $password);
-            if ($res) {
+            if ($res && $_SESSION["userId"] != null) {
                 $this->view("user/dashboard-view");
             } else {
                 echo "Connexion échouée";
             }
         }
+    }
+
+    /** Logout the user
+     * 
+     */
+    public function logout()
+    {
+        session_unset();
+        $this->view("user/login-view");
     }
 }
 

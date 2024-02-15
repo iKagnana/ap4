@@ -1,3 +1,4 @@
+<?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <form action="http://localhost:8089/product/createProduct" method="post">
         <div class="textfield">
@@ -30,3 +31,4 @@
         <input type="submit" value="Valider">
     </form>
 </div>
+<?php require_once("../app/views/footer-view.php"); ?>

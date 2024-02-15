@@ -37,7 +37,11 @@ class ProductController extends Controller
         $category = $_POST["category"];
         $newProduct = new Product();
         $newProduct->setProduct($name, $price, $stock, $access_level, $category);
-        $newProduct->createProduct();
+        $res = $newProduct->createProduct();
+        if ($res == null) {
+            $allProducts = $newProduct->getProducts();
+            $this->view("product/products-view", $allProducts);
+        }
     }
 
 }
