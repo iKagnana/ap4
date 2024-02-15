@@ -1,5 +1,5 @@
 <div class="page-container">
-    <a href="index.php?controller=product&action=displayProductMenu">
+    <a href="http://localhost:8089/product">
         <div class="dashboard-item">
             Stocks
         </div>

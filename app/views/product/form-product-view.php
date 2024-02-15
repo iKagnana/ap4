@@ -1,5 +1,5 @@
 <div class="page-container">
-    <form action="index.php?controller=product&action=createProduct" method="post">
+    <form action="product/createProduct" method="post">
         <div class="textfield">
             <label for="name">Libellé du produit</label>
             <input type="text" name="name" id="name">
@@ -20,7 +20,7 @@
             <label for="category">Catégorie</label>
             <select name="category" id=category">
                 <?php
-                foreach ($allCategories as $category) {
+                foreach ($data as $category) {
                     echo "<option value=" . "$category[0]" . ">" . $category[1] . "</option>";
                 }
                 ?>

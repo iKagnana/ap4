@@ -1,6 +1,6 @@
 <div class="page-container">
     <div class="flex-col-container">
-        <a href="index.php?controller=product&action=displayFormProduct">Ajouter</a>
+        <a href="product/displayFormProduct">Ajouter</a>
 
         <table>
             <thead>
@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 <?php
-                foreach ($allProducts as $product) {
+                foreach ($data as $product) {
                     echo "<tr>";
                     echo "<th> $product->id </th>";
                     echo "<td> $product->name </td>";

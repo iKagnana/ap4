@@ -1,5 +1,5 @@
 <?php
-include("app/models/product.class.php");
+require_once("../app/models/Product.php");
 
 class ProductController extends Controller
 {
@@ -15,7 +15,7 @@ class ProductController extends Controller
         $this->view("product/products-view", $allProducts);
     }
 
-    public function displayForm()
+    public function displayFormProduct()
     {
         ## test if the user has access
         if (!isset($_SESSION["user"])) {
