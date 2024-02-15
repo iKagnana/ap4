@@ -1,4 +1,7 @@
 <?php
+/** We decompose the different step of a request for better maintainability.
+ * Used in class in folder models so the user doesn't directly have access to the db
+ */
 class Database
 {
     private $host = "mysql:host=db";
@@ -25,7 +28,7 @@ class Database
     }
 
     /** Set statement with query
-     * @param string query
+     * @param string query for prepared statement
      */
     public function query($query)
     {
@@ -35,6 +38,7 @@ class Database
     /** Bind value in query
      * @param string $param 
      * @param string $value
+     * We bind value because we have prepared statement in order to prevent SQL injection
      */
     public function bind($param, $value, $type = null)
     {
@@ -61,12 +65,18 @@ class Database
         return $this->statement->execute();
     }
 
+    /** method fetchAll of the statement 
+     * @return []
+     */
     public function fetchAll()
     {
         $this->execute();
         return $this->statement->fetchAll();
     }
 
+    /** Method fetch of the statement
+     * @return mixed
+     */
     public function fetch()
     {
         $this->execute();

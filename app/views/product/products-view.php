@@ -1,6 +1,6 @@
 <div class="page-container">
     <div class="flex-col-container">
-        <a href="product/displayFormProduct">Ajouter</a>
+        <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
 
         <table>
             <thead>

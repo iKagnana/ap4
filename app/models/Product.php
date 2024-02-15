@@ -38,6 +38,7 @@ class Product
     ################ Request to db
 
     /** Function to retreive all the products 
+     * @return Product[]
      */
     public function getProducts()
     {
@@ -65,7 +66,7 @@ class Product
         }
     }
 
-    /** Function to create product ressource
+    /** Function to create product ressource from the object itself
      */
     public function createProduct()
     {
@@ -84,6 +85,9 @@ class Product
         }
     }
 
+    /** Function to get all categories
+     * @return [] categories
+     */
     public function getCategories()
     {
         try {
@@ -92,6 +96,7 @@ class Product
             return $result;
         } catch (PDOException $exception) {
             echo "Couldn't get categories : " . $exception->getMessage();
+            return [];
         }
     }
 }

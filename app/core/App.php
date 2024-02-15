@@ -1,7 +1,6 @@
 <?php
 /** class App 
  * - redirect to the right controller
- * - 
  */
 class App
 {
@@ -34,8 +33,7 @@ class App
         }
     }
 
-    /** function that get the url
-     * 
+    /** function that get the url and separed the different section in url
      */
     public function parseUrl()
     {

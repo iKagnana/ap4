@@ -42,6 +42,13 @@ class User
         $this->role = $role;
     }
 
+    /** Function that save into $_SESSION user's infos
+     * $_SESSION["userId"]
+     * $_SESSION["userLastname"]
+     * $_SESSION["userFirstname"]
+     * $_SESSION["userEmail"]
+     * $_SESSION["userRole"]
+     */
     public function saveInSession()
     {
         $_SESSION["userId"] = $this->id;
