@@ -6,6 +6,7 @@ class ProductController extends Controller
     private $product;
     private $filterOrder = "asc";
     private $filterBy = "none";
+    private $openedProduct = null;
     public function __construct()
     {
         $this->product = $this->model("Product");
@@ -79,5 +80,44 @@ class ProductController extends Controller
 
         $data = ["products" => $allProducts, "order" => $this->filterOrder];
         $this->view("product/products-view", $data);
+    }
+
+    public function open()
+    {
+        $id = $_REQUEST["id"];
+
+        $productClass = new Product();
+        $allProducts = $productClass->getProducts();
+
+        # get the right product and update it
+        if (array_key_exists($id, $allProducts)) {
+            $this->openedProduct = array_column($allProducts, null, "id")[$id] ?? false;
+            echo json_encode($this->openedProduct);
+        }
+
+        $data = ["products" => $allProducts, "order" => $this->filterOrder, "open" => $this->openedProduct];
+        $this->view("product/products-view", $data);
+
+    }
+
+    public function update()
+    {
+        $id = $_REQUEST["id"];
+        $productClass = new Product();
+        $productClass->setProduct(
+            $_REQUEST["name"],
+            $_REQUEST["price"],
+            $_REQUEST["stock"],
+            $_REQUEST["access_level"],
+            0
+        );
+
+        $productClass->updateProduct($id);
+        $this->index();
+    }
+
+    public function delete()
+    {
+        $id = $_REQUEST["id"];
     }
 }
