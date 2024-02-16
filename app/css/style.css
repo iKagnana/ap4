@@ -2,6 +2,10 @@ body {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 table {
     border-collapse: collapse;
     border: 2px solid rgb(140 140 140);
@@ -72,6 +76,12 @@ li a:hover {
     margin-bottom: 1em;
 }
 
+.flex-col-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /********* items layout */
 .align-center {
     display: flex;
@@ -83,6 +93,10 @@ li a:hover {
     border-radius: 5%;
     width: 15rem;
     height: 15rem;
+    margin: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /********* page layout */
@@ -102,4 +116,8 @@ li a:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.item-container {
+    margin: 1em;
 }

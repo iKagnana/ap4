@@ -11,5 +11,6 @@ require_once("../app/core/Controller.php");
 # import controller
 require_once("../app/controllers/LoginController.php");
 require_once("../app/controllers/ProductController.php");
+require_once("../app/controllers/HomeController.php");
 
 $app = new App();

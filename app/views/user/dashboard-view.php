@@ -1,12 +1,17 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
-    <a href="http://localhost:8089/product">
-        <div class="dashboard-item">
-            Stocks
+    <div class="flex-col-container">
+        <?php echo "<h1>Bonjour, " . $data["lastname"] . " " . $data["firstname"] . "</h1>"; ?>
+        <div class="flex-row-container">
+            <a class="dashboard-item" href="http://localhost:8089/product">
+                <div>
+                    Stocks
+                </div>
+            </a>
+            <div class="dashboard-item">
+                Commandes
+            </div>
         </div>
-    </a>
-    <div class="dashboard-item">
-        Commandes
     </div>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

@@ -27,7 +27,7 @@ class LoginController extends Controller
         if ($email != "" && $password != "") {
             $res = $this->user->login($email, $password);
             if ($res && $_SESSION["userId"] != null) {
-                $this->view("user/dashboard-view");
+                $this->view("user/dashboard-view", ["lastname" => $_SESSION["userLastname"], "firstname" => $_SESSION["userFirstname"]]);
             } else {
                 echo "Connexion échouée";
             }
