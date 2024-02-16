@@ -5,6 +5,7 @@ class ProductController extends Controller
 {
     private $product;
     private $filterOrder = "asc";
+    private $filterBy = "none";
     public function __construct()
     {
         $this->product = $this->model("Product");
@@ -42,6 +43,7 @@ class ProductController extends Controller
         $res = $newProduct->createProduct();
         if ($res == null) {
             $allProducts = $newProduct->getProducts();
+            $_SESSION["products"] = $allProducts;
             $data = ["products" => $allProducts, "order" => $this->filterOrder];
             $this->view("product/products-view", $data);
         }
@@ -49,13 +51,33 @@ class ProductController extends Controller
 
     public function searchProduct()
     {
-        $search = $_POST["search"];
+        $search = $_REQUEST["search"];
 
         $productClass = new Product();
         $allProducts = $productClass->getProducts();
 
         $filteredData = $productClass->filterProduct($search, $allProducts);
+        $_SESSION["searchProductText"] = $search;
         $data = ["products" => $filteredData, "order" => $this->filterOrder];
+        $this->view("product/products-view", $data);
+    }
+
+    public function filter()
+    {
+        $search = isset($_SESSION["search"]) ? $_SESSION["search"] : "";
+
+        $productClass = new Product();
+        $allProducts = $productClass->getProducts();
+        $filteredData = $productClass->filterProduct($search, $allProducts);
+
+        $order = isset($_REQUEST["order"]) ? $_REQUEST["order"] : "asc";
+
+        if ($order != $this->filterOrder) {
+            $allProducts = array_reverse($filteredData);
+            $this->filterOrder = $order;
+        }
+
+        $data = ["products" => $allProducts, "order" => $this->filterOrder];
         $this->view("product/products-view", $data);
     }
 }

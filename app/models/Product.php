@@ -66,6 +66,10 @@ class Product
         }
     }
 
+    /** filter product by name
+     * @param string $searchName
+     * @param Product[] $products
+     */
     public function filterProduct($searchName, $products)
     {
         return array_filter($products, function ($product) use ($searchName) {
@@ -73,6 +77,9 @@ class Product
         });
     }
 
+    /** method to get product only by certain category
+     * 
+     */
     public function getProductByCategory($category)
     {
         try {

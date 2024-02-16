@@ -2,26 +2,21 @@
 <div class="page-container">
     <div class="flex-col-container">
         <div class="flex-row-container">
-            <form action="http://localhost:8089/product/searchProduct" method="POST">
+            <form action="http://localhost:8089/product/searchProduct" method="GET">
                 <label for=" searchbar">Rechercher le nom</label>
                 <input type="text" name="search" id="searchbar">
                 <input type="submit" value="🔍">
             </form>
-            <select name="filteredBy" id="">
-                <option value="">Trier par :</option>
-                <option value="category">Catégories</option>
-                <option value="name">Nom</option>
-                <option value="access_level">Le niveau d'accès</option>
-            </select>
-            <button>
+
+            <form action="http://localhost:8089/product/filter" method="GET">
                 <?php
                 if ($data["order"] == "asc") {
-                    echo "<span>↓</span>";
+                    echo "<button name='order' value='desc'>↑</button>";
                 } else {
-                    echo "<span>↑</span>";
+                    echo "<button name='order' value='asc'>↓</button>";
                 }
                 ?>
-            </button>
+            </form>
             <button>
                 <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
             </button>
