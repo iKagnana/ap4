@@ -119,5 +119,8 @@ class ProductController extends Controller
     public function delete()
     {
         $id = $_REQUEST["id"];
+        $productClass = new Product();
+        $productClass->deleteProduct($id);
+        $this->index();
     }
 }

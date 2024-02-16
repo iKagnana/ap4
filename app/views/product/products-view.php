@@ -59,8 +59,8 @@
                         <form action=http://localhost:8089/product method='GET'>
                         <input type='submit' value='❌'>
                         </form>
-                        <form action=http://localhost:8089/delete method='GET'>
-                            <input type='submit' value='🗑️'>
+                        <form action=http://localhost:8089/product/delete method='GET'>
+                            <button name='id' value=" . $product->id . ">🗑️</button> 
                             </form>
                         </td>";
                         }

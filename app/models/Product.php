@@ -162,11 +162,11 @@ class Product
     /** function to delete a product 
      * @return bool
      */
-    public function deleteProduct()
+    public function deleteProduct($id)
     {
         try {
             $this->db->query("DELETE FROM products WHERE id_p = :id");
-            $this->db->bind("id", $this->id);
+            $this->db->bind("id", $id);
             $this->db->fetch();
             return true;
         } catch (PDOException $exception) {
