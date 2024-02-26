@@ -8,9 +8,15 @@ class Product
     public $stock;
     public $access_level;
     public $category;
-    private $db;
 
+    # used for order
+    public $quantity = 1;
+    public $totalPrice = 0;
+
+    private $db;
     private $openState; # to handle update and delete state for view
+
+
 
     /** Constructor for the class product
      */
@@ -38,9 +44,19 @@ class Product
         $this->openState = false;
     }
 
+    /** Method used when we want to order 
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+        $this->totalPrice = $quantity * $this->price;
+    }
+
     /** filter product by name
      * @param string $searchName
      * @param Product[] $products
+     * @return Product[] filtered 
      */
     public function filterProduct($searchName, $products)
     {
