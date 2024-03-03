@@ -1,10 +1,9 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <?php
-    if ($_SESSION["userRole"] == 0) {
-        echo "<div class='left-side'>
+    echo "<div>
             <table>
-            <caption>Demandes à traiter</caption>
+            <caption>Commandes</caption>
             <thead>
                 <tr>
                     <th>id</th>
@@ -16,50 +15,39 @@
                 </tr>
             </thead>
             <tbody>";
-        foreach ($data["todo"] as $order) {
-            echo "<th>" . $order->id . "</th>";
-            echo "<th>" . $order->date . "</th>";
-            echo "<th>" . $order->price . "</th>";
-            echo "<th>" . $order->applicant . "</th>";
-            echo "<th>" . $order->status . "</th>";
-            echo "<th>" . $order->reason . "</th>";
+    foreach ($data["all"] as $order) {
+        echo "<tr>";
+        echo "<td>" . $order->id . "</td>";
+        echo "<td>" . $order->date . "</td>";
+        echo "<td>" . $order->price . "</td>";
+        echo "<td>" . $order->applicant . "</td>";
+        echo "<td>" . $order->status . "</td>";
+        echo "<td>" . $order->reason . "</td>";
+        if (isset($data["openedItem"]) && $data["openedItem"] == $order->id) {
+            echo "<td>
+                <form action='http://localhost:8089/order' method='GET'>
+                    <button type='submit'>X</button>
+                </form>
+            </td>";
+            echo '</tr>';
+            echo "<tr><td colspan=6>";
+            foreach ($order->products as $product) {
+                echo "<p>" . $product["name_p"] . "</p>";
+            }
+            echo "</td></tr>";
+        } else {
+            echo "<td>
+                <form action='http://localhost:8089/order/detail' method='GET'>
+                    <button name='item' type='submit' value=" . $order->id . ">Détails</button>
+                </form>
+            </td>";
+            echo '</tr>';
         }
-        echo "</tbody>
-        </table>
-            </div>";
-        echo "<div>
-            <table>
-            <caption>Demandes traitées</caption>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Date</th>
-                    <th>Prix total</th>
-                    <th>Demandeur</th>
-                    <th>Status</th>
-                    <th>Raison</th>
-                </tr>
-            </thead>
-            <tbody>";
-        foreach ($data["done"] as $order) {
-            echo "<th>" . $order->id . "</th>";
-            echo "<th>" . $order->date . "</th>";
-            echo "<th>" . $order->price . "</th>";
-            echo "<th>" . $order->applicant . "</th>";
-            echo "<th>" . $order->status . "</th>";
-            echo "<th>" . $order->reason . "</th>";
-        }
-        echo "</tbody>
-        </table>
-            </div>";
     }
+    echo "</tbody>
+        </table>
+        </div>";
     ?>
 
-    <div class='left-side'>
-
-    </div>
-    <div class='right-side'>
-
-    </div>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

@@ -5,6 +5,22 @@ class OrderController extends Controller
 {
     public function index()
     {
+        $order = new Order();
+        $orders = $order->getOrder();
+        $this->view("order/orders-view", ["all" => $orders]);
+    }
+
+    public function detail()
+    {
+        $selected = $_REQUEST["item"];
+        $order = new Order();
+        $orders = $order->getOrder();
+        $this->view("order/orders-view", ["all" => $orders, "openedItem" => $selected]);
+
+    }
+
+    public function form()
+    {
         $products = new Product();
         $allProducts = $products->getProducts();
         $cart = $_SESSION["cart"] ?? [];

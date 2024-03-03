@@ -6,6 +6,7 @@ class Order
     public $date;
     public $price;
     public $applicant;
+    public $validator;
     public $status;
     public $reason;
     public $products = [];
@@ -47,19 +48,24 @@ class Order
      * @param Product[] $products
      * @param int $id
      */
-    public function setOrderGet($date, $price, $applicant, $status, $reason, $products, $id)
+    public function setOrderGet($date, $price, $applicant, $validator, $status, $reason, $id)
     {
-        if (is_a($date, "DateTime")) {
-            $this->date = date("Y-m-d H:i:s");
-        } else {
-            $this->date = $date;
-        }
+
+        $this->date = $date;
         $this->price = $price;
         $this->applicant = $applicant;
+        $this->validator = $validator;
         $this->status = $status;
         $this->reason = $reason;
-        $this->products = $products;
         $this->id = $id;
+    }
+
+    /** method to set products for an order
+     * @param Product[] $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
     }
 
     /** function to get only order to check by admin
@@ -92,7 +98,33 @@ class Order
      */
     public function getOrder()
     {
-        # TODO
+        try {
+            $this->db->query("SELECT * FROM orders JOIN users ON orders.id_u = users.id_u");
+            $result = $this->db->fetchAll();
+
+            $allOrders = [];
+            for ($i = 0; $i < count($result); $i++) {
+                $order = new Order();
+                $order->setOrderGet(
+                    $result[$i]["date_o"],
+                    $result[$i]["price_o"],
+                    $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                    $result[$i]["id_u_User"],
+                    $result[$i]["status"],
+                    $result[$i]["reason"],
+                    $result[$i]["id_o"]
+                );
+
+                $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+                $order->setProducts($products);
+                array_push($allOrders, $order);
+            }
+            return $allOrders;
+
+        } catch (PDOException $e) {
+            echo "Couldn't get orders because of error :" . $e->getMessage();
+            return [];
+        }
     }
 
     /** function to retreive only user's order
@@ -104,8 +136,28 @@ class Order
         # TODO
     }
 
+    /** function to retreive all the products for an order
+     * @param int $idO
+     */
+    public function getProductsByOrderId($idO)
+    {
+        try {
+            $this->db->query("SELECT products.name_p FROM orders_details 
+            INNER JOIN orders ON orders.id_o = orders_details.id_o
+            INNER JOIN products ON products.id_p = orders_details.id_p
+            WHERE orders.id_o = :idO");
+            $this->db->bind("idO", $idO);
+            $result = $this->db->fetchAll();
+            return $result;
+
+        } catch (PDOException $e) {
+            echo "Could get the products for the order" . $e->getMessage();
+            return [];
+        }
+    }
 
     ######### POST
+
     /** method to add order in db 
      * @param DateTime date 
      * @param int price
@@ -126,8 +178,6 @@ class Order
             return $nb;
         } catch (PDOException $e) {
             echo "Couldn't add order because of error :" . $e->getMessage();
-            echo "<br>";
-            echo json_encode($this);
             return 0;
         }
     }
