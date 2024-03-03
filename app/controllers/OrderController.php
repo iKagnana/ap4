@@ -1,4 +1,5 @@
 <?php
+require_once("../app/models/Order.php");
 
 class OrderController extends Controller
 {
@@ -81,5 +82,36 @@ class OrderController extends Controller
         $_SESSION["cart"] = $cart;
 
         $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
+    }
+
+
+    public function create()
+    {
+        $totalPrice = 0;
+        $cart = $_SESSION["cart"];
+        foreach ($cart as $product) {
+            $totalPrice = $totalPrice + $product["totalPrice"];
+        }
+
+        # variable
+        $date = new DateTime();
+        $idUser = $_SESSION["userId"];
+
+        $order = new Order();
+        $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "");
+        $idOrder = $order->createOrder();
+
+        if ($idOrder != 0) {
+            echo $idOrder;
+            foreach ($cart as $product) {
+                echo "oui";
+                $order->addOrderDetails($idOrder, $product["id"], $product["quantity"]);
+            }
+
+            unset($_SESSION["cart"]);
+        } else {
+            echo "Une erreur est survenue lors de la création de la commande";
+        }
+
     }
 }

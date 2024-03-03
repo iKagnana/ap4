@@ -18,7 +18,27 @@ class Order
         $this->db = new Database();
     }
 
-    /** method to set value into order
+    /** method to set value into order to create
+     * @param DateTime|string $date
+     * @param double $price
+     * @param int|string $applicant can be its id or its name
+     * @param string $status
+     * @param string $reason
+     */
+    public function setOrder($date, $price, $applicant, $status, $reason)
+    {
+        if (is_a($date, "DateTime")) {
+            $this->date = date("Y-m-d H:i:s");
+        } else {
+            $this->date = $date;
+        }
+        $this->price = $price;
+        $this->applicant = $applicant;
+        $this->status = $status;
+        $this->reason = $reason;
+    }
+
+    /** method to set value into order to get
      * @param DateTime|string $date
      * @param double $price
      * @param int|string $applicant can be its id or its name
@@ -27,7 +47,7 @@ class Order
      * @param Product[] $products
      * @param int $id
      */
-    public function setOrder($date, $price, $applicant, $status, $reason, $products, $id = null)
+    public function setOrderGet($date, $price, $applicant, $status, $reason, $products, $id)
     {
         if (is_a($date, "DateTime")) {
             $this->date = date("Y-m-d H:i:s");
@@ -97,34 +117,17 @@ class Order
     {
         try {
             $this->db->query("INSERT INTO orders (date_o, price_o, id_u, status, reason) VALUES (:date, :price, :applicant, :status, :reason)");
-            $this->db->bind("date_o", $this->date);
-            $this->db->bind("price_o", $this->price);
-            $this->db->bind("id_u", $this->applicant);
+            $this->db->bind("date", $this->date);
+            $this->db->bind("price", $this->price);
+            $this->db->bind("applicant", $this->applicant);
             $this->db->bind("status", $this->status);
             $this->db->bind("reason", $this->reason);
-            $this->db->fetch();
-            return true;
+            $nb = $this->db->fetchLastId();
+            return $nb;
         } catch (PDOException $e) {
             echo "Couldn't add order because of error :" . $e->getMessage();
-            return false;
-        }
-    }
-
-    /** function to get order id to add details
-     * @param int $applicantId the user that make the order
-     * @param DateTime $date when did the order was made
-     * @return int result, 0 if none
-     */
-    public function getLastOrderId($applicantId, $date)
-    {
-        try {
-            $this->db->query("SELECT id_o FROM orders WHERE id_o = :applicantId and date_o = :date");
-            $this->db->bind("date", $this->date);
-            $this->db->bind("applicantId", $this->applicant);
-            $result = $this->db->fetch();
-            return $result;
-        } catch (PDOException $e) {
-            echo "Couldn't get id because of error :" . $e->getMessage();
+            echo "<br>";
+            echo json_encode($this);
             return 0;
         }
     }
@@ -133,16 +136,22 @@ class Order
      * @param int $idOrder order id 
      * @param int $idProduct product id
      * @param int $quantity quantity, may be negative or positive
+     * @return 
      */
     public function addOrderDetails($idOrder, $idProduct, $quantity)
     {
+        echo "<br>";
+        echo " id order" . $idOrder . ", id product" . $idProduct . ", quantity" . $quantity;
         try {
-            $this->db->query("INSERT INTO orders_details (id_o, id_p, quantity) VALUES (:idOrder, :idProduct, :quantity");
-            $this->db->bind("idOrder", $this->date);
-            $this->db->bind("idProduct", $this->price);
-            $this->db->bind("quantity", $this->applicant);
+            $this->db->query("INSERT INTO orders_details (id_o, id_p, quantity) VALUES (:idOrder, :idProduct, :quantity)");
+            $this->db->bind("idOrder", $idOrder);
+            $this->db->bind("idProduct", $idProduct);
+            $this->db->bind("quantity", $quantity);
+            $result = $this->db->fetch();
+            return $result;
         } catch (PDOException $e) {
             echo "Couldn't add order details because of error :" . $e->getMessage();
+            return false;
         }
     }
 

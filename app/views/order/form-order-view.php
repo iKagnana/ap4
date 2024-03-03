@@ -70,6 +70,8 @@
             </table>
         </div>
     </div>
-
+    <form action="http://localhost:8089/order/create" method="post">
+        <input type="submit" value="Valider">
+    </form>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

@@ -82,4 +82,14 @@ class Database
         $this->execute();
         return $this->statement->fetch();
     }
+
+    /** Method to fetch and get the last insert id 
+     * 
+     */
+    public function fetchLastId()
+    {
+        $this->execute();
+        $this->statement->fetch();
+        return $this->service->lastInsertId();
+    }
 }
