@@ -3,20 +3,60 @@ require_once("../app/models/Order.php");
 
 class OrderController extends Controller
 {
-    public function index()
+    /** method to display order view
+     * @param []|null $extra
+     */
+    public function index($extra = null)
     {
         $order = new Order();
         $orders = $order->getOrder();
-        $this->view("order/orders-view", ["all" => $orders]);
+        $data = ["all" => $orders];
+        if (isset($extra)) {
+            $sendData = array_merge($data, $extra);
+            $this->view("order/orders-view", $sendData);
+        } else {
+            $this->view("order/orders-view", $data);
+        }
     }
 
     public function detail()
     {
-        $selected = $_REQUEST["item"];
-        $order = new Order();
-        $orders = $order->getOrder();
-        $this->view("order/orders-view", ["all" => $orders, "openedItem" => $selected]);
+        $selected = $_POST["item"];
+        $this->index(["openedItem" => $selected]);
+    }
 
+    /** method to display the page orders-control-view
+     * @param []|null $extra
+     */
+    public function control($extra = null)
+    {
+
+        $order = new Order();
+        $allOrders = $order->getOrder();
+
+        $todo = $order->getTodoOrders($allOrders);
+        $done = $order->getDoneOrders($allOrders);
+
+        $data = ["todo" => $todo, "done" => $done];
+        if (isset($extra)) {
+            $sendData = array_merge($data, $extra);
+            $this->view("order/orders-control-view", $sendData);
+        } else {
+            $this->view("order/orders-control-view", $data);
+        }
+    }
+
+    public function detailsControl()
+    {
+        if (isset($_POST["selectedTodo"])) {
+            $selectedTodo = $_POST["selectedTodo"];
+            $this->control(["selectedTodo" => $selectedTodo]);
+        }
+
+        if (isset($_POST["selectedDone"])) {
+            $selectedDone = $_POST["selectedDone"];
+            $this->control(["selectedDone" => $selectedDone]);
+        }
     }
 
     public function form()

@@ -75,7 +75,7 @@ class Order
     public function getTodoOrders($orders)
     {
         return array_filter($orders, function ($order) {
-            return $order["status"] == "En attente de validation";
+            return $order->status == "En attente de validation";
         });
     }
 
@@ -86,7 +86,7 @@ class Order
     public function getDoneOrders($orders)
     {
         return array_filter($orders, function ($order) {
-            return $order["status"] != "En attente de validation";
+            return $order->status != "En attente de validation";
         });
     }
 

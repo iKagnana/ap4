@@ -37,7 +37,7 @@
             echo "</td></tr>";
         } else {
             echo "<td>
-                <form action='http://localhost:8089/order/detail' method='GET'>
+                <form action='http://localhost:8089/order/detail' method='POST'>
                     <button name='item' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";

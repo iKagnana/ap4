@@ -39,7 +39,7 @@
             echo "<div class='dropdown-menu'><a href='http://localhost:8089/order'>Consulter</a>";
             echo "<a href='http://localhost:8089/order/form'>Ajouter</a>";
             if ($_SESSION["userRole"] == 0) {
-                echo "<a>Contrôler</a>";
+                echo "<a href='http://localhost:8089/order/control'>Contrôler</a>";
             }
             echo "</div>
                 </div>";
