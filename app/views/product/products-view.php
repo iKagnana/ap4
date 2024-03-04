@@ -18,7 +18,7 @@
                 ?>
             </form>
             <button>
-                <a href="http://localhost:8089/product/displayFormProduct">Ajouter</a>
+                <a href="http://localhost:8089/product/form">Ajouter</a>
             </button>
         </div>
 

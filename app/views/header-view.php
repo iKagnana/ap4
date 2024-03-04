@@ -11,18 +11,41 @@
 <body>
     <!-- In order to get the style -->
     <style>
-        <?php require("../app/css/style.css"); ?>
+        <?php
+        require("../app/css/style.css");
+        require("../app/css/header.css");
+        ?>
     </style>
     <header>
         <?php
         if (isset($_SESSION["userId"])) {
             echo "
-            <ul>
-                <li><a href='http://localhost:8089/home'>Accueil</a></li>
-                <li><a href='http://localhost:8089/product'>Stocks</a></li>
-                <li><a>Commandes</a></li>
-                <li><a href='http://localhost:8089/login/logout'>Déconnexion</a></li>
-            </ul>
+            <div class='menu'>
+                <div class='menu-item'><a href='http://localhost:8089/home'>Accueil</a></div>";
+            echo "<div class='menu-item'><a href='http://localhost:8089/product'>
+                Stocks</a><div class='dropdown-menu'>";
+
+            if ($_SESSION["userRole"] < 2) {
+                echo "<a href='http://localhost:8089/product'>Consulter</a>";
+            }
+            if ($_SESSION["userRole"] == 0) {
+                echo "<a href='http://localhost:8089/product/form'>Ajouter</a>";
+            }
+            echo "</div>
+                </div>";
+            # clear seperation
+            echo "<div class='menu-item'><a href='http://localhost:8089/order'>
+               Commande</a>";
+            echo "<div class='dropdown-menu'><a href='http://localhost:8089/order'>Consulter</a>";
+            echo "<a href='http://localhost:8089/order/form'>Ajouter</a>";
+            if ($_SESSION["userRole"] == 0) {
+                echo "<a>Contrôler</a>";
+            }
+            echo "</div>
+                </div>";
+            # clear seperatiob
+            echo "<div class='menu-item'><a href='http://localhost:8089/login/logout'>Déconnexion</a></div>
+            </div>
         ";
         }
         ?>

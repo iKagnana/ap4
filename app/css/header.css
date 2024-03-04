@@ -1,0 +1,49 @@
+.menu {
+    display: inherit;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    height: 100%
+}
+
+.menu a {
+    color: #FFF;
+    text-align: center;
+    display: block;
+}
+
+.menu-item a {
+    padding: 1em;
+    min-width: 130px;
+}
+
+.menu-item a:hover {
+    background-color: #111
+}
+
+.menu-item {
+    float: left;
+    overflow: hidden;
+    color: #fff;
+}
+
+.menu-item:hover {
+    background-color: #111
+}
+
+.menu-item:hover>.dropdown-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item:last-child {
+    float: right;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1;
+    background-color: #333;
+    display: none;
+}

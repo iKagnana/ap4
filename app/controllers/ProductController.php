@@ -19,7 +19,7 @@ class ProductController extends Controller
         $this->view("product/products-view", $data);
     }
 
-    public function displayFormProduct()
+    public function form()
     {
         ## test if the user has access
         if ($_SESSION["userRole"] != 0) {
