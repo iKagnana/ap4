@@ -31,15 +31,39 @@
                 </form>
             </td>";
             echo '</tr>';
-            echo "<tr><td colspan=6>";
+            echo "<tr><td colspan=3>";
             foreach ($order->products as $product) {
                 echo "<p>" . $product["name_p"] . "</p>";
             }
-            echo "</td></tr>";
+            echo "</td>";
+            echo "</tr>";
+        } else if (isset($data["onDoingItem"]) && $data["onDoingItem"] == $order->id) {
+            echo "<tr>
+                <form action='http://localhost:8089/order/treatment' method='POST'>
+                    <td colspan=3>
+                    <label for='status'>Status :</label>
+                        <select name='status'>
+                            <option value='Validé'>Validé</option>
+                            <option value='Refusé'>Refusé</option>
+                        </select>
+                    </td>";
+            echo "<td colspan=3>
+                <label for='reason'>Commentaire :</label>
+                <input type='text' name='reason'>
+            </td>";
+            echo "<td>
+                <button type='submit'>Valider</button>
+                <input hidden name='id' type='text' value=" . $order->id . ">
+                </td>
+            ";
+            echo " </form> </tr>";
         } else {
             echo "<td>
-                <form action='http://localhost:8089/order/detailsControl' method='POST'>
+                <form action='http://localhost:8089/order/detail' method='POST'>
                     <button name='selectedTodo' type='submit' value=" . $order->id . ">Détails</button>
+                </form>
+                <form action='http://localhost:8089/order/detail' method='POST'>
+                    <button name='onDoingItem' type='submit' value=" . $order->id . ">Contrôler</button>
                 </form>
             </td>";
             echo '</tr>';
@@ -85,7 +109,7 @@
             echo "</td></tr>";
         } else {
             echo "<td>
-                <form action='http://localhost:8089/order/detailsControl' method='POST'>
+                <form action='http://localhost:8089/order/detail' method='POST'>
                     <button name='selectedDone' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";

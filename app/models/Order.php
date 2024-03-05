@@ -205,4 +205,27 @@ class Order
         }
     }
 
+    ######### PUT
+
+    /** function to validate by admin an order
+     * @param int $id
+     * @param string $status
+     * @param string $reason
+     */
+    public function treatOrder($id, $status, $reason)
+    {
+        try {
+            $this->db->query("UPDATE orders SET status = :status, reason = :reason, id_u_User = :userId WHERE id_o = :id");
+            $this->db->bind("id", $id);
+            $this->db->bind("status", $status);
+            $this->db->bind("reason", $reason);
+            $this->db->bind("userId", $_SESSION["userId"]);
+            $result = $this->db->fetch();
+            return $result;
+        } catch (PDOException $e) {
+            echo "Could update orders" . $e->getMessage();
+            return false;
+        }
+    }
+
 }

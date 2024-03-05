@@ -21,8 +21,25 @@ class OrderController extends Controller
 
     public function detail()
     {
-        $selected = $_POST["item"];
-        $this->index(["openedItem" => $selected]);
+        if (isset($_POST["item"])) {
+            $selected = $_POST["item"];
+            $this->index(["openedItem" => $selected]);
+        }
+
+        if (isset($_POST["selectedTodo"])) {
+            $selectedTodo = $_POST["selectedTodo"];
+            $this->control(["selectedTodo" => $selectedTodo]);
+        }
+
+        if (isset($_POST["selectedDone"])) {
+            $selectedDone = $_POST["selectedDone"];
+            $this->control(["selectedDone" => $selectedDone]);
+        }
+
+        if (isset($_POST["onDoingItem"])) {
+            $selectOnDoingItem = $_POST["onDoingItem"];
+            $this->control(["onDoingItem" => $selectOnDoingItem]);
+        }
     }
 
     /** method to display the page orders-control-view
@@ -46,19 +63,21 @@ class OrderController extends Controller
         }
     }
 
-    public function detailsControl()
+    public function treatment()
     {
-        if (isset($_POST["selectedTodo"])) {
-            $selectedTodo = $_POST["selectedTodo"];
-            $this->control(["selectedTodo" => $selectedTodo]);
+        echo "MIAAAAOUUU";
+        $order = new Order();
+        $status = $_POST["status"];
+        $reason = $_POST["reason"];
+        $id = $_POST["id"];
+
+        if ($order->treatOrder($id, $status, $reason)) {
+            $this->control();
+        } else {
+            echo "woopsie doopsie";
         }
 
-        if (isset($_POST["selectedDone"])) {
-            $selectedDone = $_POST["selectedDone"];
-            $this->control(["selectedDone" => $selectedDone]);
-        }
     }
-
     public function form()
     {
         $products = new Product();
