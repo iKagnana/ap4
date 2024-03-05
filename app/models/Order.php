@@ -190,8 +190,6 @@ class Order
      */
     public function addOrderDetails($idOrder, $idProduct, $quantity)
     {
-        echo "<br>";
-        echo " id order" . $idOrder . ", id product" . $idProduct . ", quantity" . $quantity;
         try {
             $this->db->query("INSERT INTO orders_details (id_o, id_p, quantity) VALUES (:idOrder, :idProduct, :quantity)");
             $this->db->bind("idOrder", $idOrder);

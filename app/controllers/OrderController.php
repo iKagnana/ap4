@@ -65,17 +65,13 @@ class OrderController extends Controller
 
     public function treatment()
     {
-        echo "MIAAAAOUUU";
         $order = new Order();
         $status = $_POST["status"];
         $reason = $_POST["reason"];
         $id = $_POST["id"];
 
-        if ($order->treatOrder($id, $status, $reason)) {
-            $this->control();
-        } else {
-            echo "woopsie doopsie";
-        }
+        $order->treatOrder($id, $status, $reason);
+        $this->control();
 
     }
     public function form()
@@ -177,13 +173,11 @@ class OrderController extends Controller
         $idOrder = $order->createOrder();
 
         if ($idOrder != 0) {
-            echo $idOrder;
             foreach ($cart as $product) {
-                echo "oui";
                 $order->addOrderDetails($idOrder, $product["id"], $product["quantity"]);
             }
-
             unset($_SESSION["cart"]);
+            $this->index();
         } else {
             echo "Une erreur est survenue lors de la création de la commande";
         }
