@@ -1,6 +1,13 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="left-side">
+        <div class="flex-col-container">
+            <form action="http://localhost:8089/order/search" method="post">
+                <label for="searchName">Rechercher :</label>
+                <input type="text" name="search" id="searchName">
+                <button type="submit">Valider</button>
+            </form>
+        </div>
         <table class="table-scroll">
             <thead>
                 <tr>
@@ -69,9 +76,9 @@
                 </tbody>
             </table>
         </div>
+        <form action="http://localhost:8089/order/create" method="post">
+            <input type="submit" value="Valider">
+        </form>
     </div>
-    <form action="http://localhost:8089/order/create" method="post">
-        <input type="submit" value="Valider">
-    </form>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

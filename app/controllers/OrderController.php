@@ -42,6 +42,14 @@ class OrderController extends Controller
         }
     }
 
+    /** method to search for product
+     */
+    public function search()
+    {
+        $searchName = $_POST["search"];
+        $this->form(["searchName" => $searchName]);
+    }
+
     /** method to display the page orders-control-view
      * @param []|null $extra
      */
@@ -74,12 +82,20 @@ class OrderController extends Controller
         $this->control();
 
     }
-    public function form()
+
+    /** method to display the page form-order-view
+     * @param []|null $extra
+     */
+    public function form($extra = null)
     {
         $products = new Product();
         $allProducts = $products->getProducts();
+        $sendData = $allProducts;
+        if (isset($extra["searchName"])) {
+            $sendData = $products->filterProduct($extra["searchName"], $allProducts);
+        }
         $cart = $_SESSION["cart"] ?? [];
-        $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
+        $this->view("order/form-order-view", ["allProducts" => $sendData, "cart" => $cart]);
     }
 
     public function addProduct()
