@@ -142,9 +142,10 @@ class Order
     public function getProductsByOrderId($idO)
     {
         try {
-            $this->db->query("SELECT products.name_p FROM orders_details 
+            $this->db->query("SELECT products.name_p, products.price, categories.name_cat FROM orders_details 
             INNER JOIN orders ON orders.id_o = orders_details.id_o
             INNER JOIN products ON products.id_p = orders_details.id_p
+            INNER JOIN categories ON categories.id_cat = products.id_cat
             WHERE orders.id_o = :idO");
             $this->db->bind("idO", $idO);
             $result = $this->db->fetchAll();

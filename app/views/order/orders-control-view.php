@@ -31,12 +31,20 @@
                 </form>
             </td>";
             echo '</tr>';
-            echo "<tr><td colspan=3>";
+            echo "<tr><td colspan=6>";
+            echo "<div class='group-grid-3-col text-bold'>
+                <span>Libellé</span>
+                <span>Price</span>
+                <span>Catégorie</span>
+                </div>";
             foreach ($order->products as $product) {
+                echo "<div class='group-grid-3-col'>";
                 echo "<p>" . $product["name_p"] . "</p>";
+                echo "<p>" . $product["price"] . "€</p>";
+                echo "<p>" . $product["name_cat"] . "</p>";
+                echo "</div>";
             }
-            echo "</td>";
-            echo "</tr>";
+            echo "</td></tr>";
         } else if (isset($data["onDoingItem"]) && $data["onDoingItem"] == $order->id) {
             echo "<tr>
                 <form action='http://localhost:8089/order/treatment' method='POST'>
@@ -103,8 +111,17 @@
             </td>";
             echo '</tr>';
             echo "<tr><td colspan=6>";
+            echo "<div class='group-grid-3-col text-bold'>
+                <span>Libellé</span>
+                <span>Price</span>
+                <span>Catégorie</span>
+                </div>";
             foreach ($order->products as $product) {
+                echo "<div class='group-grid-3-col'>";
                 echo "<p>" . $product["name_p"] . "</p>";
+                echo "<p>" . $product["price"] . "€</p>";
+                echo "<p>" . $product["name_cat"] . "</p>";
+                echo "</div>";
             }
             echo "</td></tr>";
         } else {
