@@ -3,13 +3,22 @@ require_once("../app/models/Order.php");
 
 class OrderController extends Controller
 {
+
+    private $order; # used for function db relate to order
+    private $product; # used for function db relate to product
+
+    public function __construct()
+    {
+        $this->order = $this->model("Order");
+        $this->product = $this->model("Product");
+    }
+
     /** method to display order view
      * @param []|null $extra
      */
     public function index($extra = null)
     {
-        $order = new Order();
-        $orders = $order->getOrder();
+        $orders = $this->order->getOrder();
         $data = ["all" => $orders];
         if (isset($extra)) {
             $sendData = array_merge($data, $extra);
@@ -55,12 +64,10 @@ class OrderController extends Controller
      */
     public function control($extra = null)
     {
+        $allOrders = $this->order->getOrder();
 
-        $order = new Order();
-        $allOrders = $order->getOrder();
-
-        $todo = $order->getTodoOrders($allOrders);
-        $done = $order->getDoneOrders($allOrders);
+        $todo = $this->order->getTodoOrders($allOrders);
+        $done = $this->order->getDoneOrders($allOrders);
 
         $data = ["todo" => $todo, "done" => $done];
         if (isset($extra)) {
@@ -73,12 +80,11 @@ class OrderController extends Controller
 
     public function treatment()
     {
-        $order = new Order();
         $status = $_POST["status"];
         $reason = $_POST["reason"];
         $id = $_POST["id"];
 
-        $order->treatOrder($id, $status, $reason);
+        $this->order->treatOrder($id, $status, $reason);
         $this->control();
 
     }
@@ -88,11 +94,10 @@ class OrderController extends Controller
      */
     public function form($extra = null)
     {
-        $products = new Product();
-        $allProducts = $products->getProducts();
+        $allProducts = $this->product->getProducts();
         $sendData = $allProducts;
         if (isset($extra["searchName"])) {
-            $sendData = $products->filterProduct($extra["searchName"], $allProducts);
+            $sendData = $this->product->filterProduct($extra["searchName"], $allProducts);
         }
         $cart = $_SESSION["cart"] ?? [];
         $this->view("order/form-order-view", ["allProducts" => $sendData, "cart" => $cart]);
@@ -102,8 +107,7 @@ class OrderController extends Controller
     {
         $idProduct = $_POST["idProduct"];
         # get product with its id 
-        $products = new Product();
-        $allProducts = $products->getProducts();
+        $allProducts = $this->product->getProducts();
         $selectedProduct = array_column($allProducts, null, "id")[$idProduct];
 
         if (isset($_SESSION["cart"])) {
@@ -133,8 +137,7 @@ class OrderController extends Controller
         $idProduct = $_REQUEST["id"];
         $cart = $_SESSION["cart"];
 
-        $products = new Product();
-        $allProducts = $products->getProducts();
+        $allProducts = $this->product->getProducts();
 
         # search key and remove it 
         $key = array_search($idProduct, array_column($cart, "id"));
@@ -159,8 +162,7 @@ class OrderController extends Controller
         $idProduct = $_REQUEST["id"];
         $cart = $_SESSION["cart"];
 
-        $products = new Product();
-        $allProducts = $products->getProducts();
+        $allProducts = $this->product->getProducts();
 
         # search key and remove it 
         $key = array_search($idProduct, array_column($cart, "id"));

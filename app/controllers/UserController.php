@@ -39,4 +39,28 @@ class UserController extends Controller
 
         $this->view("user/login-view");
     }
+
+
+    ########## User list code
+    /** function to nagivate to the list of users page
+     * @param [] $extra
+     */
+    public function users($extra = null)
+    {
+        $allUsers = $this->user->getUsers();
+        $data = ["users" => $allUsers];
+        if (isset($extra["searchName"])) {
+            $sendData = $this->user->filterUser($extra["searchName"], $allUsers);
+            $this->view("user/handle/user-list-view", $sendData);
+        } else {
+            $this->view("user/handle/user-list-view", $data);
+        }
+
+    }
+
+    public function search()
+    {
+        $searchName = $_POST["search"];
+        $this->users(["searchName" => $searchName]);
+    }
 }

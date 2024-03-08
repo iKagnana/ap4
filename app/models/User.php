@@ -69,6 +69,23 @@ class User
         $_SESSION["userRole"] = $this->role;
     }
 
+
+    ### filters
+
+    /** filter product by firstname, lastname or email
+     * @param string $searchName
+     * @param User[] $user
+     * @return User[] filtered 
+     */
+    public function filterUser($searchName, $users)
+    {
+        return array_filter($users, function ($user) use ($searchName) {
+            return str_contains($user->lastname, $searchName) ||
+                str_contains($user->firstname, $searchName) ||
+                str_contains($user->email, $searchName);
+        });
+    }
+
     public function getValideUser($users)
     {
         return array_filter($users, function ($user) {
