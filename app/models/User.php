@@ -12,6 +12,8 @@ class User
     public $email;
     public $password;
     public $role;
+    public $enterprise;
+    public $levelAccess;
 
     private $db;
 
@@ -30,17 +32,20 @@ class User
      * @param string $email 
      * @param string $password
      * @param int $role
+     * @param int $levelAccess
      * @param int $id optionnal
      */
-    public function setUser($lastname, $firstname, $email, $password, $role, $id = null)
+    public function setUser($lastname, $firstname, $email, $password, $role, $id = null, $enterprise = null, $levelAccess = null)
     {
         $this->id = $id;
         $this->lastname = $lastname;
         $this->firstname = $firstname;
         $this->email = $email;
         $this->password = $password;
+        $this->levelAccess = $levelAccess;
         $this->role = $role;
     }
+
 
     /** Function that save into $_SESSION user's infos
      * $_SESSION["userId"]
@@ -68,11 +73,10 @@ class User
     public function login($email, $password)
     {
         try {
-            $this->db->query("SELECT * FROM users WHERE email_u=:email and password=:password");
+            $this->db->query("SELECT * FROM users WHERE email_u=:email");
             $this->db->bind("email", $email);
-            $this->db->bind("password", $password);
             $result = $this->db->fetch();
-            if (count($result) > 0) {
+            if (count($result) != 0 && password_verify($password, $result[4])) {
                 $user = new User();
                 $user->setUser(
                     $result[1],
@@ -90,6 +94,29 @@ class User
         } catch (Exception $e) {
             echo "Une erreur est survenue lors de la connexion" . $e->getMessage();
             return false;
+        }
+    }
+
+    ######### POST
+
+    /** function to create account 
+     * 
+     */
+    function createUser()
+    {
+        try {
+            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, isValid, client_name) VALUES (:lastname, :firstname, :email, :password, :role, :isValid, :client_name)");
+            $this->db->bind("lastname", $this->lastname);
+            $this->db->bind("firstname", $this->firstname);
+            $this->db->bind("email", $this->email);
+            $this->db->bind("role", $this->role);
+            $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+            $this->db->bind("password", $hashedPassword);
+            $this->db->bind("isValid", 0);
+            $this->db->bind("client_name", $this->enterprise ?? "");
+            $this->db->fetch();
+        } catch (Exception $e) {
+            echo "Could add user error :" . $e->getMessage();
         }
     }
 }

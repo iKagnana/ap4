@@ -109,6 +109,14 @@ li a:hover {
     justify-content: center;
 }
 
+.plain-left-side {
+    width: 50%;
+}
+
+.plain-right-side {
+    width: 50%;
+}
+
 .left-side {
     width: 50%;
     height: 100%;

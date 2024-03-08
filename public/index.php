@@ -13,5 +13,6 @@ require_once("../app/controllers/LoginController.php");
 require_once("../app/controllers/ProductController.php");
 require_once("../app/controllers/HomeController.php");
 require_once("../app/controllers/OrderController.php");
+require_once("../app/controllers/UserController.php");
 
 $app = new App();
