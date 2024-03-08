@@ -14,6 +14,7 @@ class User
     public $role;
     public $enterprise;
     public $levelAccess;
+    public $status;
 
     private $db;
 
@@ -33,9 +34,12 @@ class User
      * @param string $password
      * @param int $role
      * @param int $levelAccess
-     * @param int $id optionnal
+     * @param int|null $id optionnal
+     * @param int|null $levelAccess optionnal
+     * @param bool|null $status optionnal
+     * @param string|null $enterprise optionnal
      */
-    public function setUser($lastname, $firstname, $email, $password, $role, $id = null, $enterprise = null, $levelAccess = null)
+    public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $id = null, $levelAccess = null, $status = null)
     {
         $this->id = $id;
         $this->lastname = $lastname;
@@ -43,6 +47,8 @@ class User
         $this->email = $email;
         $this->password = $password;
         $this->levelAccess = $levelAccess;
+        $this->status = $status ?? "En attente de validation";
+        $this->enterprise = $enterprise;
         $this->role = $role;
     }
 
@@ -63,7 +69,65 @@ class User
         $_SESSION["userRole"] = $this->role;
     }
 
+    public function getValideUser($users)
+    {
+        return array_filter($users, function ($user) {
+            return $user->status == "Validé";
+        });
+    }
+
+    public function getNoValidUser($users)
+    {
+        return array_filter($users, function ($user) {
+            return $user->status == "En attente de validation";
+        });
+    }
+
+    public function getRefusedeUser($users)
+    {
+        return array_filter($users, function ($user) {
+            return $user->status == "Refusé";
+        });
+    }
+
     ################ Request to db
+
+    ######### GET
+    /** function to retreive user collection
+     * 
+     */
+    public function getUsers()
+    {
+        try {
+            $this->db->query("SELECT * FROM users");
+            $result = $this->db->fetchAll();
+
+            $allUsers = [];
+            for ($i = 0; $i < count($result); $i++) {
+                $user = new User();
+                $user->setUser(
+                    $result[$i]["enterprise"],
+                    $result[$i]["lastname_u"],
+                    $result[$i]["firstname_u"],
+                    $result[$i]["email_u"],
+                    $result[$i]["role"],
+                    $result[$i]["id_u"],
+                    $result[$i]["level_access"],
+                    $result[$i]["status"],
+                );
+
+                array_push($allUsers, $user);
+            }
+
+            return $allUsers;
+        } catch (Exception $e) {
+            echo "Couldn't get users because of error :" . $e->getMessage();
+            return [];
+        }
+    }
+
+
+    ######### POST
 
     /** function that will be used for user login
      * @param string
@@ -76,15 +140,27 @@ class User
             $this->db->query("SELECT * FROM users WHERE email_u=:email");
             $this->db->bind("email", $email);
             $result = $this->db->fetch();
+
+            # prevent user to login when his status is not valid
+            if ($result["status"] == "En attente de validation") {
+                echo "L'administrateur n'a pas encore validé votre compte.";
+                return false;
+            } else if ($result["status"] == "Refusé") {
+                echo "L'administrateur a refusé votre demande";
+                return false;
+            }
+
             if (count($result) != 0 && password_verify($password, $result[4])) {
                 $user = new User();
                 $user->setUser(
-                    $result[1],
-                    $result[2],
-                    $result[3],
-                    $result[4],
-                    $result[5],
-                    $result[0]
+                    $result["enterprise"],
+                    $result["lastname_u"],
+                    $result["firstname_u"],
+                    $result["email_u"],
+                    $result["role"],
+                    $result["id_u"],
+                    $result["level_access"],
+                    $result["status"],
                 );
                 $user->saveInSession();
                 return true;
@@ -97,23 +173,21 @@ class User
         }
     }
 
-    ######### POST
-
     /** function to create account 
      * 
      */
     function createUser()
     {
         try {
-            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, isValid, client_name) VALUES (:lastname, :firstname, :email, :password, :role, :isValid, :client_name)");
+            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, status, client_name) VALUES (:lastname, :firstname, :email, :password, :role, :status, :client_name)");
             $this->db->bind("lastname", $this->lastname);
             $this->db->bind("firstname", $this->firstname);
             $this->db->bind("email", $this->email);
             $this->db->bind("role", $this->role);
             $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
             $this->db->bind("password", $hashedPassword);
-            $this->db->bind("isValid", 0);
             $this->db->bind("client_name", $this->enterprise ?? "");
+            $this->db->bind("status", $this->status);
             $this->db->fetch();
         } catch (Exception $e) {
             echo "Could add user error :" . $e->getMessage();

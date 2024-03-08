@@ -29,10 +29,12 @@ class UserController extends Controller
 
         if (isset($_POST["type"]) && $_POST["type"] == "client") {
             $role = 2;
+        } else if (isset($_POST["type"]) && $_POST["type"] == "employee") {
+            $enterprise = "GSB";
         }
 
         $newUser = new User();
-        $newUser->setUser($lastname, $firstname, $email, $role, $password, $enterprise);
+        $newUser->setUser($enterprise, $lastname, $firstname, $email, $role, $password);
         $newUser->createUser();
 
         $this->view("user/login-view");
