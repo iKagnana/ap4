@@ -93,14 +93,14 @@ class User
         });
     }
 
-    public function getNoValidUser($users)
+    public function getWaitingUser($users)
     {
         return array_filter($users, function ($user) {
             return $user->status == "En attente de validation";
         });
     }
 
-    public function getRefusedeUser($users)
+    public function getRefusedUser($users)
     {
         return array_filter($users, function ($user) {
             return $user->status == "Refusé";
@@ -243,6 +243,46 @@ class User
             $this->db->fetch();
         } catch (Exception $e) {
             echo "Could add user error :" . $e->getMessage();
+        }
+    }
+
+    ######### PATCH
+    /** function to patch a user
+     * 
+     */
+    function patchUser()
+    {
+        try {
+            $this->db->query("UPDATE users SET enterprise = :enterprise, lastname_u = :lastname, firstname_u = :firstname, email_u = :email, role = :role, level_access = :levelAccess, status = :status WHERE id_u = :id");
+            $this->db->bind("id", $this->id);
+            $this->db->bind("enterprise", $this->enterprise);
+            $this->db->bind("lastname", $this->lastname);
+            $this->db->bind("firstname", $this->firstname);
+            $this->db->bind("email", $this->email);
+            $this->db->bind("role", $this->role);
+            $this->db->bind("levelAccess", $this->levelAccess);
+            $this->db->bind("status", $this->status);
+            $this->db->fetch();
+        } catch (Exception $e) {
+            echo "Couldn't modify user" . $e->getMessage();
+        }
+
+    }
+
+
+    ######### DELETE
+    /** function to delete a user
+     * @param int $id
+     */
+    function deleteUser($id)
+    {
+        try {
+            $this->db->query("DELETE FROM users WHERE id_u = :id");
+            $this->db->bind("id", $id);
+            $this->db->fetch();
+        } catch (Exception $e) {
+            echo "Couldn't delete user" . $e->getMessage();
+
         }
     }
 }

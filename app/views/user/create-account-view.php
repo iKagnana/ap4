@@ -1,6 +1,6 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
-    <form class="form-create-account" action="http://localhost:8089/user/create" method="post">
+    <form class="form-create-account" action="http://localhost:8089/user/create" method="post" autocomplete="off">
         <div>
             <div>
                 <input type="radio" value="1" name="type" id="employee">

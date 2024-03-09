@@ -4,3 +4,20 @@
     gap: 1em;
     padding: 1em;
 }
+
+.select-filterBy {
+    border: 0em;
+}
+
+.form-detail-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-user-label-text {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+    width: 100%;
+}

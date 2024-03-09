@@ -1,6 +1,6 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
-    <form class="form-create-account" action="http://localhost:8089/user/create" method="post">
+    <form class="form-create-account" action="http://localhost:8089/user/create" method="post" autocomplete="off">
         <select name="role" id="">
             <option value="2">Client</option>
             <option value="1">Employé</option>
@@ -25,12 +25,12 @@
 
         <div>
             <label for="email">Email</label>
-            <input type="text" name="email" id="email">
+            <input type="text" name="email" id="email" autocomplete="off">
         </div>
 
         <div>
             <label for="password">Mot de passe</label>
-            <input type="text" name="password" id="password">
+            <input type="password" name="password" id="password" autocomplete="off">
         </div>
 
         <div>

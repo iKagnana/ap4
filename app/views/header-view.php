@@ -51,9 +51,6 @@
                Utilisateurs</a>";
                 echo "<div class='dropdown-menu'><a href='http://localhost:8089/user'>Consulter</a>";
                 echo "<a href='http://localhost:8089/user/form'>Ajouter</a>";
-                if ($_SESSION["userRole"] == 0) {
-                    echo "<a href='http://localhost:8089/user/control'>Contrôler</a>";
-                }
                 echo "</div>
                 </div>";
             }

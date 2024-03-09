@@ -54,10 +54,9 @@ class ProductController extends Controller
     {
         $search = $_REQUEST["search"];
 
-        $productClass = new Product();
-        $allProducts = $productClass->getProducts();
+        $allProducts = $this->product->getProducts();
 
-        $filteredData = $productClass->filterProduct($search, $allProducts);
+        $filteredData = $this->product->filterProduct($search, $allProducts);
         $_SESSION["searchProductText"] = $search;
         $data = ["products" => $filteredData, "order" => $this->filterOrder];
         $this->view("product/products-view", $data);
@@ -67,9 +66,8 @@ class ProductController extends Controller
     {
         $search = isset($_SESSION["search"]) ? $_SESSION["search"] : "";
 
-        $productClass = new Product();
-        $allProducts = $productClass->getProducts();
-        $filteredData = $productClass->filterProduct($search, $allProducts);
+        $allProducts = $this->product->getProducts();
+        $filteredData = $this->product->filterProduct($search, $allProducts);
 
         $order = isset($_REQUEST["order"]) ? $_REQUEST["order"] : "asc";
 
@@ -86,13 +84,11 @@ class ProductController extends Controller
     {
         $id = $_REQUEST["id"];
 
-        $productClass = new Product();
-        $allProducts = $productClass->getProducts();
+        $allProducts = $this->product->getProducts();
 
         # get the right product and update it
         if (array_key_exists($id, $allProducts)) {
             $this->openedProduct = array_column($allProducts, null, "id")[$id] ?? false;
-            echo json_encode($this->openedProduct);
         }
 
         $data = ["products" => $allProducts, "order" => $this->filterOrder, "open" => $this->openedProduct];
