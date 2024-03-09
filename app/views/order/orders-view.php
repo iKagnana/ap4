@@ -1,7 +1,7 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <?php
-    echo "<div>
+    echo "<div class='padding-one'>
             <table>
             <caption>Commandes</caption>
             <thead>

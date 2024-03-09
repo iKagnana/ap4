@@ -20,29 +20,35 @@ class UserController extends Controller
 
     public function create()
     {
+        $newUser = new User();
         $lastname = $_POST["lastname"];
         $firstname = $_POST["firstname"];
         $email = $_POST["email"];
         $password = $_POST["password"];
         $enterprise = $_POST["enterprise"];
-        $role = 1;
+        $role = $_POST["role"];
 
-        if (isset($_POST["type"]) && $_POST["type"] == "client") {
-            $role = 2;
-        } else if (isset($_POST["type"]) && $_POST["type"] == "employee") {
+        if (isset($_POST["type"]) && $_POST["type"] == "employee") {
             $enterprise = "GSB";
         }
 
-        $newUser = new User();
-        $newUser->setUser($enterprise, $lastname, $firstname, $email, $role, $password);
-        $newUser->createUser();
+        if (isset($_POST["origin"]) && $_POST["origin"] == "user") {
+            $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
+            $newUser->createUser();
+            $this->view("user/login-view");
+        } else {
+            $levelAccess = $_POST["levelAccess"];
+            $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
+            $newUser->createUserAdmin();
+            $this->index();
+        }
 
-        $this->view("user/login-view");
+
     }
 
 
     ########## User list code
-    /** function to nagivate to the list of users page
+    /** method to nagivate to the list of users page
      * @param [] $extra
      */
     public function index($extra = null)
@@ -63,5 +69,14 @@ class UserController extends Controller
     {
         $searchName = $_GET["search"];
         $this->index(["searchName" => $searchName]);
+    }
+
+
+    /** method to navigate to the user form for the admin
+     * 
+     */
+    public function form()
+    {
+        $this->view("user/handle/form-user-view");
     }
 }

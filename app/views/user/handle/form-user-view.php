@@ -1,22 +1,17 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <form class="form-create-account" action="http://localhost:8089/user/create" method="post">
-        <div>
-            <div>
-                <input type="radio" value="1" name="type" id="employee">
-                <label for="employee">Employé</label>
-            </div>
-
-            <div>
-                <input type="radio" value="2" name="type" id="client">
-                <label for="client">Client</label>
-            </div>
-        </div>
+        <select name="role" id="">
+            <option value="2">Client</option>
+            <option value="1">Employé</option>
+            <option value="0">Administrateur</option>
+        </select>
 
         <div>
             <label for="enterprise">Nom de l'entreprise (Client uniquement)</label>
             <input type="text" name="enterprise" id="enterprise">
         </div>
+
 
         <div>
             <label for="lastname">Nom</label>
@@ -38,7 +33,16 @@
             <input type="text" name="password" id="password">
         </div>
 
-        <input hidden type="text" name="origin" value="user">
+        <div>
+            <label for="level-access">Niveau d'accès maximum</label>
+            <select name="levelAccess" id="level-access">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+
+
         <button type="submit">Valdier</button>
     </form>
 </div>

@@ -34,12 +34,12 @@ class User
      * @param string $email 
      * @param string $password
      * @param int|string $role
-     * @param int|null $id optionnal
      * @param int|null $levelAccess optionnal
-     * @param bool|null $status optionnal
+     * @param string|null $status optionnal
+     * @param int|null $id optionnal
      * 
      */
-    public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $id = null, $levelAccess = null, $status = null)
+    public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess = null, $status = null, $id = null)
     {
         $this->id = $id;
         $this->lastname = $lastname;
@@ -140,9 +140,9 @@ class User
                     $result[$i]["email_u"],
                     "",
                     $role,
-                    $result[$i]["id_u"],
                     $result[$i]["level_access"],
                     $result[$i]["status"],
+                    $result[$i]["id_u"],
                 );
 
                 array_push($allUsers, $user);
@@ -188,9 +188,9 @@ class User
                     $result["email_u"],
                     "", # place for the password
                     $result["role"],
-                    $result["id_u"],
                     $result["level_access"],
                     $result["status"],
+                    $result["id_u"],
                 );
                 $user->saveInSession();
                 return true;
@@ -209,7 +209,7 @@ class User
     function createUser()
     {
         try {
-            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, status, client_name) VALUES (:lastname, :firstname, :email, :password, :role, :status, :client_name)");
+            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, status, enterprise) VALUES (:lastname, :firstname, :email, :password, :role, :status, :client_name)");
             $this->db->bind("lastname", $this->lastname);
             $this->db->bind("firstname", $this->firstname);
             $this->db->bind("email", $this->email);
@@ -218,6 +218,28 @@ class User
             $this->db->bind("password", $hashedPassword);
             $this->db->bind("client_name", $this->enterprise ?? "");
             $this->db->bind("status", $this->status);
+            $this->db->fetch();
+        } catch (Exception $e) {
+            echo "Could add user error :" . $e->getMessage();
+        }
+    }
+
+    /** function to create account as an admin
+     * 
+     */
+    function createUserAdmin()
+    {
+        try {
+            $this->db->query("INSERT INTO users (lastname_u, firstname_u, email_u, password, role, status, enterprise, level_access) VALUES (:lastname, :firstname, :email, :password, :role, :status, :client_name, :level_access)");
+            $this->db->bind("lastname", $this->lastname);
+            $this->db->bind("firstname", $this->firstname);
+            $this->db->bind("email", $this->email);
+            $this->db->bind("role", $this->role);
+            $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+            $this->db->bind("password", $hashedPassword);
+            $this->db->bind("client_name", $this->enterprise ?? "");
+            $this->db->bind("status", $this->status);
+            $this->db->bind("level_access", $this->levelAccess);
             $this->db->fetch();
         } catch (Exception $e) {
             echo "Could add user error :" . $e->getMessage();
