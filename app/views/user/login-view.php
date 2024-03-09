@@ -19,7 +19,7 @@
             <input type="submit" value="Valider">
         </form>
 
-        <form action="http://localhost:8089/user" method="POST">
+        <form action="http://localhost:8089/user/account" method="POST">
             <button type="submit">Je n'ai pas de compte</button>
         </form>
     </div>

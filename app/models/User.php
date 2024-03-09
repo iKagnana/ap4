@@ -28,16 +28,16 @@ class User
 
 
     /** Set user
+     * @param string $enterprise 
      * @param string $lastname
      * @param string $firstname
      * @param string $email 
      * @param string $password
-     * @param int $role
-     * @param int $levelAccess
+     * @param int|string $role
      * @param int|null $id optionnal
      * @param int|null $levelAccess optionnal
      * @param bool|null $status optionnal
-     * @param string|null $enterprise optionnal
+     * 
      */
     public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $id = null, $levelAccess = null, $status = null)
     {
@@ -121,13 +121,25 @@ class User
 
             $allUsers = [];
             for ($i = 0; $i < count($result); $i++) {
+                $role = "";
+
+                if ($result[$i]["role"] == 0) {
+                    $role = "Administrateur";
+                } else if ($result[$i]["role"] == 1) {
+                    $role = "Utilisateur";
+                } else if ($result[$i]["role"] == 2) {
+                    $role = "Client";
+                }
+
+
                 $user = new User();
                 $user->setUser(
                     $result[$i]["enterprise"],
                     $result[$i]["lastname_u"],
                     $result[$i]["firstname_u"],
                     $result[$i]["email_u"],
-                    $result[$i]["role"],
+                    "",
+                    $role,
                     $result[$i]["id_u"],
                     $result[$i]["level_access"],
                     $result[$i]["status"],
@@ -174,6 +186,7 @@ class User
                     $result["lastname_u"],
                     $result["firstname_u"],
                     $result["email_u"],
+                    "", # place for the password
                     $result["role"],
                     $result["id_u"],
                     $result["level_access"],

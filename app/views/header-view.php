@@ -45,7 +45,19 @@
             }
             echo "</div>
                 </div>";
-            # clear seperatiob
+            # clear seperation
+            if ($_SESSION["userRole"] == 0) {
+                echo "<div class='menu-item'><a href='http://localhost:8089/user'>
+               Utilisateurs</a>";
+                echo "<div class='dropdown-menu'><a href='http://localhost:8089/user'>Consulter</a>";
+                echo "<a href='http://localhost:8089/user/form'>Ajouter</a>";
+                if ($_SESSION["userRole"] == 0) {
+                    echo "<a href='http://localhost:8089/user/control'>Contrôler</a>";
+                }
+                echo "</div>
+                </div>";
+            }
+            # clear seperation
             echo "<div class='menu-item'><a href='http://localhost:8089/login/logout'>Déconnexion</a></div>
             </div>
         ";

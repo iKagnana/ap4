@@ -1,7 +1,7 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
-    <div>
-        <form action="http://localhost:8089/user/search" method="GET">
+    <div class="flex-col-container padding-one">
+        <form class="padding-one" action="http://localhost:8089/user/search" method="GET">
             <label for=" searchbar">Rechercher le nom</label>
             <input type="text" name="search" id="searchbar">
             <input type="submit" value="🔍">
@@ -17,7 +17,7 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Niveau d'accès</th>
-                    <th>Valide</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
                     echo "<td>$user->email </td>";
                     echo "<td>$user->role </td>";
                     echo "<td>$user->levelAccess </td>";
-                    echo "<td>$user->isValid </td>";
+                    echo "<td>$user->status </td>";
                     echo "</tr>";
                 }
                 ?>

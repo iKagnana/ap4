@@ -13,7 +13,7 @@ class UserController extends Controller
     /** page to create an account
      * @param $extra
      */
-    public function index($extra = null)
+    public function account($extra = null)
     {
         $this->view("user/create-account-view");
     }
@@ -45,13 +45,14 @@ class UserController extends Controller
     /** function to nagivate to the list of users page
      * @param [] $extra
      */
-    public function users($extra = null)
+    public function index($extra = null)
     {
         $allUsers = $this->user->getUsers();
         $data = ["users" => $allUsers];
+
         if (isset($extra["searchName"])) {
             $sendData = $this->user->filterUser($extra["searchName"], $allUsers);
-            $this->view("user/handle/user-list-view", $sendData);
+            $this->view("user/handle/user-list-view", ["users" => $sendData]);
         } else {
             $this->view("user/handle/user-list-view", $data);
         }
@@ -60,7 +61,7 @@ class UserController extends Controller
 
     public function search()
     {
-        $searchName = $_POST["search"];
-        $this->users(["searchName" => $searchName]);
+        $searchName = $_GET["search"];
+        $this->index(["searchName" => $searchName]);
     }
 }
