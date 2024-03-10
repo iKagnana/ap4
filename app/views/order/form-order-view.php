@@ -14,6 +14,7 @@
                     <th>Libellé</th>
                     <th>Prix</th>
                     <th>Catégorie</th>
+                    <th>Stock</th>
                     <th>Quantité</th>
                     <th>Action</th>
                 </tr>
@@ -26,7 +27,8 @@
                     echo "<td>" . $product->name . "</td>";
                     echo "<td>" . $product->price . "</td>";
                     echo "<td>" . $product->category . "</td>";
-                    echo "<td><input type='number' name='quantity' value=" . $product->quantity . "></td>";
+                    echo "<td>" . $product->stock . "</td>";
+                    echo "<td><input type='number' name='quantity' min='1' max=$product->stock value=" . $product->quantity . "></td>";
                     echo "<input hidden type='text' name='idProduct' value=" . $product->id . ">";
                     echo "<td>
                         <input type='submit' value='+'>

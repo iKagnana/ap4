@@ -10,8 +10,6 @@ class Order
     public $status;
     public $reason;
     public $products = [];
-    private $listStatus = [0 => "En attente de validation", 1 => "Validée", 2 => "Refusée"];
-
     private $db;
 
     public function __construct()
@@ -99,7 +97,7 @@ class Order
     public function getOrder()
     {
         try {
-            $this->db->query("SELECT * FROM orders JOIN users ON orders.id_u = users.id_u");
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u FROM orders JOIN users ON orders.id_u = users.id_u");
             $result = $this->db->fetchAll();
 
             $allOrders = [];
@@ -133,7 +131,34 @@ class Order
      */
     public function getUserOrders($id)
     {
-        # TODO
+        try {
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u FROM orders JOIN users ON orders.id_u = users.id_u WHERE orders.id_u = :id");
+            $this->db->bind("id", $id);
+            $result = $this->db->fetchAll();
+
+            $allOrders = [];
+            for ($i = 0; $i < count($result); $i++) {
+                $order = new Order();
+                $order->setOrderGet(
+                    $result[$i]["date_o"],
+                    $result[$i]["price_o"],
+                    $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                    $result[$i]["id_u_User"],
+                    $result[$i]["status"],
+                    $result[$i]["reason"],
+                    $result[$i]["id_o"]
+                );
+
+                $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+                $order->setProducts($products);
+                array_push($allOrders, $order);
+            }
+            return $allOrders;
+
+        } catch (PDOException $e) {
+            echo "Couldn't get orders because of error :" . $e->getMessage();
+            return [];
+        }
     }
 
     /** function to retreive all the products for an order

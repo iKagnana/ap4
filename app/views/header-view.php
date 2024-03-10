@@ -24,17 +24,19 @@
             echo "
             <div class='menu'>
                 <div class='menu-item'><a href='http://localhost:8089/home'>Accueil</a></div>";
-            echo "<div class='menu-item'><a href='http://localhost:8089/product'>
+            if ($_SESSION["userRole"] < 2) {
+                echo "<div class='menu-item'><a href='http://localhost:8089/product'>
                 Stocks</a><div class='dropdown-menu'>";
 
-            if ($_SESSION["userRole"] < 2) {
+
                 echo "<a href='http://localhost:8089/product'>Consulter</a>";
-            }
-            if ($_SESSION["userRole"] == 0) {
-                echo "<a href='http://localhost:8089/product/form'>Ajouter</a>";
-            }
-            echo "</div>
+
+                if ($_SESSION["userRole"] == 0) {
+                    echo "<a href='http://localhost:8089/product/form'>Ajouter</a>";
+                }
+                echo "</div>
                 </div>";
+            }
             # clear seperation
             echo "<div class='menu-item'><a href='http://localhost:8089/order'>
                Commande</a>";

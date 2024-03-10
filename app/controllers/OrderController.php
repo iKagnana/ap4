@@ -18,7 +18,13 @@ class OrderController extends Controller
      */
     public function index($extra = null)
     {
-        $orders = $this->order->getOrder();
+        $orders = [];
+        if ($_SESSION["userRole"] < 2) {
+            $orders = $this->order->getOrder();
+        } else {
+            $orders = $this->order->getUserOrders($_SESSION["userId"]);
+        }
+
         $data = ["all" => $orders];
         if (isset($extra)) {
             $sendData = array_merge($data, $extra);
@@ -94,7 +100,7 @@ class OrderController extends Controller
      */
     public function form($extra = null)
     {
-        $allProducts = $this->product->getProducts();
+        $allProducts = $this->product->getProductAccessible();
         $sendData = $allProducts;
         if (isset($extra["searchName"])) {
             $sendData = $this->product->filterProduct($extra["searchName"], $allProducts);

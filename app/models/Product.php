@@ -74,7 +74,7 @@ class Product
     public function getProducts()
     {
         try {
-            $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories WHERE products.id_cat = categories.id_cat");
+            $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat");
             $result = $this->db->fetchAll();
 
             $allProducts = [];
@@ -97,7 +97,37 @@ class Product
         }
     }
 
-    /** method to get product only by certain category
+    /** function to get only products accessible by the user
+     * 
+     */
+    public function getProductAccessible()
+    {
+        try {
+            $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel");
+            $this->db->bind("accessLevel", $_SESSION["userLevelAccess"]);
+            $result = $this->db->fetchAll();
+
+            $allProducts = [];
+            for ($i = 0; $i < count($result); $i++) {
+                $product = new Product();
+                $product->setProduct(
+                    $result[$i]["name_p"],
+                    $result[$i]["price"],
+                    $result[$i]["stock"],
+                    $result[$i]["access_level"],
+                    $result[$i]["name_cat"],
+                    $result[$i]["id_p"]
+                );
+                array_push($allProducts, $product);
+            }
+            return $allProducts;
+        } catch (PDOException $exception) {
+            echo "Couldn't get products beacause of error : " . $exception->getMessage();
+            return [];
+        }
+    }
+
+    /** function to get product only by certain category
      * 
      */
     public function getProductByCategory($category)

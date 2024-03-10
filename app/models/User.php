@@ -67,6 +67,7 @@ class User
         $_SESSION["userFirstname"] = $this->firstname;
         $_SESSION["userEmail"] = $this->email;
         $_SESSION["userRole"] = $this->role;
+        $_SESSION["userLevelAccess"] = $this->levelAccess;
     }
 
 
