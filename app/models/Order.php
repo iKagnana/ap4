@@ -209,18 +209,24 @@ class Order
     }
 
     /** method to add order_details in db
+     * @param string $type type of order
      * @param int $idOrder order id 
      * @param int $idProduct product id
      * @param int $quantity quantity, may be negative or positive
      * @return 
      */
-    public function addOrderDetails($idOrder, $idProduct, $quantity)
+    public function addOrderDetails($idOrder, $idProduct, $quantity, $type)
     {
         try {
             $this->db->query("INSERT INTO orders_details (id_o, id_p, quantity) VALUES (:idOrder, :idProduct, :quantity)");
             $this->db->bind("idOrder", $idOrder);
             $this->db->bind("idProduct", $idProduct);
-            $this->db->bind("quantity", $quantity);
+            if ($type == "incoming") {
+                $this->db->bind("quantity", 0 - $quantity);
+            } else {
+                $this->db->bind("quantity", $quantity);
+            }
+
             $result = $this->db->fetch();
             return $result;
         } catch (PDOException $e) {

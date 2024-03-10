@@ -41,29 +41,39 @@
         </table>
     </div>
     <div class="right-side">
-        <span>Panier</span>
+        <?php echo $_SESSION["userRole"] < 2 ? "<div>" : "<div hidden>"; ?>
         <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Libellé</th>
-                        <th>Quantité</th>
-                        <th>Prix</th>
-                        <th>Catégorie</th>
-                        <th>Prix total €</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($data["cart"] as $addedProduct) {
-                        echo "<tr>";
-                        echo "<td>" . $addedProduct["name"] . "</td>";
-                        echo "<td>" . $addedProduct["quantity"] . "</td>";
-                        echo "<td>" . $addedProduct["price"] . "</td>";
-                        echo "<td>" . $addedProduct["category"] . "</td>";
-                        echo "<td>" . $addedProduct["totalPrice"] . "</td>";
-                        echo "<td>
-                            <form action='http://localhost:8089/order/substract' method='GET'>
+            <input checked form="cart" type="radio" name="type" id="incoming">
+            <label for="incoming">Commande client</label>
+        </div>
+        <div>
+            <input form="cart" type="radio" name="type" id="outgoing">
+            <label for="outgoing">Commande fournisseur</label>
+        </div>
+    </div>
+    <span>Panier</span>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Libellé</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                    <th>Catégorie</th>
+                    <th>Prix total €</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($data["cart"] as $addedProduct) {
+                    echo "<tr>";
+                    echo "<td>" . $addedProduct["name"] . "</td>";
+                    echo "<td>" . $addedProduct["quantity"] . "</td>";
+                    echo "<td>" . $addedProduct["price"] . "</td>";
+                    echo "<td>" . $addedProduct["category"] . "</td>";
+                    echo "<td>" . $addedProduct["totalPrice"] . "</td>";
+                    echo "<td>
+                            <form id='cart' action='http://localhost:8089/order/substract' method='GET'>
                                 <input hidden type='text' name='id' value=" . $addedProduct["id"] . ">
                                 <input type='submit' value='-'>
                             </form>
@@ -72,15 +82,15 @@
                                 <input type='submit' value='X'>
                                 </form>
                             </td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-        <form action="http://localhost:8089/order/create" method="post">
-            <input type="submit" value="Valider">
-        </form>
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
+    <form action="http://localhost:8089/order/create" method="post">
+        <input type="submit" value="Valider">
+    </form>
+</div>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

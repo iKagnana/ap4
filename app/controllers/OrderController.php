@@ -191,6 +191,7 @@ class OrderController extends Controller
         # variable
         $date = new DateTime();
         $idUser = $_SESSION["userId"];
+        $type = $_POST["type"] ?? "incoming";
 
         $order = new Order();
         $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "");
@@ -198,7 +199,7 @@ class OrderController extends Controller
 
         if ($idOrder != 0) {
             foreach ($cart as $product) {
-                $order->addOrderDetails($idOrder, $product["id"], $product["quantity"]);
+                $order->addOrderDetails($idOrder, $product["id"], $product["quantity"], $type);
             }
             unset($_SESSION["cart"]);
             $this->index();
