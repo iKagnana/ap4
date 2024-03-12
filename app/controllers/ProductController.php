@@ -80,6 +80,38 @@ class ProductController extends Controller
         $this->view("product/products-view", $data);
     }
 
+    /** method to add to cart from product page
+     * 
+     */
+    public function cart()
+    {
+        $idProduct = $_POST["id"];
+        # get product with its id 
+        $allProducts = $this->product->getProducts();
+        $selectedProduct = array_column($allProducts, null, "id")[$idProduct];
+
+        if (isset($_SESSION["cart"])) {
+            $cart = $_SESSION["cart"];
+        } else {
+            $cart = array();
+        }
+
+        # change format in order to add in cart
+        $productArray = array(
+            "id" => $idProduct,
+            "name" => $selectedProduct->name,
+            "quantity" => 1,
+            "price" => $selectedProduct->price,
+            "category" => $selectedProduct->category,
+            "totalPrice" => $selectedProduct->price
+        );
+
+        array_push($cart, $productArray);
+        $_SESSION["cart"] = $cart;
+
+        $this->index();
+    }
+
     public function open()
     {
         $id = $_REQUEST["id"];

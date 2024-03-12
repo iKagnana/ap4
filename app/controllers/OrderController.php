@@ -180,6 +180,12 @@ class OrderController extends Controller
         $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
     }
 
+    public function reset()
+    {
+        unset($_SESSION["cart"]);
+        $this->form();
+    }
+
 
     public function create()
     {

@@ -72,13 +72,17 @@
                         echo "<td> $product->stock </td>";
                         echo "<td> $product->access_level </td>";
                         echo "<td> $product->category </td>";
+                        echo "<td>";
                         if ($_SESSION["userRole"] == 0) {
-                            echo "<td> 
-                        <form action=http://localhost:8089/product/open method='GET'>
+                            echo "<form action=http://localhost:8089/product/open method='GET'>
                         <button name='id' value=" . $product->id . ">✏️</button> 
-                            </form>
-                        </td>";
+                            </form>";
                         }
+                        echo "<form action=http://localhost:8089/product/cart method='POST'>
+                            <button name='id' value=$product->id>Ajouter</button>
+                            </form>";
+                        echo "</td>";
+
                     }
                     echo "</tr>";
                 }

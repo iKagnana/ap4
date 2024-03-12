@@ -104,6 +104,9 @@
 <form id='cart' action="http://localhost:8089/order/create" method="post">
     <input type="submit" value="Valider">
 </form>
+<form action="http://localhost:8089/order/reset" method="POST">
+    <button type="submit">Vider le panier</button>
+</form>
 </div>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>
