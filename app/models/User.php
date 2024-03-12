@@ -81,9 +81,9 @@ class User
     public function filterUser($searchName, $users)
     {
         return array_filter($users, function ($user) use ($searchName) {
-            return str_contains($user->lastname, $searchName) ||
-                str_contains($user->firstname, $searchName) ||
-                str_contains($user->email, $searchName);
+            return str_contains(strtolower($user->lastname), strtolower($searchName)) ||
+                str_contains(strtolower($user->firstname), strtolower($searchName)) ||
+                str_contains(strtolower($user->email), strtolower($searchName));
         });
     }
 

@@ -58,25 +58,20 @@ class UserController extends Controller
      */
     public function index($extra = null)
     {
-        $sendData = ["users" => $this->allUsers];
+        $sendData = $this->allUsers;
+        $filter = null;
 
-        if (isset($extra["searchName"])) {
-            $filtered = $this->user->filterUser($extra["searchName"], $this->allUsers);
-            $sendData = ["user" => $filtered];
-        } else if (isset($extra["filtered"])) {
-            $sendData = ["users" => $extra["filtered"], "filter" => $extra["filter"]];
+        if (isset($extra["filtered"])) {
+            $sendData = $extra["filtered"];
+            $filter = $extra["filter"];
         }
 
-        $this->view("user/handle/user-list-view", $sendData);
+        if (isset($extra["searchName"])) {
+            $sendData = $this->user->filterUser($extra["searchName"], $sendData);
+        }
 
-    }
+        $this->view("user/handle/user-list-view", ["users" => $sendData, "filter" => $filter]);
 
-    /** method to get search result
-     */
-    public function search()
-    {
-        $searchName = $_GET["search"];
-        $this->index(["searchName" => $searchName]);
     }
 
     /** method to get filter result
@@ -84,7 +79,7 @@ class UserController extends Controller
     public function filter()
     {
         $filter = $_GET["filter"] ?? "all";
-
+        $searchName = $_GET["search"] ?? "";
         $allUser = $this->user->getUsers();
 
         if ($filter == "waiting") {
@@ -95,7 +90,7 @@ class UserController extends Controller
             $allUser = $this->user->getRefusedUser($allUser);
         }
 
-        $this->index(["filtered" => $allUser, "filter" => $filter]);
+        $this->index(["filtered" => $allUser, "filter" => $filter, "searchName" => $searchName]);
     }
 
     /** method to toggle details of an user

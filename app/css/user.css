@@ -5,19 +5,32 @@
     padding: 1em;
 }
 
-.select-filterBy {
-    border: 0em;
-}
-
 .form-detail-user {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.form-user-label-text {
+.form-filter-user {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 1em;
     width: 100%;
+    align-items: end;
+    padding: 0;
+}
+
+.filter-wrapper {
+    border: 1px solid black;
+    padding: 1em;
+    border-radius: 1em;
+    margin: 1em;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-footer {
+    display: flex;
+    justify-content: end;
 }

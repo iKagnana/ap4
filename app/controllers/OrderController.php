@@ -6,11 +6,13 @@ class OrderController extends Controller
 
     private $order; # used for function db relate to order
     private $product; # used for function db relate to product
+    private $provider; # used for function db relate to provider
 
     public function __construct()
     {
         $this->order = $this->model("Order");
         $this->product = $this->model("Product");
+        $this->provider = $this->model("Provider");
     }
 
     /** method to display order view
@@ -19,13 +21,10 @@ class OrderController extends Controller
     public function index($extra = null)
     {
         $orders = [];
-        if ($_SESSION["userRole"] < 2) {
-            $orders = $this->order->getOrder();
-        } else {
-            $orders = $this->order->getUserOrders($_SESSION["userId"]);
-        }
+        $orders = $_SESSION["userRole"] < 2 ? $this->order->getOrder() : $this->order->getUserOrders($_SESSION["userId"]);
 
         $data = ["all" => $orders];
+
         if (isset($extra)) {
             $sendData = array_merge($data, $extra);
             $this->view("order/orders-view", $sendData);
@@ -101,12 +100,14 @@ class OrderController extends Controller
     public function form($extra = null)
     {
         $allProducts = $this->product->getProductAccessible();
-        $sendData = $allProducts;
+        $allProviders = $this->provider->getProvider();
+
+        $sendProduct = $allProducts;
         if (isset($extra["searchName"])) {
-            $sendData = $this->product->filterProduct($extra["searchName"], $allProducts);
+            $sendProduct = $this->product->filterProduct($extra["searchName"], $allProducts);
         }
         $cart = $_SESSION["cart"] ?? [];
-        $this->view("order/form-order-view", ["allProducts" => $sendData, "cart" => $cart]);
+        $this->view("order/form-order-view", ["allProducts" => $sendProduct, "cart" => $cart, "providers" => $allProviders]);
     }
 
     public function addProduct()
@@ -135,7 +136,7 @@ class OrderController extends Controller
         array_push($cart, $productArray);
         $_SESSION["cart"] = $cart;
 
-        $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
+        $this->form();
     }
 
     public function substract()
@@ -192,9 +193,11 @@ class OrderController extends Controller
         $date = new DateTime();
         $idUser = $_SESSION["userId"];
         $type = $_POST["type"] ?? "incoming";
+        $provider = $type == "outgoing" ? $_POST["provider"] : null ?? null;
+        $this->form();
 
         $order = new Order();
-        $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "");
+        $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "", $provider);
         $idOrder = $order->createOrder();
 
         if ($idOrder != 0) {

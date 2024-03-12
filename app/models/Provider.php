@@ -69,6 +69,20 @@ class Provider
         }
     }
 
+    /** function that return the provider name with its id 
+     * @param int $id
+     */
+    public function getProviderId($id)
+    {
+        try {
+            $this->db->query("SELECT name_pro FROM provider WHERE id_pro = :id");
+            $this->db->bind("id", $id);
+            return $this->db->fetch();
+        } catch (Exception $e) {
+            echo "Could get provider name " . $e->getMessage();
+        }
+    }
+
     ######### POST
 
     /** method add provider in db 

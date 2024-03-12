@@ -30,7 +30,13 @@
                 </form>
             </td>";
             echo '</tr>';
-            echo "<tr><td colspan=6>";
+            echo "<tr>";
+            if (isset($order->provider)) {
+                echo "<td> Commande fournisseur : " . $order->provider . "</td>";
+            } else {
+                echo "<td>Commande Cliente</td>";
+            }
+            echo "<td colspan=6>";
             echo "<div class='group-grid-3-col text-bold'>
                 <span>Libellé</span>
                 <span>Price</span>

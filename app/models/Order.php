@@ -10,6 +10,7 @@ class Order
     public $status;
     public $reason;
     public $products = [];
+    public $provider;
     private $db;
 
     public function __construct()
@@ -23,8 +24,9 @@ class Order
      * @param int|string $applicant can be its id or its name
      * @param string $status
      * @param string $reason
+     * @param int|null $provider optionnal
      */
-    public function setOrder($date, $price, $applicant, $status, $reason)
+    public function setOrder($date, $price, $applicant, $status, $reason, $provider = null)
     {
         if (is_a($date, "DateTime")) {
             $this->date = date("Y-m-d H:i:s");
@@ -35,6 +37,7 @@ class Order
         $this->applicant = $applicant;
         $this->status = $status;
         $this->reason = $reason;
+        $this->provider = $provider;
     }
 
     /** method to set value into order to get
@@ -46,7 +49,7 @@ class Order
      * @param Product[] $products
      * @param int $id
      */
-    public function setOrderGet($date, $price, $applicant, $validator, $status, $reason, $id)
+    public function setOrderGet($date, $price, $applicant, $validator, $status, $reason, $id, $provider)
     {
 
         $this->date = $date;
@@ -56,6 +59,7 @@ class Order
         $this->status = $status;
         $this->reason = $reason;
         $this->id = $id;
+        $this->provider = $provider;
     }
 
     /** method to set products for an order
@@ -64,6 +68,14 @@ class Order
     public function setProducts($products)
     {
         $this->products = $products;
+    }
+
+    /** function to set provider name for display 
+     * @param string $provider
+     */
+    public function setProvider($provider)
+    {
+        $this->provider = $provider;
     }
 
     /** function to get only order to check by admin
@@ -97,7 +109,7 @@ class Order
     public function getOrder()
     {
         try {
-            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u FROM orders JOIN users ON orders.id_u = users.id_u");
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro");
             $result = $this->db->fetchAll();
 
             $allOrders = [];
@@ -110,7 +122,8 @@ class Order
                     $result[$i]["id_u_User"],
                     $result[$i]["status"],
                     $result[$i]["reason"],
-                    $result[$i]["id_o"]
+                    $result[$i]["id_o"],
+                    $result[$i]["name_pro"],
                 );
 
                 $products = $order->getProductsByOrderId($result[$i]["id_o"]);
@@ -146,7 +159,8 @@ class Order
                     $result[$i]["id_u_User"],
                     $result[$i]["status"],
                     $result[$i]["reason"],
-                    $result[$i]["id_o"]
+                    $result[$i]["id_o"],
+                    $result[$i]["id_pro"],
                 );
 
                 $products = $order->getProductsByOrderId($result[$i]["id_o"]);
@@ -194,12 +208,13 @@ class Order
     public function createOrder()
     {
         try {
-            $this->db->query("INSERT INTO orders (date_o, price_o, id_u, status, reason) VALUES (:date, :price, :applicant, :status, :reason)");
+            $this->db->query("INSERT INTO orders (date_o, price_o, id_u, status, reason, id_pro) VALUES (:date, :price, :applicant, :status, :reason, :provider)");
             $this->db->bind("date", $this->date);
             $this->db->bind("price", $this->price);
             $this->db->bind("applicant", $this->applicant);
             $this->db->bind("status", $this->status);
             $this->db->bind("reason", $this->reason);
+            $this->db->bind("provider", $this->provider);
             $nb = $this->db->fetchLastId();
             return $nb;
         } catch (PDOException $e) {

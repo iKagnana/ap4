@@ -105,6 +105,12 @@ li a:hover {
     align-items: center;
 }
 
+.textfield-label {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+}
+
 /********* page layout */
 .page-container {
     display: flex;
