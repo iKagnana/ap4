@@ -89,7 +89,7 @@ li a:hover {
 }
 
 /********* items layout */
-.align-center {
+.flex-column {
     display: flex;
     flex-direction: column;
 }

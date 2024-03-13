@@ -58,47 +58,23 @@
                 <?php
                 foreach ($data["products"] as $product) {
                     echo "<tr>";
-                    if (isset($data["open"]) && $data["open"]->id == $product->id) {
-                        echo "<form id='update' action=http://localhost:8089/product/update method='POST'>";
-                        echo "<th> $product->id </th>";
-                        echo "<td> <input type='text' name='name' value=" . $product->name . "></td>";
-                        echo "<td> <input type='number' step='0.01' name='price' value=" . $product->price . "></td>";
-                        echo "<td> <input type='number' name='stock' value=" . $product->stock . "></td>";
-                        echo "<td> <input type='number' name='access_level' value=" . $product->access_level . "></td>";
-                        echo "<td> $product->category </td>";
-                        echo "</form>";
-                        if ($_SESSION["userRole"] == 0) {
-                            echo "<td> 
-                        <button form='update' name='id' value=" . $product->id . ">✅</button> 
-
-                        <form action=http://localhost:8089/product method='GET'>
-                        <input type='submit' value='❌'>
-                        </form>
-                        <form action=http://localhost:8089/product/delete method='GET'>
-                            <button name='id' value=" . $product->id . ">🗑️</button> 
-                            </form>
-                        </td>";
-                        }
-                    } else {
-                        echo "<tr>";
-                        echo "<th> $product->id </th>";
-                        echo "<td> $product->name </td>";
-                        echo "<td> $product->price </td>";
-                        echo "<td> $product->stock </td>";
-                        echo "<td> $product->access_level </td>";
-                        echo "<td> $product->category </td>";
-                        echo "<td>";
-                        if ($_SESSION["userRole"] == 0) {
-                            echo "<form action=http://localhost:8089/product/open method='GET'>
+                    echo "<tr>";
+                    echo "<th> $product->id </th>";
+                    echo "<td> $product->name </td>";
+                    echo "<td> $product->price </td>";
+                    echo "<td> $product->stock </td>";
+                    echo "<td> $product->access_level </td>";
+                    echo "<td>" . $product->category["name"] . "</td>";
+                    echo "<td>";
+                    if ($_SESSION["userRole"] == 0) {
+                        echo "<form action=http://localhost:8089/product/details method='GET'>
                         <button name='id' value=" . $product->id . ">✏️</button> 
                             </form>";
-                        }
-                        echo "<form action=http://localhost:8089/product/cart method='POST'>
+                    }
+                    echo "<form action=http://localhost:8089/product/cart method='POST'>
                             <button name='id' value=$product->id>Ajouter</button>
                             </form>";
-                        echo "</td>";
-
-                    }
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>

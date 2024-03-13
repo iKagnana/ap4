@@ -7,15 +7,15 @@
         </div>
         <div class="textfield">
             <label for="price">Prix à l'unité (€)</label>
-            <input type="number" step="0.01" name="price" id="price">
+            <input type="number" min="0,01" step="0.01" name="price" id="price">
         </div>
         <div class="textfield">
             <label for="stock">Stock</label>
-            <input type="number" name="stock" id="stock">
+            <input type="number" min="0" name="stock" id="stock">
         </div>
         <div class="textfield">
             <label for="access_level">Niveau d'accès</label>
-            <input type="number" name="access_level" id="access_level">
+            <input type="number" min="1" name="access_level" id="access_level">
         </div>
         <div class="textfield">
             <label for="category">Catégorie</label>

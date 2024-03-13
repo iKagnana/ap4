@@ -30,7 +30,7 @@ class Product
      * @param double $price
      * @param int $stock
      * @param int $access_level
-     * @param string | int $category
+     * @param [] $category
      * @param int $id optionnal
      */
     public function setProduct($name, $price, $stock, $access_level, $category, $id = null)
@@ -74,7 +74,7 @@ class Product
     public function getProducts()
     {
         try {
-            $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat");
+            $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat");
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
             $error = "Les produits n'ont pas pu être récupérés.";
@@ -89,7 +89,7 @@ class Product
                 $result[$i]["price"],
                 $result[$i]["stock"],
                 $result[$i]["access_level"],
-                $result[$i]["name_cat"],
+                ["name" => $result[$i]["name_cat"], "id" => $result[$i]["id_cat"]],
                 $result[$i]["id_p"]
             );
             array_push($allProducts, $product);
@@ -104,7 +104,7 @@ class Product
     public function getProductAccessible()
     {
         try {
-            $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel");
+            $this->db->query("SELECT id_p, name_p, stock, price, access_level, id_cat, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel");
             $this->db->bind("accessLevel", $_SESSION["userLevelAccess"]);
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
@@ -120,7 +120,7 @@ class Product
                 $result[$i]["price"],
                 $result[$i]["stock"],
                 $result[$i]["access_level"],
-                $result[$i]["name_cat"],
+                ["name" => $result[$i]["name_cat"], "id" => $result[$i]["id_cat"]],
                 $result[$i]["id_p"]
             );
             array_push($allProducts, $product);
@@ -152,7 +152,7 @@ class Product
                 $result[$i]["price"],
                 $result[$i]["stock"],
                 $result[$i]["access_level"],
-                $result[$i]["name_cat"],
+                ["name" => $result[$i]["name_cat"], "id" => $result[$i]["id_cat"]],
                 $result[$i]["id_p"]
             );
             array_push($allProducts, $product);

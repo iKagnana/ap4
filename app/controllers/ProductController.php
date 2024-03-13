@@ -38,7 +38,12 @@ class ProductController extends Controller
             $error = $extra["error"];
         }
 
-        $data = ["products" => $allProducts, "categories" => $allCats, "error" => $error, "filterCat" => $extra["filterCat"] ?? null];
+        $data = [
+            "products" => $allProducts,
+            "categories" => $allCats,
+            "error" => $error,
+            "filterCat" => $extra["filterCat"] ?? null
+        ];
         $this->view("product/products-view", $data);
     }
 
@@ -111,7 +116,7 @@ class ProductController extends Controller
         $this->index();
     }
 
-    public function open()
+    public function details()
     {
         $id = $_REQUEST["id"];
 
@@ -119,11 +124,22 @@ class ProductController extends Controller
 
         # get the right product and update it
         if (array_key_exists($id, $allProducts)) {
-            $this->openedProduct = array_column($allProducts, null, "id")[$id] ?? false;
+            $openedProduct = array_column($allProducts, null, "id")[$id] ?? false;
         }
 
-        $data = ["products" => $allProducts, "order" => $this->filterOrder, "open" => $this->openedProduct];
-        $this->view("product/products-view", $data);
+        $res = $this->product->getCategories();
+        $allCat = $res["data"];
+        $error = $res["error"] ?? null;
+
+        if (isset($openedProduct)) {
+            $this->view("product/product-details-view", [
+                "selected" => $openedProduct,
+                "categories" => $allCat,
+                "error" => $error
+            ]);
+        } else {
+            $this->index(["error" => "Impossible d'accéder au détail de ce produit."]);
+        }
 
     }
 
