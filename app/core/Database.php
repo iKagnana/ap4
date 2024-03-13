@@ -1,4 +1,9 @@
 <?php
+enum ErrorType
+{
+    case IsFK; #cannot delete because id used in another table
+    case UnkownError;
+}
 /** We decompose the different step of a request for better maintainability.
  * Used in class in folder models so the user doesn't directly have access to the db
  */
@@ -11,7 +16,6 @@ class Database
     private $query;
     private $service; # PDO
     private $statement;
-    private $error; # return error if neeeded
 
     /** Constructor for the class Database
      * Set PDO in private variable
@@ -65,7 +69,7 @@ class Database
         return $this->statement->execute();
     }
 
-    /** method fetchAll of the statement 
+    /** function fetchAll of the statement 
      * @return []
      */
     public function fetchAll()
@@ -83,7 +87,7 @@ class Database
         return $this->statement->fetch();
     }
 
-    /** Method to fetch and get the last insert id 
+    /** Function to fetch and get the last insert id 
      * 
      */
     public function fetchLastId()
@@ -91,5 +95,17 @@ class Database
         $this->execute();
         $this->statement->fetch();
         return $this->service->lastInsertId();
+    }
+
+
+    /** Function to return error type if needed
+     * @param ?string $code
+     */
+    public function getTypeError($code)
+    {
+        return match ($code) {
+            "23000" => ErrorType::IsFK,
+            default => ErrorType::UnkownError
+        };
     }
 }

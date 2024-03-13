@@ -4,18 +4,41 @@ require_once("../app/models/Product.php");
 class ProductController extends Controller
 {
     private $product;
-    private $filterOrder = "asc";
-    private $filterBy = "none";
     private $openedProduct = null;
     public function __construct()
     {
         $this->product = $this->model("Product");
     }
 
-    public function index()
+    public function index($extra = null)
     {
-        $allProducts = $this->product->getProducts();
-        $data = ["products" => $allProducts, "order" => $this->filterOrder];
+
+        // filter by cat or get all
+        if (isset($extra["filterCat"])) {
+            $resPro = $this->product->getProductByCategory($extra["filterCat"]);
+        } else {
+            $resPro = $this->product->getProducts();
+        }
+
+        $allProducts = $resPro["data"];
+        $error = $resPro["error"] ?? null;
+
+        // get categories for filter
+        $resCat = $this->product->getCategories();
+        $allCats = $resCat["data"];
+        $error = $resCat["error"] ?? null ? (isset($error) ? "Impossible de récupérer les données." : $resCat["error"]) : $error;
+
+        // filter by search 
+        if (isset($extra["searchName"])) {
+            $allProducts = $this->product->filterProduct($extra["searchName"], $allProducts);
+        }
+
+        // set error if have
+        if (isset($extra["error"])) {
+            $error = $extra["error"];
+        }
+
+        $data = ["products" => $allProducts, "categories" => $allCats, "error" => $error, "filterCat" => $extra["filterCat"] ?? null];
         $this->view("product/products-view", $data);
     }
 
@@ -27,9 +50,9 @@ class ProductController extends Controller
             return;
         }
 
-        $allCategories = $this->product->getCategories();
+        $res = $this->product->getCategories();
         # display form to add product
-        $this->view("product/form-product-view", $allCategories);
+        $this->view("product/form-product-view", ["allCat" => $res["data"], "error" => $res["error"] ?? null]);
     }
 
     public function createProduct()
@@ -39,45 +62,20 @@ class ProductController extends Controller
         $stock = $_POST["stock"];
         $access_level = $_POST["access_level"];
         $category = $_POST["category"];
+
         $newProduct = new Product();
         $newProduct->setProduct($name, $price, $stock, $access_level, $category);
+
         $res = $newProduct->createProduct();
-        if ($res == null) {
-            $allProducts = $newProduct->getProducts();
-            $_SESSION["products"] = $allProducts;
-            $data = ["products" => $allProducts, "order" => $this->filterOrder];
-            $this->view("product/products-view", $data);
-        }
-    }
-
-    public function searchProduct()
-    {
-        $search = $_REQUEST["search"];
-
-        $allProducts = $this->product->getProducts();
-
-        $filteredData = $this->product->filterProduct($search, $allProducts);
-        $_SESSION["searchProductText"] = $search;
-        $data = ["products" => $filteredData, "order" => $this->filterOrder];
-        $this->view("product/products-view", $data);
+        $this->index(["error" => $res["error"] ?? null]);
     }
 
     public function filter()
     {
-        $search = isset($_SESSION["search"]) ? $_SESSION["search"] : "";
+        $search = $_GET["search"] ?? null;
+        $category = $_GET["category"] ?? null;
 
-        $allProducts = $this->product->getProducts();
-        $filteredData = $this->product->filterProduct($search, $allProducts);
-
-        $order = isset($_REQUEST["order"]) ? $_REQUEST["order"] : "asc";
-
-        if ($order != $this->filterOrder) {
-            $allProducts = array_reverse($filteredData);
-            $this->filterOrder = $order;
-        }
-
-        $data = ["products" => $allProducts, "order" => $this->filterOrder];
-        $this->view("product/products-view", $data);
+        $this->index(["searchName" => $search, "filterCat" => $category]);
     }
 
     /** method to add to cart from product page
@@ -107,6 +105,7 @@ class ProductController extends Controller
         );
 
         array_push($cart, $productArray);
+        echo json_encode($cart);
         $_SESSION["cart"] = $cart;
 
         $this->index();
@@ -116,7 +115,7 @@ class ProductController extends Controller
     {
         $id = $_REQUEST["id"];
 
-        $allProducts = $this->product->getProducts();
+        $allProducts = $this->product->getProducts()["data"];
 
         # get the right product and update it
         if (array_key_exists($id, $allProducts)) {

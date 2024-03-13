@@ -16,7 +16,7 @@
                 <div class="textfield-label">
                     <label for="filterBy">Status</label>
 
-                    <select name="filter" id="filterBy" onchange="filter();">
+                    <select name="filter" id="filterBy">
                         <?php
                         echo "<option value='all'>Tous</option>";
                         echo isset($data["filter"]) && $data["filter"] == "waiting" ? "<option value='waiting' selected>En attente</option>" : "<option value='waiting' >En attente</option>";

@@ -1,25 +1,40 @@
 <?php require_once("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="flex-col-container">
-        <div class="flex-row-container">
-            <form action="http://localhost:8089/product/searchProduct" method="GET">
-                <label for=" searchbar">Rechercher le nom</label>
-                <input type="text" name="search" id="searchbar">
-                <input type="submit" value="🔍">
-            </form>
+        <div class="filter-wrapper">
+            <div class="filter-header">
+                <label for="">Filter :</label>
+                <input form="filter" type="submit" value="🔍">
+            </div>
+            <form class="form-filter-user padding-one" id="filter" action="http://localhost:8089/product/filter"
+                method="GET">
 
-            <form action="http://localhost:8089/product/filter" method="GET">
-                <?php
-                if ($data["order"] == "asc") {
-                    echo "<button name='order' value='desc'>↑</button>";
-                } else {
-                    echo "<button name='order' value='asc'>↓</button>";
-                }
-                ?>
+                <div class="textfield-label">
+                    <label for=" searchbar">Rechercher</label>
+                    <input type="text" name="search" id="searchbar">
+                </div>
+                <div class="textfield-label">
+                    <label for="filterBy">Catégorie</label>
+
+                    <select name="category" id="filterBy">
+                        <?php
+                        echo "<option value='all'>Tous</option>";
+                        foreach ($data["categories"] as $category) {
+                            echo $data["filterCat"] == $category["id_cat"] ? "<option selected value=" . $category["id_cat"] . ">" . $category["name_cat"] . "</option>" : "<option value=" . $category["id_cat"] . ">" . $category["name_cat"] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+
             </form>
-            <button>
-                <a href="http://localhost:8089/product/form">Ajouter</a>
-            </button>
+            <form class=" filter-footer" action="http://localhost:8089/product" method="GET">
+                <button type="submit">Réinitialiser les filtres</button>
+            </form>
+        </div>
+
+        <div>
+            <?php echo isset($extra["error"]) ? "<span>" . $extra["error"] . "</span>" : ""; ?>
         </div>
 
         <table>

@@ -76,25 +76,26 @@ class Product
         try {
             $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat");
             $result = $this->db->fetchAll();
-
-            $allProducts = [];
-            for ($i = 0; $i < count($result); $i++) {
-                $product = new Product();
-                $product->setProduct(
-                    $result[$i]["name_p"],
-                    $result[$i]["price"],
-                    $result[$i]["stock"],
-                    $result[$i]["access_level"],
-                    $result[$i]["name_cat"],
-                    $result[$i]["id_p"]
-                );
-                array_push($allProducts, $product);
-            }
-            return $allProducts;
         } catch (PDOException $exception) {
-            echo "Couldn't get products beacause of error : " . $exception->getMessage();
-            return [];
+            $error = "Les produits n'ont pas pu être récupérés.";
+            return ["data" => [], "error" => $error];
         }
+
+        $allProducts = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $product = new Product();
+            $product->setProduct(
+                $result[$i]["name_p"],
+                $result[$i]["price"],
+                $result[$i]["stock"],
+                $result[$i]["access_level"],
+                $result[$i]["name_cat"],
+                $result[$i]["id_p"]
+            );
+            array_push($allProducts, $product);
+        }
+
+        return ["data" => $allProducts];
     }
 
     /** function to get only products accessible by the user
@@ -106,25 +107,25 @@ class Product
             $this->db->query("SELECT id_p, name_p, stock, price, access_level, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel");
             $this->db->bind("accessLevel", $_SESSION["userLevelAccess"]);
             $result = $this->db->fetchAll();
-
-            $allProducts = [];
-            for ($i = 0; $i < count($result); $i++) {
-                $product = new Product();
-                $product->setProduct(
-                    $result[$i]["name_p"],
-                    $result[$i]["price"],
-                    $result[$i]["stock"],
-                    $result[$i]["access_level"],
-                    $result[$i]["name_cat"],
-                    $result[$i]["id_p"]
-                );
-                array_push($allProducts, $product);
-            }
-            return $allProducts;
         } catch (PDOException $exception) {
             echo "Couldn't get products beacause of error : " . $exception->getMessage();
-            return [];
+            return ["data" => [], "erorr" => "Les produits n'ont pas pu être récupérés."];
         }
+
+        $allProducts = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $product = new Product();
+            $product->setProduct(
+                $result[$i]["name_p"],
+                $result[$i]["price"],
+                $result[$i]["stock"],
+                $result[$i]["access_level"],
+                $result[$i]["name_cat"],
+                $result[$i]["id_p"]
+            );
+            array_push($allProducts, $product);
+        }
+        return ["data" => $allProducts];
     }
 
     /** function to get product only by certain category
@@ -138,12 +139,25 @@ class Product
             INNER JOIN categories ON products.id_cat = categories.id_cat
             WHERE products.id_cat = :cat");
             $this->db->bind("cat", $category);
-            $res = $this->db->fetchAll();
-            return $res;
+            $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
-            echo "Problème lors de la récupération des produits, due à l'erreur :" . $exception->getMessage();
-            return [];
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les produits de la catégorie correspondante."];
         }
+
+        $allProducts = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $product = new Product();
+            $product->setProduct(
+                $result[$i]["name_p"],
+                $result[$i]["price"],
+                $result[$i]["stock"],
+                $result[$i]["access_level"],
+                $result[$i]["name_cat"],
+                $result[$i]["id_p"]
+            );
+            array_push($allProducts, $product);
+        }
+        return ["data" => $allProducts];
     }
 
     /** Function to get all categories
@@ -154,11 +168,11 @@ class Product
         try {
             $this->db->query("SELECT * FROM categories");
             $result = $this->db->fetchAll();
-            return $result;
         } catch (PDOException $exception) {
-            echo "Couldn't get categories : " . $exception->getMessage();
-            return [];
+            return ["data" => [], "error" => "Les catégories n'ont pas pu être récupérées."];
         }
+
+        return ["data" => $result];
     }
 
     ######### POST
@@ -174,19 +188,15 @@ class Product
             $this->db->bind("stock", $this->stock);
             $this->db->bind("access_level", $this->access_level);
             $this->db->bind("category", $this->category);
-            $result = $this->db->fetch();
-            echo $result;
-            return $result;
+            $this->db->fetch();
         } catch (PDOException $exception) {
-            echo "Couldn't add product because of error :" . $exception->getMessage();
-            return false;
+            return ["error" => "Le produit n'a pas pu être ajouté."];
         }
     }
 
     ######### PATCH
     /** function to update a product by its id
      * @param int $id
-     * @return bool 
      */
     public function updateProduct($id)
     {
@@ -198,15 +208,12 @@ class Product
             $this->db->bind("stock", $this->stock);
             $this->db->bind("access_level", $this->access_level);
             $this->db->fetch();
-            return true;
         } catch (PDOException $exception) {
-            echo "Couldn't update product" . $exception->getMessage();
-            return false;
+            return ["error" => "La modification n'a pas pu être enregistrée."];
         }
     }
 
     /** function to delete a product 
-     * @return bool
      */
     public function deleteProduct($id)
     {
@@ -214,10 +221,10 @@ class Product
             $this->db->query("DELETE FROM products WHERE id_p = :id");
             $this->db->bind("id", $id);
             $this->db->fetch();
-            return true;
         } catch (PDOException $exception) {
-            echo "Couldn't delete this product" . $exception->getMessage();
-            return false;
+            $errorType = $this->db->getTypeError($exception->getCode());
+            $errorMsg = $errorType == ErrorType::IsFK ? "Le produit est associé à une commande. Il ne peut pas être supprimé." : "Le produit n'a pas pu être supprimé";
+            return ["error" => $errorMsg];
         }
     }
 

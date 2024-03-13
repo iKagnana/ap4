@@ -21,7 +21,7 @@
             <label for="category">Catégorie</label>
             <select name="category" id=category">
                 <?php
-                foreach ($data as $category) {
+                foreach ($data["allCat"] as $category) {
                     echo "<option value=" . "$category[0]" . ">" . $category[1] . "</option>";
                 }
                 ?>
