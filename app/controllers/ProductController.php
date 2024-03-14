@@ -94,31 +94,41 @@ class ProductController extends Controller
         $allProducts = $res["data"];
         $error = $res["error"] ?? null;
 
-        $index = array_search($idProduct, array_column($allProducts, "id"));
-        $selectedProduct = $allProducts[$index] ?? null;
-
         if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
         } else {
             $cart = array();
         }
 
-        if (isset($selectedProduct)) {
-            # change format in order to add in cart
-            $productArray = array(
-                "id" => $idProduct,
-                "name" => $selectedProduct->name,
-                "quantity" => 1,
-                "price" => $selectedProduct->price,
-                "category" => $selectedProduct->category,
-                "totalPrice" => $selectedProduct->price
-            );
+        # check if product already in cart
+        $indNew = array_search($idProduct, array_column($cart, "id"));
+        $newProduct = $cart[$indNew] ?? null;
 
-            array_push($cart, $productArray);
-            $_SESSION["cart"] = $cart;
+        if (isset($newProduct) && $indNew !== false) {
+            $cart[$indNew]["quantity"] = $newProduct["quantity"] + 1;
+            $cart[$indNew]["totalPrice"] = $newProduct["totalPrice"] + $newProduct["price"];
         } else {
-            $error = "Nous n'avons pas pu ajouter ce produit au panier";
+            # get the selected product
+            $index = array_search($idProduct, array_column($allProducts, "id"));
+            $selectedProduct = $allProducts[$index] ?? null;
+
+            if (isset($selectedProduct)) {
+                # change format in order to add in cart
+                $productArray = array(
+                    "id" => $idProduct,
+                    "name" => $selectedProduct->name,
+                    "quantity" => $_REQUEST["quantity"],
+                    "price" => $selectedProduct->price,
+                    "category" => $selectedProduct->category,
+                    "totalPrice" => $selectedProduct->price * $_REQUEST["quantity"]
+                );
+                array_push($cart, $productArray);
+            } else {
+                $error = "Nous n'avons pas pu ajouter ce produit au panier";
+            }
         }
+
+        $_SESSION["cart"] = $cart;
 
         $this->index(["error" => $error ?? null]);
     }

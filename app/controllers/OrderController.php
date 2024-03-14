@@ -140,13 +140,11 @@ class OrderController extends Controller
     public function addProduct()
     {
         $idProduct = $_POST["idProduct"];
+
         # get product with its id 
         $res = $this->product->getProducts();
         $allProducts = $res["data"];
         $error = $res["error"] ?? null;
-
-        $index = array_search($idProduct, array_column($allProducts, "id"));
-        $selectedProduct = $allProducts[$index] ?? null;
 
         if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
@@ -154,17 +152,34 @@ class OrderController extends Controller
             $cart = array();
         }
 
-        # change format in order to add in cart
-        $productArray = array(
-            "id" => $idProduct,
-            "name" => $selectedProduct->name,
-            "quantity" => $_REQUEST["quantity"],
-            "price" => $selectedProduct->price,
-            "category" => $selectedProduct->category,
-            "totalPrice" => $selectedProduct->price * $_REQUEST["quantity"]
-        );
+        # check if product already in cart
+        $indNew = array_search($idProduct, array_column($cart, "id"));
+        $newProduct = $cart[$indNew] ?? null;
 
-        array_push($cart, $productArray);
+        if (isset($newProduct) && $indNew !== false) {
+            $cart[$indNew]["quantity"] = $newProduct["quantity"] + $_REQUEST["quantity"];
+            $cart[$indNew]["totalPrice"] = $newProduct["totalPrice"] + $newProduct["price"] * $_REQUEST["quantity"];
+        } else {
+            # get the selected product
+            $index = array_search($idProduct, array_column($allProducts, "id"));
+            $selectedProduct = $allProducts[$index] ?? null;
+
+            if (isset($selectedProduct)) {
+                # change format in order to add in cart
+                $productArray = array(
+                    "id" => $idProduct,
+                    "name" => $selectedProduct->name,
+                    "quantity" => $_REQUEST["quantity"],
+                    "price" => $selectedProduct->price,
+                    "category" => $selectedProduct->category,
+                    "totalPrice" => $selectedProduct->price * $_REQUEST["quantity"]
+                );
+                array_push($cart, $productArray);
+            } else {
+                $error = "Nous n'avons pas pu ajouter ce produit au panier";
+            }
+        }
+
         $_SESSION["cart"] = $cart;
 
         $this->form(["error" => $error]);
@@ -175,21 +190,18 @@ class OrderController extends Controller
         $idProduct = $_REQUEST["id"];
         $cart = $_SESSION["cart"];
 
-        $allProducts = $this->product->getProducts();
-
         # search key and remove it 
-        $key = array_search($idProduct, array_column($cart, "id"));
-        if ($cart[$key]["quantity"] - 1 == 0) {
-            unset($cart[$key]);
+        $index = array_search($idProduct, array_column($cart, "id"));
+        if ($cart[$index]["quantity"] - 1 == 0) {
+            unset($cart[$index]);
         } else {
-            $cart[$key]["quantity"] = $cart[$key]["quantity"] - 1;
-            $cart[$key]["totalPrice"] = $cart[$key]["quantity"] * $cart[$key]["price"];
+            $cart[$index]["quantity"] = $cart[$index]["quantity"] - 1;
+            $cart[$index]["totalPrice"] = $cart[$index]["quantity"] * $cart[$index]["price"];
         }
 
         $_SESSION["cart"] = $cart;
 
-        $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
-
+        $this->form();
     }
 
     /** method in order to remove a product from cart
@@ -200,15 +212,13 @@ class OrderController extends Controller
         $idProduct = $_REQUEST["id"];
         $cart = $_SESSION["cart"];
 
-        $allProducts = $this->product->getProducts();
-
         # search key and remove it 
-        $key = array_search($idProduct, array_column($cart, "id"));
-        unset($cart[$key]);
+        $index = array_search($idProduct, array_column($cart, "id"));
+        unset($cart[$index]);
 
         $_SESSION["cart"] = $cart;
 
-        $this->view("order/form-order-view", ["allProducts" => $allProducts, "cart" => $cart]);
+        $this->form();
     }
 
     public function reset()
