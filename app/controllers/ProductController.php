@@ -90,8 +90,12 @@ class ProductController extends Controller
     {
         $idProduct = $_POST["id"];
         # get product with its id 
-        $allProducts = $this->product->getProducts();
-        $selectedProduct = array_column($allProducts, null, "id")[$idProduct];
+        $res = $this->product->getProducts();
+        $allProducts = $res["data"];
+        $error = $res["error"] ?? null;
+
+        $index = array_search($idProduct, array_column($allProducts, "id"));
+        $selectedProduct = $allProducts[$index] ?? null;
 
         if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
@@ -99,21 +103,24 @@ class ProductController extends Controller
             $cart = array();
         }
 
-        # change format in order to add in cart
-        $productArray = array(
-            "id" => $idProduct,
-            "name" => $selectedProduct->name,
-            "quantity" => 1,
-            "price" => $selectedProduct->price,
-            "category" => $selectedProduct->category,
-            "totalPrice" => $selectedProduct->price
-        );
+        if (isset($selectedProduct)) {
+            # change format in order to add in cart
+            $productArray = array(
+                "id" => $idProduct,
+                "name" => $selectedProduct->name,
+                "quantity" => 1,
+                "price" => $selectedProduct->price,
+                "category" => $selectedProduct->category,
+                "totalPrice" => $selectedProduct->price
+            );
 
-        array_push($cart, $productArray);
-        echo json_encode($cart);
-        $_SESSION["cart"] = $cart;
+            array_push($cart, $productArray);
+            $_SESSION["cart"] = $cart;
+        } else {
+            $error = "Nous n'avons pas pu ajouter ce produit au panier";
+        }
 
-        $this->index();
+        $this->index(["error" => $error ?? null]);
     }
 
     public function details()
@@ -123,9 +130,8 @@ class ProductController extends Controller
         $allProducts = $this->product->getProducts()["data"];
 
         # get the right product and update it
-        if (array_key_exists($id, $allProducts)) {
-            $openedProduct = array_column($allProducts, null, "id")[$id] ?? false;
-        }
+        $index = array_search($id, array_column($allProducts, "id"));
+        $openedProduct = $allProducts[$index] ?? null;
 
         $res = $this->product->getCategories();
         $allCat = $res["data"];
@@ -146,8 +152,7 @@ class ProductController extends Controller
     public function update()
     {
         $id = $_REQUEST["id"];
-        $productClass = new Product();
-        $productClass->setProduct(
+        $this->product->setProduct(
             $_REQUEST["name"],
             $_REQUEST["price"],
             $_REQUEST["stock"],
@@ -155,15 +160,16 @@ class ProductController extends Controller
             $_REQUEST["category"]
         );
 
-        $productClass->updateProduct($id);
-        $this->index();
+        $res = $this->product->updateProduct($id);
+        $error = $res["error"] ?? null;
+        $this->index(["error" => $error]);
     }
 
     public function delete()
     {
         $id = $_REQUEST["id"];
-        $productClass = new Product();
-        $productClass->deleteProduct($id);
-        $this->index();
+        $res = $this->product->deleteProduct($id);
+        $error = $res["error"];
+        $this->index(["error" => $error]);
     }
 }
