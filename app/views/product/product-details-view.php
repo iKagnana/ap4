@@ -39,7 +39,7 @@
             <button type="submit">Valider</button>
         </form>
 
-        <form action="" method="post">
+        <form action="http://localhost:8089/product/delete" method="post">
             <?php
             $product = $data["selected"];
             echo "<input hidden name='id' value=$product->id>"

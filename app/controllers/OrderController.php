@@ -20,10 +20,16 @@ class OrderController extends Controller
      */
     public function index($extra = null)
     {
-        $orders = [];
-        $orders = $_SESSION["userRole"] < 2 ? $this->order->getOrder() : $this->order->getUserOrders($_SESSION["userId"]);
+        $res = $_SESSION["userRole"] < 2 ? $this->order->getOrder() : $this->order->getUserOrders($_SESSION["userId"]);
 
-        $data = ["all" => $orders];
+        $orders = $res["data"];
+        $error = $res["error"] ?? null;
+
+        if (isset($extra["error"])) {
+            $error = $res["error"];
+        }
+
+        $data = ["all" => $orders, "error" => $error];
 
         if (isset($extra)) {
             $sendData = array_merge($data, $extra);
@@ -69,12 +75,24 @@ class OrderController extends Controller
      */
     public function control($extra = null)
     {
-        $allOrders = $this->order->getOrder();
+        $res = $this->order->getOrder();
+        $allOrders = $res["data"];
+        $error = $res["error"] ?? null;
 
-        $todo = $this->order->getTodoOrders($allOrders);
-        $done = $this->order->getDoneOrders($allOrders);
+        if (count($allOrders) != 0) {
+            $todo = $this->order->getTodoOrders($allOrders);
+            $done = $this->order->getDoneOrders($allOrders);
+        } else {
+            $todo = [];
+            $done = [];
+            $error = "Impossible de récupérer la liste des commandes.";
+        }
 
-        $data = ["todo" => $todo, "done" => $done];
+        if (isset($extra["error"])) {
+            $error = $extra["error"];
+        }
+
+        $data = ["todo" => $todo, "done" => $done, "error" => $error];
         if (isset($extra)) {
             $sendData = array_merge($data, $extra);
             $this->view("order/orders-control-view", $sendData);
@@ -89,8 +107,9 @@ class OrderController extends Controller
         $reason = $_POST["reason"];
         $id = $_POST["id"];
 
-        $this->order->treatOrder($id, $status, $reason);
-        $this->control();
+        $res = $this->order->treatOrder($id, $status, $reason);
+        $error = $res["error"] ?? null;
+        $this->control(["error" => $error]);
 
     }
 
@@ -99,15 +118,18 @@ class OrderController extends Controller
      */
     public function form($extra = null)
     {
-        $allProducts = $this->product->getProductAccessible();
-        $allProviders = $this->provider->getProvider();
+        $resProduct = $this->product->getProductAccessible();
+        $resProvider = $this->provider->getProvider();
 
-        $sendProduct = $allProducts;
+        $sendProduct = $resProduct["data"];
+        $allProviders = $resProvider["data"];
         if (isset($extra["searchName"])) {
-            $sendProduct = $this->product->filterProduct($extra["searchName"], $allProducts);
+            $sendProduct = $this->product->filterProduct($extra["searchName"], $sendProduct);
         }
+
+        $error = isset($resProduct["error"]) || isset($resProvider["error"]) ? "Des données n'ont pas pu être récupéré" : null;
         $cart = $_SESSION["cart"] ?? [];
-        $this->view("order/form-order-view", ["allProducts" => $sendProduct, "cart" => $cart, "providers" => $allProviders]);
+        $this->view("order/form-order-view", ["allProducts" => $sendProduct, "cart" => $cart, "providers" => $allProviders, "error" => $error]);
     }
 
     public function addProduct()
@@ -204,17 +226,24 @@ class OrderController extends Controller
 
         $order = new Order();
         $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "", $provider);
-        $idOrder = $order->createOrder();
+        $res = $order->createOrder();
+        $idOrder = $res["data"];
 
         if ($idOrder != 0) {
             foreach ($cart as $product) {
-                $order->addOrderDetails($idOrder, $product["id"], $product["quantity"], $type);
+                $res = $order->addOrderDetails($idOrder, $product["id"], $product["quantity"], $type);
+                if (isset($res["error"])) {
+                    $error = $res["error"];
+                    break;
+                }
             }
             unset($_SESSION["cart"]);
-            $this->index();
+
         } else {
-            echo "Une erreur est survenue lors de la création de la commande";
+            $error = $res["error"];
         }
+
+        $this->index(["error" => $error]);
 
     }
 }
