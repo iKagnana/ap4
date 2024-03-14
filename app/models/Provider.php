@@ -48,25 +48,25 @@ class Provider
         try {
             $this->db->query("SELECT * FROM provider");
             $result = $this->db->fetchAll();
-
-            $allProvider = [];
-            for ($i = 0; $i < count($result); $i++) {
-
-                $provider = new Provider();
-                $provider->setProvider(
-                    $result[$i]["name_pro"],
-                    $result[$i]["email_pro"],
-                    $result[$i]["id_pro"],
-                );
-
-                array_push($allProvider, $provider);
-            }
-
-            return $allProvider;
         } catch (Exception $e) {
-            echo "Couldn't get provider because of error :" . $e->getMessage();
-            return [];
+            return ["data" => [], "error" => "Impossible de récupérer les fournisseurs."];
         }
+
+        $allProvider = [];
+        for ($i = 0; $i < count($result); $i++) {
+
+            $provider = new Provider();
+            $provider->setProvider(
+                $result[$i]["name_pro"],
+                $result[$i]["email_pro"],
+                $result[$i]["id_pro"],
+            );
+
+            array_push($allProvider, $provider);
+        }
+
+        return ["data" => $allProvider];
+
     }
 
     /** function that return the provider name with its id 

@@ -26,7 +26,7 @@
                     echo "<form action='http://localhost:8089/order/addProduct' method='post'>";
                     echo "<td>" . $product->name . "</td>";
                     echo "<td>" . $product->price . "</td>";
-                    echo "<td>" . $product->category . "</td>";
+                    echo "<td>" . $product->category["name"] . "</td>";
                     echo "<td>" . $product->stock . "</td>";
                     echo "<td><input type='number' name='quantity' min='1' max=$product->stock value=" . $product->quantity . "></td>";
                     echo "<input hidden type='text' name='idProduct' value=" . $product->id . ">";
@@ -64,6 +64,11 @@
         </select>
     </div>
 </div>
+
+<div>
+    <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+</div>
+
 <span>Panier</span>
 <div>
     <table>
@@ -83,7 +88,7 @@
                 echo "<td>" . $addedProduct["name"] . "</td>";
                 echo "<td>" . $addedProduct["quantity"] . "</td>";
                 echo "<td>" . $addedProduct["price"] . "</td>";
-                echo "<td>" . $addedProduct["category"] . "</td>";
+                echo "<td>" . $addedProduct["category"]["name"] . "</td>";
                 echo "<td>" . $addedProduct["totalPrice"] . "</td>";
                 echo "<td>
                             <form action='http://localhost:8089/order/substract' method='GET'>

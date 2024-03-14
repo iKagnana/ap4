@@ -111,31 +111,32 @@ class Order
         try {
             $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro");
             $result = $this->db->fetchAll();
-
-            $allOrders = [];
-            for ($i = 0; $i < count($result); $i++) {
-                $order = new Order();
-                $order->setOrderGet(
-                    $result[$i]["date_o"],
-                    $result[$i]["price_o"],
-                    $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
-                    $result[$i]["id_u_User"],
-                    $result[$i]["status"],
-                    $result[$i]["reason"],
-                    $result[$i]["id_o"],
-                    $result[$i]["name_pro"],
-                );
-
-                $products = $order->getProductsByOrderId($result[$i]["id_o"]);
-                $order->setProducts($products);
-                array_push($allOrders, $order);
-            }
-            return $allOrders;
-
         } catch (PDOException $e) {
-            echo "Couldn't get orders because of error :" . $e->getMessage();
-            return [];
+            return ["data" => [], "error" => "Impossible de récupérer les commandes."];
         }
+
+        $allOrders = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $order = new Order();
+            $order->setOrderGet(
+                $result[$i]["date_o"],
+                $result[$i]["price_o"],
+                $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                $result[$i]["id_u_User"],
+                $result[$i]["status"],
+                $result[$i]["reason"],
+                $result[$i]["id_o"],
+                $result[$i]["name_pro"],
+            );
+
+            $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+            $order->setProducts($products);
+            array_push($allOrders, $order);
+        }
+
+        return ["data" => $allOrders];
+
+
     }
 
     /** function to retreive only user's order
@@ -148,31 +149,31 @@ class Order
             $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u FROM orders JOIN users ON orders.id_u = users.id_u WHERE orders.id_u = :id");
             $this->db->bind("id", $id);
             $result = $this->db->fetchAll();
-
-            $allOrders = [];
-            for ($i = 0; $i < count($result); $i++) {
-                $order = new Order();
-                $order->setOrderGet(
-                    $result[$i]["date_o"],
-                    $result[$i]["price_o"],
-                    $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
-                    $result[$i]["id_u_User"],
-                    $result[$i]["status"],
-                    $result[$i]["reason"],
-                    $result[$i]["id_o"],
-                    $result[$i]["id_pro"],
-                );
-
-                $products = $order->getProductsByOrderId($result[$i]["id_o"]);
-                $order->setProducts($products);
-                array_push($allOrders, $order);
-            }
-            return $allOrders;
-
         } catch (PDOException $e) {
-            echo "Couldn't get orders because of error :" . $e->getMessage();
-            return [];
+            return ["data" => [], "error" => "Impossible de récupérer vos commandes"];
         }
+
+        $allOrders = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $order = new Order();
+            $order->setOrderGet(
+                $result[$i]["date_o"],
+                $result[$i]["price_o"],
+                $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                $result[$i]["id_u_User"],
+                $result[$i]["status"],
+                $result[$i]["reason"],
+                $result[$i]["id_o"],
+                $result[$i]["id_pro"],
+            );
+
+            $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+            $order->setProducts($products);
+            array_push($allOrders, $order);
+        }
+        return ["data" => $allOrders];
+
+
     }
 
     /** function to retreive all the products for an order
@@ -188,12 +189,12 @@ class Order
             WHERE orders.id_o = :idO");
             $this->db->bind("idO", $idO);
             $result = $this->db->fetchAll();
-            return $result;
-
         } catch (PDOException $e) {
             echo "Could get the products for the order" . $e->getMessage();
-            return [];
+            return ["data" => [], "error" => "Impossible de récupérer les produits associés à la commande"];
         }
+
+        return ["data" => $result];
     }
 
     ######### POST
@@ -216,11 +217,12 @@ class Order
             $this->db->bind("reason", $this->reason);
             $this->db->bind("provider", $this->provider);
             $nb = $this->db->fetchLastId();
-            return $nb;
         } catch (PDOException $e) {
-            echo "Couldn't add order because of error :" . $e->getMessage();
-            return 0;
+            return ["data" => 0, "error" => "Impossible de savegarder la commande"];
         }
+
+        return ["data" => $nb];
+
     }
 
     /** method to add order_details in db
@@ -228,7 +230,6 @@ class Order
      * @param int $idOrder order id 
      * @param int $idProduct product id
      * @param int $quantity quantity, may be negative or positive
-     * @return 
      */
     public function addOrderDetails($idOrder, $idProduct, $quantity, $type)
     {
@@ -242,12 +243,11 @@ class Order
                 $this->db->bind("quantity", $quantity);
             }
 
-            $result = $this->db->fetch();
-            return $result;
+            $this->db->fetch();
         } catch (PDOException $e) {
-            echo "Couldn't add order details because of error :" . $e->getMessage();
-            return false;
+            return ["error" => "Certains produits de votre panier n'ont pas pu être enregistré, contacter l'administrateur."];
         }
+
     }
 
     ######### PUT
@@ -265,12 +265,12 @@ class Order
             $this->db->bind("status", $status);
             $this->db->bind("reason", $reason);
             $this->db->bind("userId", $_SESSION["userId"]);
-            $result = $this->db->fetch();
-            return $result;
+            $this->db->fetch();
         } catch (PDOException $e) {
             echo "Could update orders" . $e->getMessage();
-            return false;
+            return ["error" => "Les changements n'ont pas pu être sauvegarder"];
         }
+
     }
 
 }

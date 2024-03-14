@@ -128,6 +128,11 @@ class OrderController extends Controller
         }
 
         $error = isset($resProduct["error"]) || isset($resProvider["error"]) ? "Des données n'ont pas pu être récupéré" : null;
+
+        if (isset($extra["error"])) {
+            $error = $extra["error"];
+        }
+
         $cart = $_SESSION["cart"] ?? [];
         $this->view("order/form-order-view", ["allProducts" => $sendProduct, "cart" => $cart, "providers" => $allProviders, "error" => $error]);
     }
@@ -136,8 +141,12 @@ class OrderController extends Controller
     {
         $idProduct = $_POST["idProduct"];
         # get product with its id 
-        $allProducts = $this->product->getProducts();
-        $selectedProduct = array_column($allProducts, null, "id")[$idProduct];
+        $res = $this->product->getProducts();
+        $allProducts = $res["data"];
+        $error = $res["error"] ?? null;
+
+        $index = array_search($idProduct, array_column($allProducts, "id"));
+        $selectedProduct = $allProducts[$index] ?? null;
 
         if (isset($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
@@ -158,7 +167,7 @@ class OrderController extends Controller
         array_push($cart, $productArray);
         $_SESSION["cart"] = $cart;
 
-        $this->form();
+        $this->form(["error" => $error]);
     }
 
     public function substract()
