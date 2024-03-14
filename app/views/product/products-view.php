@@ -34,7 +34,7 @@
         </div>
 
         <div>
-            <?php echo isset($extra["error"]) ? "<span>" . $extra["error"] . "</span>" : ""; ?>
+            <?php echo isset($extra["error"]) ? "<span class='text-error'>" . $extra["error"] . "</span>" : ""; ?>
         </div>
 
         <table>

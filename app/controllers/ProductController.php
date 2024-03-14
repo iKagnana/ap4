@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
 
         // filter by cat or get all
-        if (isset($extra["filterCat"])) {
+        if (isset($extra["filterCat"]) && $extra["filterCat"] != "all") {
             $resPro = $this->product->getProductByCategory($extra["filterCat"]);
         } else {
             $resPro = $this->product->getProducts();
@@ -152,7 +152,7 @@ class ProductController extends Controller
             $_REQUEST["price"],
             $_REQUEST["stock"],
             $_REQUEST["access_level"],
-            0
+            $_REQUEST["category"]
         );
 
         $productClass->updateProduct($id);

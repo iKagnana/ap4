@@ -154,3 +154,7 @@ li a:hover {
 .item-container {
     margin: 1em;
 }
+
+.text-error {
+    color: red;
+}

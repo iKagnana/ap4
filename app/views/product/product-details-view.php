@@ -32,7 +32,6 @@
             <select class='item-container' name='category'>";
             foreach ($data["categories"] as $cat) {
                 echo $product->category["id"] = $cat["id_cat"] ? "<option selected value=" . $cat["id_cat"] . ">" . $cat["name_cat"] . "</option>" : "<option value=" . $cat["id_cat"] . ">" . $cat["name_cat"] . "</option>";
-                ;
             }
             echo "</select>
             </div>";
