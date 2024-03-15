@@ -3,13 +3,11 @@ require_once("../app/models/User.php");
 
 class UserController extends Controller
 {
-    private $user; # used for function db 
-    private $allUsers;
+    private $user; # used for function db
 
     public function __construct()
     {
         $this->user = $this->model("User");
-        $this->allUsers = $this->user->getUsers();
     }
 
     /** page to create an account
@@ -36,16 +34,14 @@ class UserController extends Controller
 
         if (isset($_POST["origin"]) && $_POST["origin"] == "user") {
             $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
-            $newUser->createUser();
-            $this->view("user/login-view");
+            $res = $newUser->createUser();
+            $this->view("user/login-view", ["error" => $res["error"] ?? null]);
         } else {
             $levelAccess = $_POST["levelAccess"];
             $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
-            $newUser->createUserAdmin();
+            $res = $newUser->createUserAdmin();
 
-            $allUsers = $this->user->getUsers();
-            $this->allUsers = $allUsers;
-            $this->index();
+            $this->index(["error" => $res["error"] ?? null]);
         }
 
 
@@ -58,19 +54,27 @@ class UserController extends Controller
      */
     public function index($extra = null)
     {
-        $sendData = $this->allUsers;
+
         $filter = null;
 
         if (isset($extra["filtered"])) {
-            $sendData = $extra["filtered"];
+            $users = $extra["filtered"];
             $filter = $extra["filter"];
+        } else {
+            $res = $this->user->getUsers();
+            $users = $res["data"];
+            $error = $res["error"] ?? null;
+        }
+
+        if (isset($extra["error"])) {
+            $error = $extra["error"];
         }
 
         if (isset($extra["searchName"])) {
-            $sendData = $this->user->filterUser($extra["searchName"], $sendData);
+            $users = $this->user->filterUser($extra["searchName"], $users);
         }
 
-        $this->view("user/handle/user-list-view", ["users" => $sendData, "filter" => $filter]);
+        $this->view("user/handle/user-list-view", ["users" => $users, "filter" => $filter, "error" => $error]);
 
     }
 
@@ -80,7 +84,9 @@ class UserController extends Controller
     {
         $filter = $_GET["filter"] ?? "all";
         $searchName = $_GET["search"] ?? "";
-        $allUser = $this->user->getUsers();
+        $res = $this->user->getUsers();
+        $allUser = $res["data"];
+        $error = $res["error"] ?? null;
 
         if ($filter == "waiting") {
             $allUser = $this->user->getWaitingUser($allUser);
@@ -90,7 +96,7 @@ class UserController extends Controller
             $allUser = $this->user->getRefusedUser($allUser);
         }
 
-        $this->index(["filtered" => $allUser, "filter" => $filter, "searchName" => $searchName]);
+        $this->index(["filtered" => $allUser, "filter" => $filter, "searchName" => $searchName, "error" => $error]);
     }
 
     /** method to toggle details of an user
@@ -98,8 +104,11 @@ class UserController extends Controller
     public function details()
     {
         $id = $_REQUEST["id"];
+        $res = $this->user->getUsers();
+        $allUsers = $res["data"];
+        $error = $res["error"] ?? null;
 
-        foreach ($this->allUsers as $user) {
+        foreach ($allUsers as $user) {
             if ($user->id == $id) {
                 $selected = $user;
                 break;
@@ -109,8 +118,7 @@ class UserController extends Controller
         if (isset($selected)) {
             $this->view("user/handle/user-details-view", ["selected" => $selected]);
         } else {
-            $this->index();
-            echo "Une erreur s'est produite.";
+            $this->index(["error" => $error]);
         }
     }
 
@@ -129,12 +137,9 @@ class UserController extends Controller
 
         $updateUser = new User();
         $updateUser->setUser($enterprise, $lastname, $firstname, $email, "", $role, $levelAccess, $status, $id);
-        $updateUser->patchUser();
-
-        $allUsers = $this->user->getUsers();
-        $this->allUsers = $allUsers;
-
-        $this->index();
+        $res = $updateUser->patchUser();
+        $error = $res["error"] ?? null;
+        $this->index(["error" => $error]);
     }
 
     /** method to delete the selected user
@@ -142,11 +147,10 @@ class UserController extends Controller
     public function delete()
     {
         $id = $_REQUEST["id"];
-        $this->user->deleteUser($id);
+        $res = $this->user->deleteUser($id);
+        $error = $res["error"] ?? null;
 
-        $allUsers = $this->user->getUsers();
-        $this->allUsers = $allUsers;
-        $this->index();
+        $this->index(["error" => $error]);
     }
 
 

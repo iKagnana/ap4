@@ -30,10 +30,13 @@ class LoginController extends Controller
         # if field are not empty 
         if ($email != "" && $password != "") {
             $res = $this->user->login($email, $password);
+            $isconnected = $res["data"];
+            $error = $res["error"] ?? null;
+
             if ($res && $_SESSION["userId"] != null) {
                 $this->view("user/dashboard-view", ["lastname" => $_SESSION["userLastname"], "firstname" => $_SESSION["userFirstname"]]);
             } else {
-                echo "Connexion échouée";
+                $this->view("user/login-view", ["error" => $error]);
             }
         }
     }

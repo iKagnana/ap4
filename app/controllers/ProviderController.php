@@ -16,8 +16,15 @@ class ProviderController extends Controller
      */
     public function index($extra = null)
     {
-        $allProvider = $this->provider->getProvider();
-        $sendData = ["all" => $allProvider];
+        $res = $this->provider->getProvider();
+        $allProvider = $res["data"];
+        $error = $res["error"] ?? null;
+
+        if (isset($extra["error"])) {
+            $error = $extra["error"];
+        }
+
+        $sendData = ["all" => $allProvider, "error" => $error];
 
         if (isset($extra["searchName"])) {
             $filtered = $this->provider->searchProvider($extra["searchName"], $allProvider);
@@ -49,15 +56,15 @@ class ProviderController extends Controller
         $email = $_POST["email"];
         $updateProvider = new Provider();
         $updateProvider->setProvider($name, $email, $id);
-        $updateProvider->updateProvider();
-        $this->index();
+        $res = $updateProvider->updateProvider();
+        $this->index(["error" => $res["error"] ?? null]);
     }
 
     public function delete()
     {
         $id = $_POST("id");
-        $this->provider->deleteProvider($id);
-        $this->index();
+        $res = $this->provider->deleteProvider($id);
+        $this->index(["error" => $res["error"] ?? null]);
     }
 
     ##### form
@@ -73,7 +80,7 @@ class ProviderController extends Controller
         $email = $_POST["email"];
         $provider = new Provider();
         $provider->setProvider($name, $email);
-        $provider->createProvider();
-        $this->index();
+        $res = $provider->createProvider();
+        $this->index(["error" => $res["error"] ?? null]);
     }
 }

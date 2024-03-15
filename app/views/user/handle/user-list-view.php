@@ -30,6 +30,11 @@
                 <button type="submit">Réinitialiser les filtres</button>
             </form>
         </div>
+
+        <div>
+            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+        </div>
+
         <table>
             <thead>
                 <tr>

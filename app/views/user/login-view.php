@@ -23,5 +23,8 @@
             <button type="submit">Je n'ai pas de compte</button>
         </form>
     </div>
+    <div>
+        <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+    </div>
 </div>
 <?php require_once("../app/views/footer-view.php"); ?>

@@ -77,10 +77,13 @@ class Provider
         try {
             $this->db->query("SELECT name_pro FROM provider WHERE id_pro = :id");
             $this->db->bind("id", $id);
-            return $this->db->fetch();
+            $result = $this->db->fetch();
         } catch (Exception $e) {
             echo "Could get provider name " . $e->getMessage();
+            return ["data" => "", "error" => "Nous n'avons pas pu récupérer le fournisseur."];
         }
+
+        return ["data" => $result];
     }
 
     ######### POST
@@ -96,7 +99,7 @@ class Provider
             $this->db->bind("email", $this->email);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Couldn't create provider " . $e->getMessage();
+            return ["error" => "Impossible d'ajouter ce fournisseur pour le moment."];
         }
     }
 
@@ -113,7 +116,7 @@ class Provider
             $this->db->bind("id", $this->id);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Couldn't update provider" . $e->getMessage();
+            return ["error" => "Impossible de mettre à jour ce fournisseur pour le moment."];
         }
     }
 
@@ -128,7 +131,10 @@ class Provider
             $this->db->bind("id", $id);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Couldn't delete provider " . $e->getMessage();
+            $errorType = $this->db->getTypeError($e->getCode());
+            $errorMsg = $errorType == ErrorType::IsFK ? "Le fournissseur est associé à une commande. Il ne peut pas être supprimé." : "Le fournisseur n'a pas pu être supprimé";
+            return ["error" => $errorMsg];
         }
     }
 }
+

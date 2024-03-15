@@ -5,6 +5,10 @@
             <button type='submit'>Retour</button>
         </form>
 
+        <div>
+            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+        </div>
+
         <form class="form-detail-user" action="http://localhost:8089/user/update" method="post">
             <?php
             $user = $data["selected"];
@@ -36,20 +40,20 @@
             </div>";
 
             echo "<div class='form-user-label-text'>";
-                echo "<label for='level-access'>Niveau d'accès maximum</label>";
-                echo "<select name='levelAccess' id='level-access'>";
-                    echo $user->levelAccess == 1 ? "<option value='1' selected>1</option>" : "<option value='1'>1</option>";
-                    echo $user->levelAccess == 2 ? "<option value='2' selected>2</option>" : "<option value='2'>2</option>";
-                    echo $user->levelAccess == 3 ? "<option value='3' selected>3</option>" : "<option value='3'>3</option>";
-                echo "</select>
+            echo "<label for='level-access'>Niveau d'accès maximum</label>";
+            echo "<select name='levelAccess' id='level-access'>";
+            echo $user->levelAccess == 1 ? "<option value='1' selected>1</option>" : "<option value='1'>1</option>";
+            echo $user->levelAccess == 2 ? "<option value='2' selected>2</option>" : "<option value='2'>2</option>";
+            echo $user->levelAccess == 3 ? "<option value='3' selected>3</option>" : "<option value='3'>3</option>";
+            echo "</select>
             </div>
 
             <div class='form-user-label-text'>
                 <label for='status'>Status</label>";
-                echo "<select name='status' id='status'>";
-                    echo $user->status == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé'>Validé</option>";
-                    echo $user->status == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé'>Refusé</option>";
-                echo "</select>
+            echo "<select name='status' id='status'>";
+            echo $user->status == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé'>Validé</option>";
+            echo $user->status == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé'>Refusé</option>";
+            echo "</select>
             </div>";
             ?>
             <button type="submit">Valider</button>

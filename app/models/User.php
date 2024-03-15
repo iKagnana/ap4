@@ -119,41 +119,41 @@ class User
         try {
             $this->db->query("SELECT * FROM users");
             $result = $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les utilisateurs pour le moment."];
+        }
 
-            $allUsers = [];
-            for ($i = 0; $i < count($result); $i++) {
-                $role = "";
+        $allUsers = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $role = "";
 
-                if ($result[$i]["role"] == 0) {
-                    $role = "Administrateur";
-                } else if ($result[$i]["role"] == 1) {
-                    $role = "Utilisateur";
-                } else if ($result[$i]["role"] == 2) {
-                    $role = "Client";
-                }
-
-
-                $user = new User();
-                $user->setUser(
-                    $result[$i]["enterprise"],
-                    $result[$i]["lastname_u"],
-                    $result[$i]["firstname_u"],
-                    $result[$i]["email_u"],
-                    "",
-                    $role,
-                    $result[$i]["level_access"],
-                    $result[$i]["status"],
-                    $result[$i]["id_u"],
-                );
-
-                array_push($allUsers, $user);
+            if ($result[$i]["role"] == 0) {
+                $role = "Administrateur";
+            } else if ($result[$i]["role"] == 1) {
+                $role = "Utilisateur";
+            } else if ($result[$i]["role"] == 2) {
+                $role = "Client";
             }
 
-            return $allUsers;
-        } catch (Exception $e) {
-            echo "Couldn't get users because of error :" . $e->getMessage();
-            return [];
+
+            $user = new User();
+            $user->setUser(
+                $result[$i]["enterprise"],
+                $result[$i]["lastname_u"],
+                $result[$i]["firstname_u"],
+                $result[$i]["email_u"],
+                "",
+                $role,
+                $result[$i]["level_access"],
+                $result[$i]["status"],
+                $result[$i]["id_u"],
+            );
+
+            array_push($allUsers, $user);
         }
+
+        return ["data" => $allUsers];
+
     }
 
 
@@ -162,7 +162,7 @@ class User
     /** function that will be used for user login
      * @param string
      * @param string
-     * @return bool true if connected
+     * @return [] "data" = true if connected
      */
     public function login($email, $password)
     {
@@ -170,38 +170,36 @@ class User
             $this->db->query("SELECT * FROM users WHERE email_u=:email");
             $this->db->bind("email", $email);
             $result = $this->db->fetch();
-
-            # prevent user to login when his status is not valid
-            if ($result["status"] == "En attente de validation") {
-                echo "L'administrateur n'a pas encore validé votre compte.";
-                return false;
-            } else if ($result["status"] == "Refusé") {
-                echo "L'administrateur a refusé votre demande";
-                return false;
-            }
-
-            if (count($result) != 0 && password_verify($password, $result[4])) {
-                $user = new User();
-                $user->setUser(
-                    $result["enterprise"],
-                    $result["lastname_u"],
-                    $result["firstname_u"],
-                    $result["email_u"],
-                    "", # place for the password
-                    $result["role"],
-                    $result["level_access"],
-                    $result["status"],
-                    $result["id_u"],
-                );
-                $user->saveInSession();
-                return true;
-            } else {
-                return false;
-            }
         } catch (Exception $e) {
-            echo "Une erreur est survenue lors de la connexion" . $e->getMessage();
-            return false;
+            return ["data" => false, "error" => "Une erreur est survenue lors de la connexion."];
         }
+
+        # prevent user to login when his status is not valid
+        if ($result["status"] == "En attente de validation") {
+            return ["data" => false, "error" => "L'administrateur n'a pas encore validé votre compte."];
+        } else if ($result["status"] == "Refusé") {
+            return ["data" => false, "error" => "L'administrateur a refusé votre demande"];
+        }
+
+        if (count($result) != 0 && password_verify($password, $result[4])) {
+            $user = new User();
+            $user->setUser(
+                $result["enterprise"],
+                $result["lastname_u"],
+                $result["firstname_u"],
+                $result["email_u"],
+                "", # place for the password
+                $result["role"],
+                $result["level_access"],
+                $result["status"],
+                $result["id_u"],
+            );
+            $user->saveInSession();
+            return ["data" => true];
+        } else {
+            return ["data" => false, "error" => "Vos identifiants sont invalides."];
+        }
+
     }
 
     /** function to create account 
@@ -221,7 +219,7 @@ class User
             $this->db->bind("status", $this->status);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Could add user error :" . $e->getMessage();
+            return ["error" => "Impossible d'ajouter un utilisateur pour le moment."];
         }
     }
 
@@ -243,7 +241,7 @@ class User
             $this->db->bind("level_access", $this->levelAccess);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Could add user error :" . $e->getMessage();
+            return ["error" => "Impossible d'ajouter un utilisateur pour le moment."];
         }
     }
 
@@ -265,7 +263,7 @@ class User
             $this->db->bind("status", $this->status);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Couldn't modify user" . $e->getMessage();
+            return ["error" => "Impossible de modifier un utilisateur pour le moment."];
         }
 
     }
@@ -282,8 +280,9 @@ class User
             $this->db->bind("id", $id);
             $this->db->fetch();
         } catch (Exception $e) {
-            echo "Couldn't delete user" . $e->getMessage();
-
+            $errorType = $this->db->getTypeError($e->getCode());
+            $errorMsg = $errorType == ErrorType::IsFK ? "L'utilisateur est associé à une commande. Il ne peut pas être supprimé." : "L'utilisateur n'a pas pu être supprimé";
+            return ["error" => $errorMsg];
         }
     }
 }
