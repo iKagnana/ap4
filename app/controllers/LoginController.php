@@ -29,6 +29,10 @@ class LoginController extends Controller
 
         # if field are not empty 
         if ($email != "" && $password != "") {
+            if (!preg_match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)) {
+                return ["error" => "L'email est invalide."];
+            }
+
             $res = $this->user->login($email, $password);
             $isconnected = $res["data"];
             $error = $res["error"] ?? null;
@@ -38,6 +42,8 @@ class LoginController extends Controller
             } else {
                 $this->view("user/login-view", ["error" => $error]);
             }
+        } else {
+            $this->view("user/login-view", ["error" => "Vous ne pouvez pas avoir de champs vides"]);
         }
     }
 

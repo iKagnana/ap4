@@ -246,12 +246,21 @@ class OrderController extends Controller
             $totalPrice = $totalPrice + $product["totalPrice"];
         }
 
+        if ($totalPrice == 0) {
+            $this->index(["error" => "Vous n'avez aucun article dans votre panier."]);
+            return;
+        }
+
         # variable
         $date = new DateTime();
         $idUser = $_SESSION["userId"];
         $type = $_POST["type"] ?? "incoming";
         $provider = $type == "outgoing" ? $_POST["provider"] : null ?? null;
-        $this->form();
+
+        if ($type == "outgoing" && !isset ($provider)) {
+            $this->index(["error" => "Veuillez choisir un fournisseur."]);
+            return;
+        }
 
         $order = new Order();
         $order->setOrder($date, $totalPrice, $idUser, "En attente de validation", "", $provider);

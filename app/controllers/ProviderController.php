@@ -1,5 +1,5 @@
 <?php
-require_once("../app/models/Provider.php");
+require_once ("../app/models/Provider.php");
 
 class ProviderController extends Controller
 {
@@ -20,18 +20,18 @@ class ProviderController extends Controller
         $allProvider = $res["data"];
         $error = $res["error"] ?? null;
 
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $extra["error"];
         }
 
         $sendData = ["all" => $allProvider, "error" => $error];
 
-        if (isset($extra["searchName"])) {
+        if (isset ($extra["searchName"])) {
             $filtered = $this->provider->searchProvider($extra["searchName"], $allProvider);
             $sendData = ["all" => $filtered];
         }
 
-        if (isset($extra["selected"])) {
+        if (isset ($extra["selected"])) {
             $sendData = array_merge($sendData, ["selected" => $extra["selected"]]);
         }
         $this->view("provider/provider-view", $sendData);
@@ -55,7 +55,13 @@ class ProviderController extends Controller
         $name = $_POST["name"];
         $email = $_POST["email"];
         $updateProvider = new Provider();
-        $updateProvider->setProvider($name, $email, $id);
+        $check = $updateProvider->setProvider($name, $email, $id);
+
+        if (isset ($check["error"])) {
+            $this->index(["error" => $check["error"]]);
+            return;
+        }
+
         $res = $updateProvider->updateProvider();
         $this->index(["error" => $res["error"] ?? null]);
     }
@@ -79,7 +85,13 @@ class ProviderController extends Controller
         $name = $_POST["name"];
         $email = $_POST["email"];
         $provider = new Provider();
-        $provider->setProvider($name, $email);
+        $check = $provider->setProvider($name, $email);
+
+        if (isset ($check["error"])) {
+            $this->index(["error" => $check["error"]]);
+            return;
+        }
+
         $res = $provider->createProvider();
         $this->index(["error" => $res["error"] ?? null]);
     }

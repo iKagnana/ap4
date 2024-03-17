@@ -1,5 +1,5 @@
 <?php
-require_once("../app/core/Database.php");
+require_once ("../app/core/Database.php");
 
 class Provider
 {
@@ -21,6 +21,13 @@ class Provider
      */
     public function setProvider($name, $email, $id = null)
     {
+        if (!isset ($name) || !isset ($email) || $name == "" || $email == "") {
+            return ["error" => "Certains champs sont vides."];
+        }
+
+        if (!preg_match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)) {
+            return ["error" => "L'email est invalide."];
+        }
         $this->name = $name;
         $this->email = $email;
         $this->id = $id;

@@ -1,5 +1,5 @@
 <?php
-require_once("../app/core/Database.php");
+require_once ("../app/core/Database.php");
 
 /**
  * Class user
@@ -41,6 +41,17 @@ class User
      */
     public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess = null, $status = null, $id = null)
     {
+        if (
+            !isset ($lastname) || !isset ($firstname) || !isset ($email) || !isset ($password) || !isset ($role) ||
+            $lastname == "" || $firstname == "" || $email == ""
+        ) {
+            return ["error" => "Certains champs sont vides."];
+        }
+
+        if (!preg_match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)) {
+            return ["error" => "L'email est invalide."];
+        }
+
         $this->id = $id;
         $this->lastname = $lastname;
         $this->firstname = $firstname;

@@ -1,5 +1,5 @@
 <?php
-require_once("../app/core/Database.php");
+require_once ("../app/core/Database.php");
 class Product
 {
     public $id;
@@ -35,6 +35,22 @@ class Product
      */
     public function setProduct($name, $price, $stock, $access_level, $category, $id = null)
     {
+        # check if set
+        if (!isset ($name) || !isset ($price) || !isset ($stock) || !isset ($access_level) || !isset ($category)) {
+            return ["error" => "Certains champs sont vides."];
+        }
+
+        # check if right type
+        if (is_double($price) || is_int($stock) || is_int($$access_level) || is_int($category)) {
+            return ["error" => "Certains champs sont invalides"];
+        }
+
+        # check if not empty or 0
+        if ($name == "" || $price == 0) {
+            return ["error" => "Certains champs sont invalides"];
+        }
+
+
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;

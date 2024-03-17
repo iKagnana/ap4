@@ -33,6 +33,7 @@ class Order
         } else {
             $this->date = $date;
         }
+
         $this->price = $price;
         $this->applicant = $applicant;
         $this->status = $status;

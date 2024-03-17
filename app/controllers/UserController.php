@@ -28,17 +28,30 @@ class UserController extends Controller
         $enterprise = $_POST["enterprise"];
         $role = $_POST["role"];
 
+        if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $password)) {
+            return ["error" => "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères."];
+        }
+
         if (isset ($_POST["type"]) && $_POST["type"] == "employee") {
             $enterprise = "GSB";
         }
 
         if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
-            $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
+            $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
+            if (isset ($check["error"])) {
+                $this->view("user/login-view", ["error" => $check["error"]]);
+                return;
+            }
             $res = $newUser->createUser();
             $this->view("user/login-view", ["error" => $res["error"] ?? null]);
         } else {
             $levelAccess = $_POST["levelAccess"];
-            $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
+            $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
+            if (isset ($check["error"])) {
+                $this->view("user/login-view", ["error" => $check["error"]]);
+                return;
+            }
+
             $res = $newUser->createUserAdmin();
 
             $this->index(["error" => $res["error"] ?? null]);

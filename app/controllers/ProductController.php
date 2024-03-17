@@ -1,5 +1,5 @@
 <?php
-require_once("../app/models/Product.php");
+require_once ("../app/models/Product.php");
 
 class ProductController extends Controller
 {
@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
 
         // filter by cat or get all
-        if (isset($extra["filterCat"]) && $extra["filterCat"] != "all") {
+        if (isset ($extra["filterCat"]) && $extra["filterCat"] != "all") {
             $resPro = $this->product->getProductByCategory($extra["filterCat"]);
         } else {
             $resPro = $this->product->getProducts();
@@ -26,15 +26,15 @@ class ProductController extends Controller
         // get categories for filter
         $resCat = $this->product->getCategories();
         $allCats = $resCat["data"];
-        $error = $resCat["error"] ?? null ? (isset($error) ? "Impossible de récupérer les données." : $resCat["error"]) : $error;
+        $error = $resCat["error"] ?? null ? (isset ($error) ? "Impossible de récupérer les données." : $resCat["error"]) : $error;
 
         // filter by search 
-        if (isset($extra["searchName"])) {
+        if (isset ($extra["searchName"])) {
             $allProducts = $this->product->filterProduct($extra["searchName"], $allProducts);
         }
 
         // set error if have
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $extra["error"];
         }
 
@@ -69,7 +69,13 @@ class ProductController extends Controller
         $category = $_POST["category"];
 
         $newProduct = new Product();
-        $newProduct->setProduct($name, $price, $stock, $access_level, $category);
+        $check = $newProduct->setProduct($name, $price, $stock, $access_level, $category);
+
+        if (isset ($check["error"])) {
+            $error = $check["error"];
+            $this->index(["error" => $error]);
+            return;
+        }
 
         $res = $newProduct->createProduct();
         $this->index(["error" => $res["error"] ?? null]);
@@ -94,7 +100,7 @@ class ProductController extends Controller
         $allProducts = $res["data"];
         $error = $res["error"] ?? null;
 
-        if (isset($_SESSION["cart"])) {
+        if (isset ($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
         } else {
             $cart = array();
@@ -104,7 +110,7 @@ class ProductController extends Controller
         $indNew = array_search($idProduct, array_column($cart, "id"));
         $newProduct = $cart[$indNew] ?? null;
 
-        if (isset($newProduct) && $indNew !== false) {
+        if (isset ($newProduct) && $indNew !== false) {
             $cart[$indNew]["quantity"] = $newProduct["quantity"] + 1;
             $cart[$indNew]["totalPrice"] = $newProduct["totalPrice"] + $newProduct["price"];
         } else {
@@ -112,7 +118,7 @@ class ProductController extends Controller
             $index = array_search($idProduct, array_column($allProducts, "id"));
             $selectedProduct = $allProducts[$index] ?? null;
 
-            if (isset($selectedProduct)) {
+            if (isset ($selectedProduct)) {
                 # change format in order to add in cart
                 $productArray = array(
                     "id" => $idProduct,
@@ -147,7 +153,7 @@ class ProductController extends Controller
         $allCat = $res["data"];
         $error = $res["error"] ?? null;
 
-        if (isset($openedProduct)) {
+        if (isset ($openedProduct)) {
             $this->view("product/product-details-view", [
                 "selected" => $openedProduct,
                 "categories" => $allCat,
@@ -162,13 +168,18 @@ class ProductController extends Controller
     public function update()
     {
         $id = $_REQUEST["id"];
-        $this->product->setProduct(
+        $check = $this->product->setProduct(
             $_REQUEST["name"],
             $_REQUEST["price"],
             $_REQUEST["stock"],
             $_REQUEST["access_level"],
             $_REQUEST["category"]
         );
+
+        if (isset ($check["error"])) {
+            $this->index(["error" => $check["error"]]);
+            return;
+        }
 
         $res = $this->product->updateProduct($id);
         $error = $res["error"] ?? null;
