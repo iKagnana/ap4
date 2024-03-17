@@ -12,7 +12,7 @@ class Controller
      */
     public function model($model)
     {
-        require_once("../app/models/" . $model . ".php");
+        require_once ("../app/models/" . $model . ".php");
         return new $model;
     }
 
@@ -24,9 +24,28 @@ class Controller
     {
         $viewPath = "../app/views/" . $view . ".php";
         if (file_exists($viewPath)) {
-            require_once($viewPath);
+            require_once ($viewPath);
         } else {
-            die("La vue n'existe pas ");
+            die ("La vue n'existe pas ");
         }
+    }
+
+    /** function to test if a user can execute request or method
+     * @param string $testable role to test
+     * ["admin", "adminNUser", "user", "client"]
+     */
+    public function checkAccess($testable)
+    {
+        $role = $_SESSION["userRole"] ?? null;
+        if (!isset ($role)) {
+            return false;
+        }
+
+        return match ($testable) {
+            "admin" => $role == 0,
+            "adminNUser" => $role < 2,
+            "user" => $role == 1,
+            "client" => $role == 2,
+        };
     }
 }

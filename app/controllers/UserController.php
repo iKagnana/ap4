@@ -1,5 +1,5 @@
 <?php
-require_once("../app/models/User.php");
+require_once ("../app/models/User.php");
 
 class UserController extends Controller
 {
@@ -28,11 +28,11 @@ class UserController extends Controller
         $enterprise = $_POST["enterprise"];
         $role = $_POST["role"];
 
-        if (isset($_POST["type"]) && $_POST["type"] == "employee") {
+        if (isset ($_POST["type"]) && $_POST["type"] == "employee") {
             $enterprise = "GSB";
         }
 
-        if (isset($_POST["origin"]) && $_POST["origin"] == "user") {
+        if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
             $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
             $res = $newUser->createUser();
             $this->view("user/login-view", ["error" => $res["error"] ?? null]);
@@ -54,10 +54,14 @@ class UserController extends Controller
      */
     public function index($extra = null)
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
 
         $filter = null;
 
-        if (isset($extra["filtered"])) {
+        if (isset ($extra["filtered"])) {
             $users = $extra["filtered"];
             $filter = $extra["filter"];
         } else {
@@ -66,11 +70,11 @@ class UserController extends Controller
             $error = $res["error"] ?? null;
         }
 
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $extra["error"];
         }
 
-        if (isset($extra["searchName"])) {
+        if (isset ($extra["searchName"])) {
             $users = $this->user->filterUser($extra["searchName"], $users);
         }
 
@@ -82,6 +86,11 @@ class UserController extends Controller
      */
     public function filter()
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
+
         $filter = $_GET["filter"] ?? "all";
         $searchName = $_GET["search"] ?? "";
         $res = $this->user->getUsers();
@@ -103,6 +112,11 @@ class UserController extends Controller
      */
     public function details()
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
+
         $id = $_REQUEST["id"];
         $res = $this->user->getUsers();
         $allUsers = $res["data"];
@@ -115,7 +129,7 @@ class UserController extends Controller
             }
         }
 
-        if (isset($selected)) {
+        if (isset ($selected)) {
             $this->view("user/handle/user-details-view", ["selected" => $selected]);
         } else {
             $this->index(["error" => $error]);
@@ -126,6 +140,11 @@ class UserController extends Controller
      */
     public function update()
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
+
         $id = $_POST["id"];
         $enterprise = $_POST["enterprise"];
         $lastname = $_POST["lastname"];
@@ -146,6 +165,11 @@ class UserController extends Controller
      */
     public function delete()
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
+
         $id = $_REQUEST["id"];
         $res = $this->user->deleteUser($id);
         $error = $res["error"] ?? null;

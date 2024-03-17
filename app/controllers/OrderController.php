@@ -1,5 +1,5 @@
 <?php
-require_once("../app/models/Order.php");
+require_once ("../app/models/Order.php");
 
 class OrderController extends Controller
 {
@@ -25,13 +25,13 @@ class OrderController extends Controller
         $orders = $res["data"];
         $error = $res["error"] ?? null;
 
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $res["error"];
         }
 
         $data = ["all" => $orders, "error" => $error];
 
-        if (isset($extra)) {
+        if (isset ($extra)) {
             $sendData = array_merge($data, $extra);
             $this->view("order/orders-view", $sendData);
         } else {
@@ -41,22 +41,22 @@ class OrderController extends Controller
 
     public function detail()
     {
-        if (isset($_POST["item"])) {
+        if (isset ($_POST["item"])) {
             $selected = $_POST["item"];
             $this->index(["openedItem" => $selected]);
         }
 
-        if (isset($_POST["selectedTodo"])) {
+        if (isset ($_POST["selectedTodo"])) {
             $selectedTodo = $_POST["selectedTodo"];
             $this->control(["selectedTodo" => $selectedTodo]);
         }
 
-        if (isset($_POST["selectedDone"])) {
+        if (isset ($_POST["selectedDone"])) {
             $selectedDone = $_POST["selectedDone"];
             $this->control(["selectedDone" => $selectedDone]);
         }
 
-        if (isset($_POST["onDoingItem"])) {
+        if (isset ($_POST["onDoingItem"])) {
             $selectOnDoingItem = $_POST["onDoingItem"];
             $this->control(["onDoingItem" => $selectOnDoingItem]);
         }
@@ -75,6 +75,11 @@ class OrderController extends Controller
      */
     public function control($extra = null)
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error");
+            return; # force exit
+        }
+
         $res = $this->order->getOrder();
         $allOrders = $res["data"];
         $error = $res["error"] ?? null;
@@ -88,12 +93,12 @@ class OrderController extends Controller
             $error = "Impossible de récupérer la liste des commandes.";
         }
 
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $extra["error"];
         }
 
         $data = ["todo" => $todo, "done" => $done, "error" => $error];
-        if (isset($extra)) {
+        if (isset ($extra)) {
             $sendData = array_merge($data, $extra);
             $this->view("order/orders-control-view", $sendData);
         } else {
@@ -103,6 +108,11 @@ class OrderController extends Controller
 
     public function treatment()
     {
+        if (!$this->checkAccess("admin")) {
+            $this->view("error/prohibited-view");
+            return; # force exit
+        }
+
         $status = $_POST["status"];
         $reason = $_POST["reason"];
         $id = $_POST["id"];
@@ -123,13 +133,13 @@ class OrderController extends Controller
 
         $sendProduct = $resProduct["data"];
         $allProviders = $resProvider["data"];
-        if (isset($extra["searchName"])) {
+        if (isset ($extra["searchName"])) {
             $sendProduct = $this->product->filterProduct($extra["searchName"], $sendProduct);
         }
 
-        $error = isset($resProduct["error"]) || isset($resProvider["error"]) ? "Des données n'ont pas pu être récupéré" : null;
+        $error = isset ($resProduct["error"]) || isset ($resProvider["error"]) ? "Des données n'ont pas pu être récupéré" : null;
 
-        if (isset($extra["error"])) {
+        if (isset ($extra["error"])) {
             $error = $extra["error"];
         }
 
@@ -146,7 +156,7 @@ class OrderController extends Controller
         $allProducts = $res["data"];
         $error = $res["error"] ?? null;
 
-        if (isset($_SESSION["cart"])) {
+        if (isset ($_SESSION["cart"])) {
             $cart = $_SESSION["cart"];
         } else {
             $cart = array();
@@ -156,7 +166,7 @@ class OrderController extends Controller
         $indNew = array_search($idProduct, array_column($cart, "id"));
         $newProduct = $cart[$indNew] ?? null;
 
-        if (isset($newProduct) && $indNew !== false) {
+        if (isset ($newProduct) && $indNew !== false) {
             $cart[$indNew]["quantity"] = $newProduct["quantity"] + $_REQUEST["quantity"];
             $cart[$indNew]["totalPrice"] = $newProduct["totalPrice"] + $newProduct["price"] * $_REQUEST["quantity"];
         } else {
@@ -164,7 +174,7 @@ class OrderController extends Controller
             $index = array_search($idProduct, array_column($allProducts, "id"));
             $selectedProduct = $allProducts[$index] ?? null;
 
-            if (isset($selectedProduct)) {
+            if (isset ($selectedProduct)) {
                 # change format in order to add in cart
                 $productArray = array(
                     "id" => $idProduct,
@@ -251,7 +261,7 @@ class OrderController extends Controller
         if ($idOrder != 0) {
             foreach ($cart as $product) {
                 $res = $order->addOrderDetails($idOrder, $product["id"], $product["quantity"], $type);
-                if (isset($res["error"])) {
+                if (isset ($res["error"])) {
                     $error = $res["error"];
                     break;
                 }

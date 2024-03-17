@@ -5,15 +5,16 @@ define("ROOT", dirname(__DIR__));
 session_start();
 
 # import needed file core
-require_once("../app/core/Database.php");
-require_once("../app/core/App.php");
-require_once("../app/core/Controller.php");
+require_once ("../app/core/Database.php");
+require_once ("../app/core/App.php");
+require_once ("../app/core/Controller.php");
 # import controller
-require_once("../app/controllers/LoginController.php");
-require_once("../app/controllers/ProductController.php");
-require_once("../app/controllers/HomeController.php");
-require_once("../app/controllers/OrderController.php");
-require_once("../app/controllers/UserController.php");
-require_once("../app/controllers/ProviderController.php");
+require_once ("../app/controllers/LoginController.php");
+require_once ("../app/controllers/ProductController.php");
+require_once ("../app/controllers/HomeController.php");
+require_once ("../app/controllers/OrderController.php");
+require_once ("../app/controllers/UserController.php");
+require_once ("../app/controllers/ProviderController.php");
+require_once ("../app/controllers/ErrorController.php");
 
 $app = new App();

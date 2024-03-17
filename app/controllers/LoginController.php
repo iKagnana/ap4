@@ -1,6 +1,6 @@
 <?php
-include("../app/models/User.php");
-require_once("../app/core/Controller.php");
+include ("../app/models/User.php");
+require_once ("../app/core/Controller.php");
 
 class LoginController extends Controller
 {
@@ -12,7 +12,7 @@ class LoginController extends Controller
     }
     public function index()
     {
-        if (isset($_SESSION["userId"])) {
+        if (isset ($_SESSION["userId"])) {
             $this->view("user/dashboard-view", ["lastname" => $_SESSION["userLastname"], "firstname" => $_SESSION["userFirstname"]]);
         } else {
             $this->view("user/login-view");
@@ -33,7 +33,7 @@ class LoginController extends Controller
             $isconnected = $res["data"];
             $error = $res["error"] ?? null;
 
-            if ($res && $_SESSION["userId"] != null) {
+            if ($isconnected && $_SESSION["userId"] != null) {
                 $this->view("user/dashboard-view", ["lastname" => $_SESSION["userLastname"], "firstname" => $_SESSION["userFirstname"]]);
             } else {
                 $this->view("user/login-view", ["error" => $error]);

@@ -30,10 +30,8 @@
 
 
                 echo "<a href='http://localhost:8089/product'>Consulter</a>";
+                echo "<a href='http://localhost:8089/product/form'>Ajouter</a>";
 
-                if ($_SESSION["userRole"] == 0) {
-                    echo "<a href='http://localhost:8089/product/form'>Ajouter</a>";
-                }
                 echo "</div>
                 </div>";
             }
