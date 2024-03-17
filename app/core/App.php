@@ -4,7 +4,7 @@
  */
 class App
 {
-    protected $controller = "LoginController";
+    protected $controller = "HomeController";
     protected $method = "index";
     protected $params = [];
 
@@ -70,7 +70,8 @@ class App
                 "ProductController" => $role < 2 ? true : false,
                 "UserController" => true, #check will be done inside controller
                 "OrderController" => true, #check will be done inside controller
-                "LoginController" => true
+                "LoginController" => true,
+                "HomeController" => true,
             };
         }
 

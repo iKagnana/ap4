@@ -1,4 +1,4 @@
-<?php require_once("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
     <?php
     echo "<div class='padding-one'>
@@ -23,7 +23,7 @@
         echo "<td>" . $order->applicant . "</td>";
         echo "<td>" . $order->status . "</td>";
         echo "<td>" . $order->reason . "</td>";
-        if (isset($data["openedItem"]) && $data["openedItem"] == $order->id) {
+        if (isset ($data["openedItem"]) && $data["openedItem"] == $order->id) {
             echo "<td>
                 <form action='http://localhost:8089/order' method='GET'>
                     <button type='submit'>X</button>
@@ -31,7 +31,7 @@
             </td>";
             echo '</tr>';
             echo "<tr>";
-            if (isset($order->provider)) {
+            if (isset ($order->provider)) {
                 echo "<td> Commande fournisseur : " . $order->provider . "</td>";
             } else {
                 echo "<td>Commande Cliente</td>";
@@ -42,12 +42,14 @@
                 <span>Price</span>
                 <span>Catégorie</span>
                 </div>";
-            foreach ($order->products as $product) {
-                echo "<div class='group-grid-3-col'>";
-                echo "<p>" . $product["name_p"] . "</p>";
-                echo "<p>" . $product["price"] . "€</p>";
-                echo "<p>" . $product["name_cat"] . "</p>";
-                echo "</div>";
+            foreach ($order->products as $products) {
+                foreach ($products as $product) {
+                    echo "<div class='group-grid-3-col'>";
+                    echo "<p>" . $product["name_p"] . "</p>";
+                    echo "<p>" . $product["price"] . "€</p>";
+                    echo "<p>" . $product["name_cat"] . "</p>";
+                    echo "</div>";
+                }
             }
             echo "</td></tr>";
         } else {
@@ -65,4 +67,4 @@
     ?>
 
 </div>
-<?php require_once("../app/views/footer-view.php"); ?>
+<?php require_once ("../app/views/footer-view.php"); ?>

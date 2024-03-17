@@ -12,15 +12,15 @@
     <!-- In order to get the style -->
     <style>
         <?php
-        require("../app/css/style.css");
-        require("../app/css/header.css");
-        require("../app/css/login.css");
-        require("../app/css/user.css");
+        require ("../app/css/style.css");
+        require ("../app/css/header.css");
+        require ("../app/css/login.css");
+        require ("../app/css/user.css");
         ?>
     </style>
     <header>
         <?php
-        if (isset($_SESSION["userId"])) {
+        if (isset ($_SESSION["userId"])) {
             echo "
             <div class='menu'>
                 <div class='menu-item'><a href='http://localhost:8089/home'>Accueil</a></div>";
@@ -64,7 +64,7 @@
                 </div>";
             }
             # clear seperation
-            echo "<div class='menu-item'><a href='http://localhost:8089/login/logout'>Déconnexion</a></div>
+            echo "<div class='menu-item'><a href='http://localhost:8089/login'>Déconnexion</a></div>
             </div>
         ";
         }

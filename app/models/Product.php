@@ -40,11 +40,6 @@ class Product
             return ["error" => "Certains champs sont vides."];
         }
 
-        # check if right type
-        if (is_double($price) || is_int($stock) || is_int($$access_level) || is_int($category)) {
-            return ["error" => "Certains champs sont invalides"];
-        }
-
         # check if not empty or 0
         if ($name == "" || $price == 0) {
             return ["error" => "Certains champs sont invalides"];

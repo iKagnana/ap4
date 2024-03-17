@@ -25,7 +25,7 @@ class Provider
             return ["error" => "Certains champs sont vides."];
         }
 
-        if (!preg_match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)) {
+        if (!preg_match("/[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}/", $email)) {
             return ["error" => "L'email est invalide."];
         }
         $this->name = $name;

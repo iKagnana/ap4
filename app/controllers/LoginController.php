@@ -12,11 +12,8 @@ class LoginController extends Controller
     }
     public function index()
     {
-        if (isset ($_SESSION["userId"])) {
-            $this->view("user/dashboard-view", ["lastname" => $_SESSION["userLastname"], "firstname" => $_SESSION["userFirstname"]]);
-        } else {
-            $this->view("user/login-view");
-        }
+        session_unset();
+        $this->view("user/login-view");
     }
 
     /** Connect user
@@ -29,7 +26,7 @@ class LoginController extends Controller
 
         # if field are not empty 
         if ($email != "" && $password != "") {
-            if (!preg_match("/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)) {
+            if (!preg_match("/[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}/", $email)) {
                 return ["error" => "L'email est invalide."];
             }
 
@@ -45,15 +42,6 @@ class LoginController extends Controller
         } else {
             $this->view("user/login-view", ["error" => "Vous ne pouvez pas avoir de champs vides"]);
         }
-    }
-
-    /** Logout the user
-     * 
-     */
-    public function logout()
-    {
-        session_unset();
-        $this->view("user/login-view");
     }
 }
 
