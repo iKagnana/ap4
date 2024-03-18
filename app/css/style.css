@@ -70,10 +70,13 @@ li a:hover {
 
 .flex-row-container {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin-top: 1em;
     margin-bottom: 1em;
     flex-wrap: wrap;
+
 }
 
 .flex-col-container {
@@ -82,6 +85,7 @@ li a:hover {
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
+    max-width: 100%;
 }
 
 .group-grid-5-col {
@@ -152,10 +156,6 @@ li a:hover {
     align-items: center;
 }
 
-.m-1 {
-    margin: 1em;
-}
-
 .text-error {
     color: red;
 }
@@ -183,19 +183,28 @@ li a:hover {
     font-size: 13px;
 }
 
+/********** margin *********/
+.no-margin {
+    margin: 0 !important;
+}
+
+.m-1 {
+    margin: 1em;
+}
+
 /********** size *********/
+.full-width {
+    width: 100% !important;
+}
+
 .not-full-width {
-    width: 70%;
+    width: 75% !important;
 }
 
 .half-width {
-    width: 50%;
+    width: 50% !important;
 }
 
 .small-width {
-    width: 25%;
-}
-
-.full-width {
-    width: 100%;
+    width: 25% !important;
 }

@@ -1,11 +1,15 @@
-<?php require_once("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="left-side">
         <div class="flex-col-container">
-            <form action="http://localhost:8089/order/search" method="post">
-                <label for="searchName">Rechercher :</label>
-                <input type="text" name="search" id="searchName">
-                <button type="submit">Valider</button>
+            <form class="flex-row-container" action="http://localhost:8089/order/search" method="post">
+                <label for="searchName">Rechercher par produit :</label>
+                <div class="m-1">
+                    <input class="half-width" type="text" name="search" id="searchName">
+                    <button class="styled-button" type="submit">
+                        <span class="styled-span">Rechercher</span>
+                    </button>
+                </div>
             </form>
         </div>
         <table class="table-scroll">
@@ -28,10 +32,12 @@
                     echo "<td>" . $product->price . "</td>";
                     echo "<td>" . $product->category["name"] . "</td>";
                     echo "<td>" . $product->stock . "</td>";
-                    echo "<td><input type='number' name='quantity' min='1' max=$product->stock value=" . $product->quantity . "></td>";
+                    echo "<td><input class='not-full-width' type='number' name='quantity' min='1' max=$product->stock value=" . $product->quantity . "></td>";
                     echo "<input hidden type='text' name='idProduct' value=" . $product->id . ">";
                     echo "<td>
-                        <input type='submit' value='+'>
+                        <button class='button-outlined' type='submit'>
+                        <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 5l0 14' /><path d='M5 12l14 0' /></svg>
+                        </button>
                         </td>";
                     echo "</form>";
                     echo "</tr>";
@@ -40,7 +46,7 @@
             </tbody>
         </table>
     </div>
-    <div class="right-side">
+    <div class="right-side form-center-item">
         <?php echo $_SESSION["userRole"] < 2 ? "<div>" : "<div hidden>"; ?>
         <div>
             <input checked form="cart" type="radio" name="type" id="incoming" value="incoming">
@@ -52,21 +58,23 @@
         </div>
 
         <?php echo $_SESSION["userRole"] < 2 ? "<div>" : "<div hidden>"; ?>
-        <label for="provider">Fournisseur (Commande fournisseur uniquement)</label>
-        <select form="cart" name="provider" id="provider">
-            <?php
-            if (isset($data["providers"])) {
-                foreach ($data["providers"] as $provider) {
-                    echo "<option value=$provider->id>$provider->name</option>";
+        <div class='m-1'>
+            <label for="provider">Fournisseur (Commande fournisseur uniquement)</label>
+            <select form="cart" name="provider" id="provider">
+                <?php
+                if (isset ($data["providers"])) {
+                    foreach ($data["providers"] as $provider) {
+                        echo "<option value=$provider->id>$provider->name</option>";
+                    }
                 }
-            }
-            ?>
-        </select>
+                ?>
+            </select>
+        </div>
     </div>
 </div>
 
 <div>
-    <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+    <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
 </div>
 
 <span>Panier</span>
@@ -93,11 +101,15 @@
                 echo "<td>
                             <form action='http://localhost:8089/order/substract' method='GET'>
                                 <input hidden type='text' name='id' value=" . $addedProduct["id"] . ">
-                                <input type='submit' value='-'>
+                                <button class='button-outlined'>
+                                <svg  xmlns='http://www.w3.org/2000/svg'  width=20  height=20  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M5 12l14 0' /></svg>
+                                </button>
                             </form>
                             <form action='http://localhost:8089/order/remove' method='GET'>
                                 <input hidden type='text' name='id' value=" . $addedProduct["id"] . ">
-                                <input type='submit' value='X'>
+                                <button class='button-outlined' type='submit'>
+                    <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
+                    </button>
                                 </form>
                             </td>";
                 echo "</tr>";
@@ -107,11 +119,15 @@
     </table>
 </div>
 <form id='cart' action="http://localhost:8089/order/create" method="post">
-    <input type="submit" value="Valider">
+    <button class="styled-button" type="submit">
+        <span class="styled-span">Valider</span>
+    </button>
 </form>
 <form action="http://localhost:8089/order/reset" method="POST">
-    <button type="submit">Vider le panier</button>
+    <button class="styled-button" type="submit">
+        <span class="styled-span">Vider le panier</span>
+    </button>
 </form>
 </div>
 </div>
-<?php require_once("../app/views/footer-view.php"); ?>
+<?php require_once ("../app/views/footer-view.php"); ?>

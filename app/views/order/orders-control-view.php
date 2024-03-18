@@ -79,10 +79,10 @@
                 } else {
                     echo "<td>
                 <form action='http://localhost:8089/order/detail' method='POST'>
-                    <button name='selectedTodo' type='submit' value=" . $order->id . ">Détails</button>
+                    <button class='button-outlined' name='selectedTodo' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
                 <form action='http://localhost:8089/order/detail' method='POST'>
-                    <button name='onDoingItem' type='submit' value=" . $order->id . ">Contrôler</button>
+                    <button class='button-outlined' name='onDoingItem' type='submit' value=" . $order->id . ">Contrôler</button>
                 </form>
             </td>";
                     echo '</tr>';
@@ -117,7 +117,9 @@
                 if (isset ($data["selectedDone"]) && $data["selectedDone"] == $order->id) {
                     echo "<td>
                 <form action='http://localhost:8089/order/control' method='GET'>
-                    <button type='submit'>X</button>
+                    <button class='button-outlined' type='submit'>
+                    <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
+                    </button>
                 </form>
             </td>";
                     echo '</tr>';
@@ -144,7 +146,7 @@
                 } else {
                     echo "<td>
                 <form action='http://localhost:8089/order/detail' method='POST'>
-                    <button name='selectedDone' type='submit' value=" . $order->id . ">Détails</button>
+                    <button class='button-outlined' name='selectedDone' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";
                     echo '</tr>';

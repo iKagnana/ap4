@@ -5,7 +5,7 @@
             <div class="filter-header">
                 <label for="">Filtres :</label>
                 <button class="button-outlined" type="submit" form="filter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
@@ -76,13 +76,13 @@
                     if ($_SESSION["userRole"] == 0) {
                         echo "<form action=http://localhost:8089/product/details method='GET'>";
                         echo "<button class='button-outlined' name='id' value=$product->id>";
-                        echo "<div><svg xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4' /><path d='M13.5 6.5l4 4' /></svg></div>";
+                        echo "<div><svg xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4' /><path d='M13.5 6.5l4 4' /></svg></div>";
                         echo "</button>";
                         echo "</form>";
                     }
                     echo "<form action=http://localhost:8089/product/cart method='POST'>
                             <button class='button-outlined' name='id' value=$product->id>
-                            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor'
+                            <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor'
                                 stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
                                 <path stroke='none' d='M0 0h24v24H0z' fill='none' />
                                 <path d='M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0' />

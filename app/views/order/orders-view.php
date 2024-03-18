@@ -3,8 +3,15 @@
     <div class="flex-col-container">
         <div class=" filter-wrapper">
             <div class="filter-header">
-                <label for="">Filter :</label>
-                <input form="filter" type="submit" value="🔍">
+                <label for="">Filtres :</label>
+                <button class="button-outlined" type="submit" form="filter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                    </svg>
+                </button>
             </div>
             <form class="form-filter-user padding-one" id="filter" action="http://localhost:8089/order/filter"
                 method="GET">
@@ -29,7 +36,7 @@
 
             </form>
             <form class=" filter-footer" action="http://localhost:8089/order" method="GET">
-                <button type="submit">Réinitialiser les filtres</button>
+                <button class="button-outlined" type="submit">Réinitialiser les filtres</button>
             </form>
         </div>
         <?php
@@ -58,7 +65,9 @@
             if (isset ($data["openedItem"]) && $data["openedItem"] == $order->id) {
                 echo "<td>
                 <form action='http://localhost:8089/order' method='GET'>
-                    <button type='submit'>X</button>
+                    <button class='button-outlined' type='submit'>
+                    <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
+                    </button>
                 </form>
             </td>";
                 echo '</tr>';
@@ -78,7 +87,7 @@
                 </div>";
                 foreach ($order->products as $products) {
                     foreach ($products as $product) {
-                        echo "<div class='group-grid-4-col'>";
+                        echo "<div class='group-grid-5-col'>";
                         echo "<p>" . $product["name_p"] . "</p>";
                         echo "<p>" . abs($product["quantity"]) . "</p>";
                         echo "<p>" . $product["price"] . "€</p>";
@@ -91,7 +100,7 @@
             } else {
                 echo "<td>
                 <form action='http://localhost:8089/order/detail' method='POST'>
-                    <button name='item' type='submit' value=" . $order->id . ">Détails</button>
+                    <button class='button-outlined' name='item' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";
                 echo '</tr>';
