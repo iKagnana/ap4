@@ -61,12 +61,6 @@ li a:hover {
 
 /*********input styles */
 
-.textfield {
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-}
-
 /********* css item */
 .cover {
     object-fit: cover;
@@ -135,14 +129,6 @@ li a:hover {
     flex-wrap: wrap;
 }
 
-.plain-left-side {
-    width: 50%;
-}
-
-.plain-right-side {
-    width: 50%;
-}
-
 .left-side {
     width: 50%;
     height: 100%;
@@ -166,12 +152,8 @@ li a:hover {
     align-items: center;
 }
 
-.item-container {
-    margin: 1em;
-}
-
 .m-1 {
-    margin: 0.5em;
+    margin: 1em;
 }
 
 .text-error {
@@ -188,5 +170,32 @@ li a:hover {
     background-color: #333;
     min-height: 15%;
     color: white;
+    width: 100%;
+}
+
+.info-text {
+    color: #333;
+    font-style: italic;
+    text-align: center;
+}
+
+.small-text {
+    font-size: 13px;
+}
+
+/********** size *********/
+.not-full-width {
+    width: 70%;
+}
+
+.half-width {
+    width: 50%;
+}
+
+.small-width {
+    width: 25%;
+}
+
+.full-width {
     width: 100%;
 }

@@ -19,15 +19,22 @@
     padding: 0;
 }
 
-.not-full-width {
-    width: 70%;
-}
-
 /******* button element styled *******/
 .styled-button {
     --button_radius: 0.75em;
     --button_color: #fff;
     --button_outline_color: #000000;
+    font-weight: bold;
+    border: none;
+    border-radius: var(--button_radius);
+    background: var(--button_outline_color);
+    padding: 0;
+}
+
+.styled-button-red {
+    --button_radius: 0.75em;
+    --button_color: #fff;
+    --button_outline_color: red;
     font-weight: bold;
     border: none;
     border-radius: var(--button_radius);
@@ -65,10 +72,17 @@
     height: 1rem;
 }
 
+.button-outlined {
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin: 2px;
+}
+
 /******* input element styled *******/
 .styled-input {
     width: 100%;
-    height: 45px;
+    height: 30px;
     line-height: 30px;
     padding: 0 1rem !important;
     padding-left: 3rem !important;
@@ -114,10 +128,11 @@
 
 /******* generic-element *******/
 input[type=text],
-input[type=password] {
+input[type=password],
+input[type=number] {
     width: 100%;
-    height: 45px;
-    line-height: 30px;
+    height: 30px;
+    line-height: 15px;
     border: 1px solid #333;
     border-radius: 10px;
     outline: none;
@@ -129,4 +144,17 @@ input[type=password] {
 
 input::placeholder {
     color: #94a3b8;
+}
+
+select {
+    width: 100%;
+    height: 30px;
+    line-height: 15px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    outline: none;
+    background-color: #ffffff;
+    color: #0d0c22;
+    transition: .5s ease;
+    padding: 0 1em;
 }
