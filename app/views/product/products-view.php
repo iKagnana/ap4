@@ -1,4 +1,4 @@
-<?php require_once("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="flex-col-container">
         <div class="filter-wrapper">
@@ -34,7 +34,7 @@
         </div>
 
         <div>
-            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
 
         <table>
@@ -68,7 +68,7 @@
                     echo "<td>";
                     if ($_SESSION["userRole"] == 0) {
                         echo "<form action=http://localhost:8089/product/details method='GET'>
-                        <button name='id' value=" . $product->id . ">✏️</button> 
+                        <button name='id' value=" . $product->id . ">Modifier</button> 
                             </form>";
                     }
                     echo "<form action=http://localhost:8089/product/cart method='POST'>
@@ -83,4 +83,4 @@
         </table>
     </div>
 </div>
-<?php require_once("../app/views/footer-view.php"); ?>
+<?php require_once ("../app/views/footer-view.php"); ?>
