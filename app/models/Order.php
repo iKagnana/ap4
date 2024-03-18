@@ -101,6 +101,40 @@ class Order
         });
     }
 
+    /** function to get only order valided by admin
+     * @param Order[] $orders
+     * @return Order[]
+     */
+    public function getValidedOrders($orders)
+    {
+        return array_filter($orders, function ($order) {
+            return $order->status == "Validé";
+        });
+    }
+
+    /** function to get only refused done by admin
+     * @param Order[] $orders
+     * @return Order[]
+     */
+    public function getRefusedOrders($orders)
+    {
+        return array_filter($orders, function ($order) {
+            return $order->status == "Refusé";
+        });
+    }
+
+    /** function to get all orders done by searched applicant
+     * @param Order[] $orders
+     * @param string $searchName applicant name
+     * @return Order[]
+     */
+    public function getByUser($orders, $searchName)
+    {
+        return array_filter($orders, function ($order) use ($searchName) {
+            return str_contains(strtolower($order->applicant), strtolower($searchName));
+        });
+    }
+
     ################ Request to db
 
     ######### GET
@@ -183,7 +217,7 @@ class Order
     public function getProductsByOrderId($idO)
     {
         try {
-            $this->db->query("SELECT products.name_p, products.price, categories.name_cat FROM orders_details 
+            $this->db->query("SELECT products.name_p, products.price, categories.name_cat, quantity FROM orders_details 
             INNER JOIN orders ON orders.id_o = orders_details.id_o
             INNER JOIN products ON products.id_p = orders_details.id_p
             INNER JOIN categories ON categories.id_cat = products.id_cat

@@ -22,14 +22,26 @@ class OrderController extends Controller
     {
         $res = $_SESSION["userRole"] < 2 ? $this->order->getOrder() : $this->order->getUserOrders($_SESSION["userId"]);
 
-        $orders = $res["data"];
-        $error = $res["error"] ?? null;
+        $filter = null;
+        $error = null;
+
+        if (isset ($extra["filtered"])) {
+            $orders = $extra["filtered"];
+            $filter = $extra["filter"];
+        } else {
+            $orders = $res["data"];
+            $error = $res["error"] ?? null;
+        }
 
         if (isset ($extra["error"])) {
             $error = $res["error"];
         }
 
-        $data = ["all" => $orders, "error" => $error];
+        if (isset ($extra["searchName"])) {
+            $orders = $this->order->getByUser($orders, $extra["searchName"]);
+        }
+
+        $data = ["all" => $orders, "error" => $error, "filter" => $filter];
 
         if (isset ($extra)) {
             $sendData = array_merge($data, $extra);
@@ -60,6 +72,28 @@ class OrderController extends Controller
             $selectOnDoingItem = $_POST["onDoingItem"];
             $this->control(["onDoingItem" => $selectOnDoingItem]);
         }
+    }
+
+    /** function to filter orders
+     * used in orders-view.php
+     */
+    public function filter()
+    {
+        $filter = $_GET["filter"] ?? "all";
+        $searchName = $_GET["search"] ?? "";
+        $res = $this->order->getOrder();
+        $allOrders = $res["data"];
+        $error = $res["error"] ?? null;
+
+        if ($filter == "waiting") {
+            $allOrders = $this->order->getTodoOrders($allOrders);
+        } else if ($filter == "valid") {
+            $allOrders = $this->order->getValidedOrders($allOrders);
+        } else if ($filter == "refused") {
+            $allOrders = $this->order->getRefusedOrders($allOrders);
+        }
+
+        $this->index(["filtered" => $allOrders, "filter" => $filter, "searchName" => $searchName, "error" => $error]);
     }
 
     /** method to search for product
@@ -281,7 +315,7 @@ class OrderController extends Controller
             $error = $res["error"];
         }
 
-        $this->index(["error" => $error]);
+        $this->index(["error" => $error ?? null]);
 
     }
 }

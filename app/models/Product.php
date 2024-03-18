@@ -45,7 +45,6 @@ class Product
             return ["error" => "Certains champs sont invalides"];
         }
 
-
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
