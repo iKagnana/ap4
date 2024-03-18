@@ -1,4 +1,4 @@
-<?php require_once("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
     <?php
     echo "<div class='left-side'>
@@ -24,7 +24,7 @@
         echo "<th>" . $order->status . "</th>";
         echo "<th>" . $order->reason . "</th>";
 
-        if (isset($data["selectedTodo"]) && $data["selectedTodo"] == $order->id) {
+        if (isset ($data["selectedTodo"]) && $data["selectedTodo"] == $order->id) {
             echo "<td>
                 <form action='http://localhost:8089/order/control' method='GET'>
                     <button type='submit'>X</button>
@@ -32,20 +32,24 @@
             </td>";
             echo '</tr>';
             echo "<tr><td colspan=6>";
-            echo "<div class='group-grid-3-col text-bold'>
+            echo "<div class='group-grid-4-col text-bold'>
                 <span>Libellé</span>
-                <span>Price</span>
+                <span>Quantité</span>
+                <span>Prix unité</span>
                 <span>Catégorie</span>
                 </div>";
-            foreach ($order->products as $product) {
-                echo "<div class='group-grid-3-col'>";
-                echo "<p>" . $product["name_p"] . "</p>";
-                echo "<p>" . $product["price"] . "€</p>";
-                echo "<p>" . $product["name_cat"] . "</p>";
-                echo "</div>";
+            foreach ($order->products as $products) {
+                foreach ($products as $product) {
+                    echo "<div class='group-grid-4-col'>";
+                    echo "<p>" . $product["name_p"] . "</p>";
+                    echo "<p>" . abs($product["quantity"]) . "</p>";
+                    echo "<p>" . $product["price"] . "€</p>";
+                    echo "<p>" . $product["name_cat"] . "</p>";
+                    echo "</div>";
+                }
             }
             echo "</td></tr>";
-        } else if (isset($data["onDoingItem"]) && $data["onDoingItem"] == $order->id) {
+        } else if (isset ($data["onDoingItem"]) && $data["onDoingItem"] == $order->id) {
             echo "<tr>
                 <form action='http://localhost:8089/order/treatment' method='POST'>
                     <td colspan=3>
@@ -103,7 +107,7 @@
         echo "<th>" . $order->status . "</th>";
         echo "<th>" . $order->reason . "</th>";
 
-        if (isset($data["selectedDone"]) && $data["selectedDone"] == $order->id) {
+        if (isset ($data["selectedDone"]) && $data["selectedDone"] == $order->id) {
             echo "<td>
                 <form action='http://localhost:8089/order/control' method='GET'>
                     <button type='submit'>X</button>
@@ -111,17 +115,21 @@
             </td>";
             echo '</tr>';
             echo "<tr><td colspan=6>";
-            echo "<div class='group-grid-3-col text-bold'>
+            echo "<div class='group-grid-4-col text-bold'>
                 <span>Libellé</span>
-                <span>Price</span>
+                <span>Quantité</span>
+                <span>Prix unité</span>
                 <span>Catégorie</span>
                 </div>";
-            foreach ($order->products as $product) {
-                echo "<div class='group-grid-3-col'>";
-                echo "<p>" . $product["name_p"] . "</p>";
-                echo "<p>" . $product["price"] . "€</p>";
-                echo "<p>" . $product["name_cat"] . "</p>";
-                echo "</div>";
+            foreach ($order->products as $products) {
+                foreach ($products as $product) {
+                    echo "<div class='group-grid-4-col'>";
+                    echo "<p>" . $product["name_p"] . "</p>";
+                    echo "<p>" . abs($product["quantity"]) . "</p>";
+                    echo "<p>" . $product["price"] . "€</p>";
+                    echo "<p>" . $product["name_cat"] . "</p>";
+                    echo "</div>";
+                }
             }
             echo "</td></tr>";
         } else {
@@ -140,4 +148,4 @@
     ?>
 
 </div>
-<?php require_once("../app/views/footer-view.php"); ?>
+<?php require_once ("../app/views/footer-view.php"); ?>

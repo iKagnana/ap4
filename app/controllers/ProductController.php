@@ -123,10 +123,10 @@ class ProductController extends Controller
                 $productArray = array(
                     "id" => $idProduct,
                     "name" => $selectedProduct->name,
-                    "quantity" => $_REQUEST["quantity"],
+                    "quantity" => 1,
                     "price" => $selectedProduct->price,
                     "category" => $selectedProduct->category,
-                    "totalPrice" => $selectedProduct->price * $_REQUEST["quantity"]
+                    "totalPrice" => $selectedProduct->price
                 );
                 array_push($cart, $productArray);
             } else {
