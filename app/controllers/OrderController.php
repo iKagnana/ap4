@@ -151,8 +151,27 @@ class OrderController extends Controller
         $reason = $_POST["reason"];
         $id = $_POST["id"];
 
-        $res = $this->order->treatOrder($id, $status, $reason);
+        # check if user can validate 
+        $res = $this->order->getProductsByOrderId($id);
+        $ordersProducts = $res["data"];
         $error = $res["error"] ?? null;
+
+        foreach ($ordersProducts as $product) {
+            $errors = [];
+            if (!$this->order->checkStock($product)) {
+                array_push($errors, $product["name_p"]);
+            }
+        }
+
+        if (count($errors) == 1) {
+            $error = "Attention, vous n'avez pas assez de stock pour ce produit : " . $errors[0];
+        } else if (count($errors) > 1) {
+            $error = "Attention, vous n'avez pas assez de stocks pour ces produits : " . implode(", ", $errors);
+        } else {
+            $res = $this->order->treatOrder($id, $status, $reason);
+            $error = $res["error"] ?? null;
+        }
+
         $this->control(["error" => $error]);
 
     }

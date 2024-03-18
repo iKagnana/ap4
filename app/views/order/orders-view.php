@@ -69,11 +69,12 @@
                     echo "<td>Commande Cliente</td>";
                 }
                 echo "<td colspan=6>";
-                echo "<div class='group-grid-4-col text-bold'>
+                echo "<div class='group-grid-5-col text-bold'>
                 <span>Libellé</span>
                 <span>Quantité</span>
                 <span>Prix unité</span>
                 <span>Catégorie</span>
+                <span>Stock</span>
                 </div>";
                 foreach ($order->products as $products) {
                     foreach ($products as $product) {
@@ -82,6 +83,7 @@
                         echo "<p>" . abs($product["quantity"]) . "</p>";
                         echo "<p>" . $product["price"] . "€</p>";
                         echo "<p>" . $product["name_cat"] . "</p>";
+                        echo "<p>" . $product["stock"] . "</p>";
                         echo "</div>";
                     }
                 }

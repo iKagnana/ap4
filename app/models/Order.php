@@ -135,6 +135,20 @@ class Order
         });
     }
 
+
+    /** function to check stock before validate the order to avoid having
+     * negative stocks
+     * @param $product
+     */
+    public function checkStock($product)
+    {
+        if ($product["quantity"] < 0 && abs($product["quantity"]) > $product["stock"]) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     ################ Request to db
 
     ######### GET
@@ -217,7 +231,7 @@ class Order
     public function getProductsByOrderId($idO)
     {
         try {
-            $this->db->query("SELECT products.name_p, products.price, categories.name_cat, quantity FROM orders_details 
+            $this->db->query("SELECT products.name_p, products.price, products.stock, categories.name_cat, quantity FROM orders_details 
             INNER JOIN orders ON orders.id_o = orders_details.id_o
             INNER JOIN products ON products.id_p = orders_details.id_p
             INNER JOIN categories ON categories.id_cat = products.id_cat
@@ -302,7 +316,6 @@ class Order
             $this->db->bind("userId", $_SESSION["userId"]);
             $this->db->fetch();
         } catch (PDOException $e) {
-            echo "Could update orders" . $e->getMessage();
             return ["error" => "Les changements n'ont pas pu être sauvegarder"];
         }
 
