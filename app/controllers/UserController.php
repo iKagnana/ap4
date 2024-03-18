@@ -26,10 +26,16 @@ class UserController extends Controller
         $email = $_POST["email"];
         $password = $_POST["password"];
         $enterprise = $_POST["enterprise"];
-        $role = $_POST["role"];
+        $role = $_POST["role"] ?? null;
 
         if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
-            return ["error" => "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères."];
+            $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
+            if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
+                $this->view("user/create-account-view", ["error" => $error]);
+            } else {
+                $this->form(["error" => $error]);
+            }
+            return;
         }
 
         if (isset ($_POST["type"]) && $_POST["type"] == "employee") {
@@ -39,7 +45,7 @@ class UserController extends Controller
         if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
             if (isset ($check["error"])) {
-                $this->view("user/login-view", ["error" => $check["error"]]);
+                $this->view("user/create-account-view", ["error" => $check["error"]]);
                 return;
             }
             $res = $newUser->createUser();
@@ -48,13 +54,14 @@ class UserController extends Controller
             $levelAccess = $_POST["levelAccess"];
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
             if (isset ($check["error"])) {
-                $this->view("user/login-view", ["error" => $check["error"]]);
+                $this->form(["error" => $check["error"]]);
                 return;
             }
 
             $res = $newUser->createUserAdmin();
+            $error = $res["error"] ?? null;
 
-            $this->index(["error" => $res["error"] ?? null]);
+            $this->index(["error" => $error ?? null]);
         }
 
 
@@ -194,8 +201,8 @@ class UserController extends Controller
     /** method to navigate to the user form for the admin
      * 
      */
-    public function form()
+    public function form($extra = null)
     {
-        $this->view("user/handle/form-user-view");
+        $this->view("user/handle/form-user-view", ["error" => $extra["error"] ?? null]);
     }
 }

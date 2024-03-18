@@ -1,4 +1,4 @@
-<?php require_once("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
     <div class="flex-col-container padding-one">
         <div class="filter-wrapper">
@@ -19,9 +19,9 @@
                     <select name="filter" id="filterBy">
                         <?php
                         echo "<option value='all'>Tous</option>";
-                        echo isset($data["filter"]) && $data["filter"] == "waiting" ? "<option value='waiting' selected>En attente</option>" : "<option value='waiting' >En attente</option>";
-                        echo isset($data["filter"]) && $data["filter"] == "valid" ? "<option value='valid' selected>Validé</option>" : "<option value='valid' >Validé</option>";
-                        echo isset($data["filter"]) && $data["filter"] == "refused" ? "<option value='refused' selected>Refusé</option>" : "<option value='refused' >Refusé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "waiting" ? "<option value='waiting' selected>En attente</option>" : "<option value='waiting' >En attente</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "valid" ? "<option value='valid' selected>Validé</option>" : "<option value='valid' >Validé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "refused" ? "<option value='refused' selected>Refusé</option>" : "<option value='refused' >Refusé</option>";
                         ?>
                     </select>
                 </div>
@@ -32,7 +32,7 @@
         </div>
 
         <div>
-            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
 
         <table>
@@ -74,4 +74,4 @@
 </div>
 <script>
 </script>
-<?php require_once("../app/views/footer-view.php"); ?>
+<?php require_once ("../app/views/footer-view.php"); ?>

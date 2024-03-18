@@ -48,6 +48,12 @@ li a:hover {
     background-color: #111;
 }
 
+input[type=text],
+input[type=password],
+input[type=email] {
+    border-radius: 5%;
+}
+
 /*********input styles */
 
 .textfield {
