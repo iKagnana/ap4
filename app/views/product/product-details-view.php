@@ -1,6 +1,6 @@
 <?php require_once ("../app/views/header-view.php"); ?>
 <div class="page-container">
-    <div class="form-center-item">
+    <div class="flex-col-container">
         <form class="m-1" action="http://localhost:8089/product">
             <button class="styled-button" type="submit">
                 <div class="styled-span">
@@ -16,6 +16,9 @@
                 </svg>
             </button>
         </form>
+        <div>
+            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+        </div>
         <form class="form-center-item" action="http://localhost:8089/product/update" method="post">
             <?php
             $product = $data["selected"];

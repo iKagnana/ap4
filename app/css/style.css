@@ -156,6 +156,10 @@ li a:hover {
     align-items: center;
 }
 
+.align-top {
+    align-items: start !important;
+}
+
 .text-error {
     color: red;
 }

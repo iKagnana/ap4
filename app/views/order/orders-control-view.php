@@ -1,5 +1,5 @@
 <?php require_once ("../app/views/header-view.php"); ?>
-<div class="page-container">
+<div class="page-container align-top">
     <div class="flex-col-container">
         <div>
             <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>

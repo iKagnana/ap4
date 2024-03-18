@@ -1,5 +1,5 @@
 <?php require_once ("../app/views/header-view.php"); ?>
-<div class="page-container">
+<div class="page-container align-top">
     <div class="flex-col-container">
         <div class=" filter-wrapper">
             <div class="filter-header">
