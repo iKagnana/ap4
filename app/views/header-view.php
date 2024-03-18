@@ -16,6 +16,7 @@
         require ("../app/css/header.css");
         require ("../app/css/login.css");
         require ("../app/css/user.css");
+        require ("../app/css/form.css");
         ?>
     </style>
     <header>

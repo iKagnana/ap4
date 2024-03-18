@@ -1,0 +1,132 @@
+.form-center-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    align-items: center;
+}
+
+.form-detail-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-filter-user {
+    display: flex;
+    width: 100%;
+    align-items: end;
+    padding: 0;
+}
+
+.not-full-width {
+    width: 70%;
+}
+
+/******* button element styled *******/
+.styled-button {
+    --button_radius: 0.75em;
+    --button_color: #fff;
+    --button_outline_color: #000000;
+    font-weight: bold;
+    border: none;
+    border-radius: var(--button_radius);
+    background: var(--button_outline_color);
+    padding: 0;
+}
+
+.styled-span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 2px solid var(--button_outline_color);
+    border-radius: var(--button_radius);
+    padding: 0.75em 1.5em;
+    background: var(--button_color);
+    color: var(--button_outline_color);
+    transform: translateY(-0.2em);
+    transition: transform 0.1s ease;
+}
+
+
+.styled-button:hover .styled-span {
+    /* Pull the button upwards when hovered */
+    transform: translateY(-0.33em);
+}
+
+.styled-button:active .styled-span {
+    /* Push the button downwards when pressed */
+    transform: translateY(0);
+}
+
+.button-icon {
+    left: 1rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+/******* input element styled *******/
+.styled-input {
+    width: 100%;
+    height: 45px;
+    line-height: 30px;
+    padding: 0 1rem !important;
+    padding-left: 3rem !important;
+    border: 1px solid #333;
+    border-radius: 10px;
+    outline: none;
+    background-color: #ffffff;
+    color: #333;
+    transition: .5s ease;
+}
+
+.group {
+    display: flex;
+    line-height: 30px;
+    align-items: center;
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    left: 1rem;
+    fill: none;
+    width: 1rem;
+    height: 1rem;
+}
+
+/******* radio element styled *******/
+.radio-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1em;
+    padding: 1em;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5em;
+}
+
+/******* generic-element *******/
+input[type=text],
+input[type=password] {
+    width: 100%;
+    height: 45px;
+    line-height: 30px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    outline: none;
+    background-color: #ffffff;
+    color: #0d0c22;
+    transition: .5s ease;
+    padding: 0 1em;
+}
+
+input::placeholder {
+    color: #94a3b8;
+}
