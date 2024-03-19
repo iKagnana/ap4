@@ -75,9 +75,15 @@ class ProviderController extends Controller
 
     ##### form
 
-    public function form()
+    public function form($extra = null)
     {
-        $this->view("provider/provider-form");
+        if (isset ($extra["form"])) {
+            $newProvider = $extra["form"];
+        }
+        if (isset ($extra["error"])) {
+            $error = $extra["error"];
+        }
+        $this->view("provider/provider-form", ["error" => $error ?? null, "form" => $newProvider ?? null]);
     }
 
     public function create()
@@ -88,7 +94,7 @@ class ProviderController extends Controller
         $check = $provider->setProvider($name, $email);
 
         if (isset ($check["error"])) {
-            $this->index(["error" => $check["error"]]);
+            $this->form(["error" => $check["error"], "form" => $provider]);
             return;
         }
 

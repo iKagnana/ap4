@@ -12,7 +12,6 @@ class ProductController extends Controller
 
     public function index($extra = null)
     {
-
         // filter by cat or get all
         if (isset ($extra["filterCat"]) && $extra["filterCat"] != "all") {
             $resPro = $this->product->getProductByCategory($extra["filterCat"]);
@@ -42,12 +41,12 @@ class ProductController extends Controller
             "products" => $allProducts,
             "categories" => $allCats,
             "error" => $error,
-            "filterCat" => $extra["filterCat"] ?? null
+            "filterCat" => $extra["filterCat"] ?? null,
         ];
         $this->view("product/products-view", $data);
     }
 
-    public function form()
+    public function form($extra = null)
     {
         ## test if the user has access
         if ($_SESSION["userRole"] != 0) {
@@ -55,9 +54,23 @@ class ProductController extends Controller
             return;
         }
 
+        if (isset ($extra["form"])) {
+            $newProduct = $extra["form"];
+        }
+
         $res = $this->product->getCategories();
+        $error = $res["error"] ?? null;
+
+        if (isset ($extra["error"])) {
+            $error = $extra["error"];
+        }
+
         # display form to add product
-        $this->view("product/form-product-view", ["allCat" => $res["data"], "error" => $res["error"] ?? null]);
+        $this->view("product/form-product-view", [
+            "allCat" => $res["data"],
+            "error" => $error ?? null,
+            "form" => $newProduct ?? null
+        ]);
     }
 
     public function createProduct()
@@ -73,7 +86,7 @@ class ProductController extends Controller
 
         if (isset ($check["error"])) {
             $error = $check["error"];
-            $this->index(["error" => $error]);
+            $this->form(["error" => $error, "form" => $newProduct]);
             return;
         }
 

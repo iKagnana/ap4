@@ -28,24 +28,19 @@ class UserController extends Controller
         $enterprise = $_POST["enterprise"];
         $role = $_POST["role"] ?? null;
 
-        if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
-            $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
-            if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
-                $this->view("user/create-account-view", ["error" => $error]);
-            } else {
-                $this->form(["error" => $error]);
-            }
-            return;
-        }
-
-        if (isset ($_POST["type"]) && $_POST["type"] == "employee") {
+        if (isset ($_POST["type"]) && $_POST["type"] == 1) {
             $enterprise = "GSB";
         }
 
         if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
             if (isset ($check["error"])) {
-                $this->view("user/create-account-view", ["error" => $check["error"]]);
+                $this->view("user/create-account-view", ["error" => $check["error"], "form" => $newUser]);
+                return;
+            }
+            if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
+                $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
+                $this->view("user/create-account-view", ["error" => $error, "form" => $newUser]);
                 return;
             }
             $res = $newUser->createUser();
@@ -54,10 +49,17 @@ class UserController extends Controller
             $levelAccess = $_POST["levelAccess"];
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
             if (isset ($check["error"])) {
-                $this->form(["error" => $check["error"]]);
+                $this->form(["error" => $check["error"], "form" => $newUser]);
                 return;
             }
 
+            echo json_encode($newUser);
+
+            if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
+                $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
+                $this->form(["error" => $error, "form" => $newUser]);
+                return;
+            }
             $res = $newUser->createUserAdmin();
             $error = $res["error"] ?? null;
 
@@ -203,6 +205,9 @@ class UserController extends Controller
      */
     public function form($extra = null)
     {
-        $this->view("user/handle/form-user-view", ["error" => $extra["error"] ?? null]);
+        if (isset ($extra["form"])) {
+            $newUser = $extra["form"];
+        }
+        $this->view("user/handle/form-user-view", ["error" => $extra["error"] ?? null, "form" => $newUser ?? null]);
     }
 }

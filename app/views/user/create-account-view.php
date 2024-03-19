@@ -13,12 +13,12 @@
                 <span>Votre status</span>
                 <div class="radio-group">
                     <div>
-                        <input type="radio" value="1" name="type" id="employee">
+                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 1 ? "<input checked type='radio' value=1 name='role' id='employee'>" : "<input type='radio' value=1 name='role' id='employee'>" ?>
                         <label for="employee">Employé</label>
                     </div>
 
                     <div>
-                        <input type="radio" value="2" name="type" id="client">
+                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 2 ? "<input checked type='radio' value=2 name='role' id='client'>" : "<input type='radio' value=2 name='role' id='client'>" ?>
                         <label for="client">Client</label>
                     </div>
                 </div>
@@ -26,27 +26,27 @@
 
             <div class="not-full-width">
                 <label for="enterprise">Nom de l'entreprise (Client uniquement)</label>
-                <input type="text" name="enterprise" id="enterprise">
+                <?php echo isset ($data["form"]->enterprise) ? "<input type='text' name='enterprise' id='enterprise' value=" . $data["form"]->enterprise . ">" : "<input type='text' name='enterprise' id='enterprise'>" ?>
             </div>
 
             <div class="not-full-width">
                 <label for="lastname">Nom</label>
-                <input type="text" name="lastname" id="lastname">
+                <?php echo isset ($data["form"]->lastname) ? "<input type='text' name='lastname' id='lastname' value=" . $data["form"]->lastname . ">" : "<input type='text' name='lastname' id='lastname'>" ?>
             </div>
 
             <div class="not-full-width">
                 <label for="firstname">Prénom</label>
-                <input type="text" name="firstname" id="firstname">
+                <?php echo isset ($data["form"]->firstname) ? "<input type='text' name='firstname' id='firstname' value=" . $data["form"]->firstname . ">" : "<input type='text' name='firstname' id='firstname'>" ?>
             </div>
 
             <div class="not-full-width">
                 <label for="email">Email</label>
-                <input type="text" name="email" id="email">
+                <?php echo isset ($data["form"]->email) ? "<input type='text' name='email' id='email' value=" . $data["form"]->email . ">" : "<input type='text' name='email' id='email'>" ?>
             </div>
 
             <div class="not-full-width">
                 <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password">
+                <?php echo isset ($data["form"]->password) ? "<input type='password' name='password' id='password' value=" . $data["form"]->password . ">" : "<input type='password' name='password' id='password'>" ?>
             </div>
 
             <input hidden type="text" name="origin" value="user">

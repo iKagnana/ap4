@@ -1,4 +1,5 @@
-<?php require_once ("../app/views/header-view.php"); ?>
+<?php require_once ("../app/views/header-view.php");
+?>
 <div class="page-container">
     <div class="flex-col-container">
         <div>
@@ -16,36 +17,36 @@
 
             <div class="half-width">
                 <label for="enterprise">Nom de l'entreprise (Client uniquement)</label>
-                <input type="text" name="enterprise" id="enterprise">
+                <?php echo isset ($data["form"]->enterprise) ? "<input type='text' name='enterprise' id='enterprise' value=" . $data["form"]->enterprise . ">" : "<input type='text' name='enterprise' id='enterprise'>" ?>
             </div>
 
 
             <div class="half-width">
                 <label for="lastname">Nom</label>
-                <input type="text" name="lastname" id="lastname">
+                <?php echo isset ($data["form"]->lastname) ? "<input type='text' name='lastname' id='lastname' value=" . $data["form"]->lastname . ">" : "<input type='text' name='lastname' id='lastname'>" ?>
             </div>
 
             <div class="half-width">
                 <label for="firstname">Prénom</label>
-                <input type="text" name="firstname" id="firstname">
+                <?php echo isset ($data["form"]->firstname) ? "<input type='text' name='firstname' id='firstname' value=" . $data["form"]->firstname . ">" : "<input type='text' name='firstname' id='firstname'>" ?>
             </div>
 
             <div class="half-width">
                 <label for="email">Email</label>
-                <input type="text" name="email" id="email" autocomplete="off">
+                <?php echo isset ($data["form"]->email) ? "<input type='text' name='email' id='email' value=" . $data["form"]->email . ">" : "<input type='text' name='email' id='email'>" ?>
             </div>
 
             <div class="half-width">
                 <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password" autocomplete="off">
+                <?php echo isset ($data["form"]->password) ? "<input type='password' name='password' id='password' value=" . $data["form"]->password . ">" : "<input type='password' name='password' id='password'>" ?>
             </div>
 
             <div class="half-width">
                 <label for="level-access">Niveau d'accès maximum</label>
-                <select name="levelAccess" id="level-access">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                <select name="levelAccess" id="level-access">``
+                    <?php echo isset ($data["form"]->levelAccess) && $data["form"]->levelAccess == 1 ? "<option selected value=1>1</option>" : "<option value=1>1</option>" ?>
+                    <?php echo isset ($data["form"]->levelAccess) && $data["form"]->levelAccess == 2 ? "<option selected value=2>2</option>" : "<option value=2>2</option>" ?>
+                    <?php echo isset ($data["form"]->levelAccess) && $data["form"]->levelAccess == 3 ? "<option selected value=3>3</option>" : "<option value=3>3</option>" ?>
                 </select>
             </div>
 

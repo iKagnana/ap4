@@ -35,6 +35,14 @@ class Product
      */
     public function setProduct($name, $price, $stock, $access_level, $category, $id = null)
     {
+        $this->id = $id;
+        $this->name = $name;
+        $this->price = $price;
+        $this->stock = $stock;
+        $this->access_level = $access_level;
+        $this->category = $category;
+        $this->openState = false;
+
         # check if set
         if (!isset ($name) || !isset ($price) || !isset ($stock) || !isset ($access_level) || !isset ($category)) {
             return ["error" => "Certains champs sont vides."];
@@ -44,14 +52,6 @@ class Product
         if ($name == "" || $price == 0) {
             return ["error" => "Certains champs sont invalides"];
         }
-
-        $this->id = $id;
-        $this->name = $name;
-        $this->price = $price;
-        $this->stock = $stock;
-        $this->access_level = $access_level;
-        $this->category = $category;
-        $this->openState = false;
     }
 
     /** Method used when we want to order 

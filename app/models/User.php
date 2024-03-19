@@ -41,17 +41,6 @@ class User
      */
     public function setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess = null, $status = null, $id = null)
     {
-        if (
-            !isset ($lastname) || !isset ($firstname) || !isset ($email) || !isset ($password) || !isset ($role) ||
-            $lastname == "" || $firstname == "" || $email == ""
-        ) {
-            return ["error" => "Certains champs sont vides."];
-        }
-
-        if (!preg_match("/[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}/", $email)) {
-            return ["error" => "L'email est invalide."];
-        }
-
         $this->id = $id;
         $this->lastname = $lastname;
         $this->firstname = $firstname;
@@ -61,6 +50,17 @@ class User
         $this->status = $status ?? "En attente de validation";
         $this->enterprise = $enterprise;
         $this->role = $role;
+
+        if (
+            !isset ($lastname) || !isset ($firstname) || !isset ($email) || !isset ($password) || !isset ($role) ||
+            $lastname == "" || $firstname == "" || $email == ""
+        ) {
+            return ["error" => "Certains champs sont vides."];
+        }
+
+        if (!preg_match("/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/", $email)) {
+            return ["error" => "L'email est invalide."];
+        }
     }
 
 
