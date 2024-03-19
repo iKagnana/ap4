@@ -14,9 +14,9 @@ class ProductController extends Controller
     {
         // filter by cat or get all
         if (isset ($extra["filterCat"]) && $extra["filterCat"] != "all") {
-            $resPro = $this->product->getProductByCategory($extra["filterCat"]);
+            $resPro = $this->product->getProductByCategory($extra["filterCat"], $extra["searchName"] ?? null);
         } else {
-            $resPro = $this->product->getProducts();
+            $resPro = $this->product->getProducts($extra["searchName"] ?? null);
         }
 
         $allProducts = $resPro["data"];
@@ -26,11 +26,6 @@ class ProductController extends Controller
         $resCat = $this->product->getCategories();
         $allCats = $resCat["data"];
         $error = $resCat["error"] ?? null ? (isset ($error) ? "Impossible de récupérer les données." : $resCat["error"]) : $error;
-
-        // filter by search 
-        if (isset ($extra["searchName"])) {
-            $allProducts = $this->product->filterProduct($extra["searchName"], $allProducts);
-        }
 
         // set error if have
         if (isset ($extra["error"])) {

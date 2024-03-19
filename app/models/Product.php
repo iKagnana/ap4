@@ -79,14 +79,17 @@ class Product
 
     ######### GET
     /** Function to retreive all the products 
+     * @param ?string $searchName
      * @return Product[]
      */
-    public function getProducts()
+    public function getProducts($searchName = null)
     {
         try {
-            $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat");
+            $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE name_p LIKE :searchName");
+            $this->db->bind("searchName", $searchName . '%' ?? "");
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
+            echo $exception->getMessage();
             $error = "Les produits n'ont pas pu être récupérés.";
             return ["data" => [], "error" => $error];
         }
@@ -109,16 +112,17 @@ class Product
     }
 
     /** function to get only products accessible by the user
-     * 
+     * @param ?string $searchName
+     * @return Product[]
      */
-    public function getProductAccessible()
+    public function getProductAccessible($searchName = null)
     {
         try {
-            $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel");
+            $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel and name_p = LIKE :searchName");
+            $this->db->bind("searchName", $searchName . '%' ?? "");
             $this->db->bind("accessLevel", $_SESSION["userLevelAccess"]);
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
-            echo "Couldn't get products beacause of error : " . $exception->getMessage();
             return ["data" => [], "erorr" => "Les produits n'ont pas pu être récupérés."];
         }
 
@@ -139,16 +143,18 @@ class Product
     }
 
     /** function to get product only by certain category
-     * 
+     * @param ?int $category
+     * @param ?string $searchName
      */
-    public function getProductByCategory($category)
+    public function getProductByCategory($category, $searchName = null)
     {
         try {
             $this->db->query("
             SELECT products.*, name_cat FROM products
             INNER JOIN categories ON products.id_cat = categories.id_cat
-            WHERE products.id_cat = :cat");
+            WHERE products.id_cat = :cat and name_p LIKE :searchName");
             $this->db->bind("cat", $category);
+            $this->db->bind("searchName", $searchName . '%' ?? "");
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
             return ["data" => [], "error" => "Nous n'avons pas pu récupérer les produits de la catégorie correspondante."];
