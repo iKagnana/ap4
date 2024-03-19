@@ -31,14 +31,20 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - app-network
-      
+
   phpmyadmin:
     image: phpmyadmin
     restart: always
+    links:
+      - db
     ports:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    networks:
+      - app-network
 
 networks:
   app-network:
