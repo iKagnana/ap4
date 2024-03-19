@@ -107,6 +107,11 @@ li a:hover {
     flex-direction: column;
 }
 
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
 .dashboard-item {
     border: 1px solid #000000;
     border-radius: 5%;
@@ -162,6 +167,7 @@ li a:hover {
 
 .text-error {
     color: red;
+    text-align: center;
 }
 
 .small-title {
@@ -211,4 +217,10 @@ li a:hover {
 
 .small-width {
     width: 25% !important;
+}
+
+/********** color *********/
+.red {
+    color: red;
+    border-color: red !important;
 }
