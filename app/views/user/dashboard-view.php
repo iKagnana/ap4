@@ -18,7 +18,7 @@
                 </div>
             </a>
             <?php
-            if (isset ($_SESSION["userRole"]) && $_SESSION["userRole"] < 2) {
+            if (isset ($_SESSION["userRole"]) && $_SESSION["userRole"] == 0) {
                 echo "<a class='dashboard-item' href='http://localhost:8089/user'>";
                 echo "<div>
                     Utilisateur

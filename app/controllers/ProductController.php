@@ -45,8 +45,8 @@ class ProductController extends Controller
     public function form($extra = null)
     {
         ## test if the user has access
-        if ($_SESSION["userRole"] != 0) {
-            $this->view("app/views/no_authorized_view.php");
+        if ($_SESSION["userRole"] == 2) {
+            $this->view("error/prohibited-view");
             return;
         }
 

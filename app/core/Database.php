@@ -22,6 +22,10 @@ class Database
      */
     public function __construct()
     {
+        // $this->host = getenv("DB_HOST");
+        // $this->dbName = getenv("DB_NAME");
+        // $this->user = getenv("DB_USER");
+        // $this->password = getenv("DB_PASS");
         # set DSN
         $dsn = $this->host . ";" . $this->dbName;
         try {

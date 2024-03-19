@@ -15,7 +15,7 @@ services:
     networks:
       - app-network
     tty: true
-      
+
   db:
     image: mysql:8.0
     container_name: ap4db
@@ -31,6 +31,14 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - app-network
+      
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
 
 networks:
   app-network:

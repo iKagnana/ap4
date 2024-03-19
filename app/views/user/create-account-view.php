@@ -13,12 +13,12 @@
                 <span>Votre status</span>
                 <div class="radio-group">
                     <div>
-                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 1 ? "<input checked type='radio' value=1 name='role' id='employee'>" : "<input type='radio' value=1 name='role' id='employee'>" ?>
+                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 1 ? "<input checked type='radio' value='1' name='role' id='employee'>" : "<input type='radio' value='1' name='role' id='employee'>" ?>
                         <label for="employee">Employé</label>
                     </div>
 
                     <div>
-                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 2 ? "<input checked type='radio' value=2 name='role' id='client'>" : "<input type='radio' value=2 name='role' id='client'>" ?>
+                        <?php echo isset ($data["form"]->role) && $data["form"]->role == 2 ? "<input checked type='radio' value='2' name='role' id='client'>" : "<input type='radio' value='2' name='role' id='client'>" ?>
                         <label for="client">Client</label>
                     </div>
                 </div>
