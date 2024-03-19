@@ -21,6 +21,9 @@ class Provider
      */
     public function setProvider($name, $email, $id = null)
     {
+        $this->name = $name;
+        $this->email = $email;
+        $this->id = $id;
         if (!isset ($name) || !isset ($email) || $name == "" || $email == "") {
             return ["error" => "Certains champs sont vides."];
         }
@@ -28,9 +31,6 @@ class Provider
         if (!preg_match("/[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}/", $email)) {
             return ["error" => "L'email est invalide."];
         }
-        $this->name = $name;
-        $this->email = $email;
-        $this->id = $id;
     }
 
     /** search through provider and return result 

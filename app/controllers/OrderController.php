@@ -181,14 +181,11 @@ class OrderController extends Controller
      */
     public function form($extra = null)
     {
-        $resProduct = $this->product->getProductAccessible();
+        $resProduct = $this->product->getProductAccessible($extra["searchName"] ?? null);
         $resProvider = $this->provider->getProvider();
 
         $sendProduct = $resProduct["data"];
         $allProviders = $resProvider["data"];
-        if (isset ($extra["searchName"])) {
-            $sendProduct = $this->product->filterProduct($extra["searchName"], $sendProduct);
-        }
 
         $error = isset ($resProduct["error"]) || isset ($resProvider["error"]) ? "Des données n'ont pas pu être récupéré" : null;
 
