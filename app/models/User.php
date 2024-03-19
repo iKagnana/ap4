@@ -81,54 +81,65 @@ class User
         $_SESSION["userLevelAccess"] = $this->levelAccess;
     }
 
-
-    ### filters
-
-    /** filter product by firstname, lastname or email
-     * @param string $searchName
-     * @param User[] $user
-     * @return User[] filtered 
-     */
-    public function filterUser($searchName, $users)
-    {
-        return array_filter($users, function ($user) use ($searchName) {
-            return str_contains(strtolower($user->lastname), strtolower($searchName)) ||
-                str_contains(strtolower($user->firstname), strtolower($searchName)) ||
-                str_contains(strtolower($user->email), strtolower($searchName));
-        });
-    }
-
-    public function getValideUser($users)
-    {
-        return array_filter($users, function ($user) {
-            return $user->status == "Validé";
-        });
-    }
-
-    public function getWaitingUser($users)
-    {
-        return array_filter($users, function ($user) {
-            return $user->status == "En attente de validation";
-        });
-    }
-
-    public function getRefusedUser($users)
-    {
-        return array_filter($users, function ($user) {
-            return $user->status == "Refusé";
-        });
-    }
-
     ################ Request to db
 
     ######### GET
     /** function to retreive user collection
-     * 
+     * @param ?string $searchName
      */
-    public function getUsers()
+    public function getUsers($searchName = null)
     {
         try {
-            $this->db->query("SELECT * FROM users");
+            $this->db->query("SELECT * FROM users WHERE lastname_u LIKE :searchName or firstname_u LIKE :searchName or email_u LIKE :searchName");
+            $this->db->bind("searchName", "%" . $searchName . "%");
+            $result = $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les utilisateurs pour le moment."];
+        }
+
+        $allUsers = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $role = "";
+
+            if ($result[$i]["role"] == 0) {
+                $role = "Administrateur";
+            } else if ($result[$i]["role"] == 1) {
+                $role = "Utilisateur";
+            } else if ($result[$i]["role"] == 2) {
+                $role = "Client";
+            }
+
+
+            $user = new User();
+            $user->setUser(
+                $result[$i]["enterprise"],
+                $result[$i]["lastname_u"],
+                $result[$i]["firstname_u"],
+                $result[$i]["email_u"],
+                "",
+                $role,
+                $result[$i]["level_access"],
+                $result[$i]["status"],
+                $result[$i]["id_u"],
+            );
+
+            array_push($allUsers, $user);
+        }
+
+        return ["data" => $allUsers];
+
+    }
+
+    /** function to retreive user collection
+     * @param string $status
+     * @param ?string $searchName
+     */
+    public function getUsersByStatus($status, $searchName = null)
+    {
+        try {
+            $this->db->query("SELECT * FROM users WHERE status = :status and lastname_u LIKE :searchName or firstname_u LIKE :searchName or email_u LIKE :searchName");
+            $this->db->bind("status", $status);
+            $this->db->bind("searchName", "%" . $searchName . "%" ?? null);
             $result = $this->db->fetchAll();
         } catch (Exception $e) {
             return ["data" => [], "error" => "Nous n'avons pas pu récupérer les utilisateurs pour le moment."];

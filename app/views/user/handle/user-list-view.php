@@ -18,7 +18,7 @@
 
                 <div class="textfield-label">
                     <label for=" searchbar">Rechercher</label>
-                    <input type="text" name="search" id="searchbar">
+                    <?php echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>"; ?>
                 </div>
                 <div class="textfield-label">
                     <label for="filterBy">Status</label>
@@ -26,9 +26,9 @@
                     <select name="filter" id="filterBy">
                         <?php
                         echo "<option value='all'>Tous</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "waiting" ? "<option value='waiting' selected>En attente</option>" : "<option value='waiting' >En attente</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "valid" ? "<option value='valid' selected>Validé</option>" : "<option value='valid' >Validé</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "refused" ? "<option value='refused' selected>Refusé</option>" : "<option value='refused' >Refusé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente</option>" : "<option value='En attente de validation' >En attente</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
                         ?>
                     </select>
                 </div>

@@ -3,8 +3,8 @@
     <div class="flex-col-container padding-one">
         <div class="flex-row-container">
             <form class="flex-row" action="http://localhost:8089/provider/search" method="get">
-                <input class="not-full-width" type="text" name="search" id="searchbar" placeholder="Rechercher...">
-                <button class="button-outlined" type="submit" form="filter">
+                <?php echo isset ($data["searchName"]) ? "<input class='not-full-width' type='text' name='search' id='searchbar' placeholder='Rechercher...' value=" . $data["searchName"] . ">" : "<input class='not-full-width' type='text' name='search' placeholder='Rechercher...' id='searchbar'>"; ?>
+                <button class="button-outlined" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />

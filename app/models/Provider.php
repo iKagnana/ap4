@@ -33,27 +33,17 @@ class Provider
         }
     }
 
-    /** search through provider and return result 
-     * @param string $searchName
-     * @param Provider[] $allProvider
-     */
-    public function searchProvider($searchName, $allProvider)
-    {
-        return array_filter($allProvider, function ($provider) use ($searchName) {
-            return str_contains($provider->name, $searchName) || str_contains($provider->email, $searchName);
-        });
-    }
-
     ################ Request to db
 
     ######### GET
     /** function to get provider 
-     * 
+     * @param string $searchName
      */
-    public function getProvider()
+    public function getProvider($searchName = null)
     {
         try {
-            $this->db->query("SELECT * FROM provider");
+            $this->db->query("SELECT * FROM provider WHERE name_pro LIKE :searchName or email_pro LIKE :searchName");
+            $this->db->bind("searchName", "%" . $searchName . "%");
             $result = $this->db->fetchAll();
         } catch (Exception $e) {
             return ["data" => [], "error" => "Impossible de récupérer les fournisseurs."];

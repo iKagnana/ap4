@@ -79,62 +79,6 @@ class Order
         $this->provider = $provider;
     }
 
-    /** function to get only order to check by admin
-     * @param Order[] $orders
-     * @return Order[]
-     */
-    public function getTodoOrders($orders)
-    {
-        return array_filter($orders, function ($order) {
-            return $order->status == "En attente de validation";
-        });
-    }
-
-    /** function to get only order done by admin
-     * @param Order[] $orders
-     * @return Order[]
-     */
-    public function getDoneOrders($orders)
-    {
-        return array_filter($orders, function ($order) {
-            return $order->status != "En attente de validation";
-        });
-    }
-
-    /** function to get only order valided by admin
-     * @param Order[] $orders
-     * @return Order[]
-     */
-    public function getValidedOrders($orders)
-    {
-        return array_filter($orders, function ($order) {
-            return $order->status == "Validé";
-        });
-    }
-
-    /** function to get only refused done by admin
-     * @param Order[] $orders
-     * @return Order[]
-     */
-    public function getRefusedOrders($orders)
-    {
-        return array_filter($orders, function ($order) {
-            return $order->status == "Refusé";
-        });
-    }
-
-    /** function to get all orders done by searched applicant
-     * @param Order[] $orders
-     * @param string $searchName applicant name
-     * @return Order[]
-     */
-    public function getByUser($orders, $searchName)
-    {
-        return array_filter($orders, function ($order) use ($searchName) {
-            return str_contains(strtolower($order->applicant), strtolower($searchName));
-        });
-    }
-
 
     /** function to check stock before validate the order to avoid having
      * negative stocks
@@ -231,6 +175,46 @@ class Order
 
     }
 
+    /** function to retreive order data according to if it was controled or not 
+     * @param bool $isDone true by default
+     * @return Order[] 
+     */
+    public function getOrderDoneOrNot($isDone = true)
+    {
+        try {
+            if ($isDone) {
+                $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro WHERE orders.status != 'En attente de validation'");
+            } else {
+                $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro WHERE orders.status = 'En attente de validation'");
+            }
+            $result = $this->db->fetchAll();
+        } catch (PDOException $e) {
+            return ["data" => [], "error" => "Impossible de récupérer les commandes."];
+        }
+
+        $allOrders = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $order = new Order();
+            $order->setOrderGet(
+                $result[$i]["date_o"],
+                $result[$i]["price_o"],
+                $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                $result[$i]["id_u_User"],
+                $result[$i]["status"],
+                $result[$i]["reason"],
+                $result[$i]["id_o"],
+                $result[$i]["name_pro"],
+            );
+
+            $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+            $order->setProducts($products);
+            array_push($allOrders, $order);
+        }
+
+        return ["data" => $allOrders];
+
+
+    }
 
     /** function to retreive only user's order
      * @param int $id user id

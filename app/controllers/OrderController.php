@@ -102,21 +102,18 @@ class OrderController extends Controller
             return; # force exit
         }
 
-        $res = $this->order->getOrder();
-        $allOrders = $res["data"];
-        $error = $res["error"] ?? null;
+        $resDone = $this->order->getOrderDoneOrNot();
+        $done = $resDone["data"];
+        $DoneError = $resDone["error"] ?? null;
 
-        if (count($allOrders) != 0) {
-            $todo = $this->order->getTodoOrders($allOrders);
-            $done = $this->order->getDoneOrders($allOrders);
-        } else {
-            $todo = [];
-            $done = [];
-            $error = "Impossible de récupérer la liste des commandes.";
-        }
+        $resTodo = $this->order->getOrderDoneOrNot(false);
+        $todo = $resTodo["data"];
+        $todoError = $resTodo["error"] ?? null;
 
         if (isset ($extra["error"])) {
-            $error = $extra["error"];
+            $error = $extra["error"] ?? null;
+        } else {
+            $error = $todoError ?? $DoneError ?? null;
         }
 
         $data = ["todo" => $todo, "done" => $done, "error" => $error];

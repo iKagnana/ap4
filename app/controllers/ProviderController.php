@@ -16,7 +16,7 @@ class ProviderController extends Controller
      */
     public function index($extra = null)
     {
-        $res = $this->provider->getProvider();
+        $res = $this->provider->getProvider($extra["searchName"] ?? null);
         $allProvider = $res["data"];
         $error = $res["error"] ?? null;
 
@@ -24,12 +24,7 @@ class ProviderController extends Controller
             $error = $extra["error"];
         }
 
-        $sendData = ["all" => $allProvider, "error" => $error];
-
-        if (isset ($extra["searchName"])) {
-            $filtered = $this->provider->searchProvider($extra["searchName"], $allProvider);
-            $sendData = ["all" => $filtered];
-        }
+        $sendData = ["all" => $allProvider, "error" => $error, "searchName" => $extra["searchName"] ?? null];
 
         if (isset ($extra["selected"])) {
             $sendData = array_merge($sendData, ["selected" => $extra["selected"]]);

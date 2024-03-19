@@ -83,11 +83,12 @@ class UserController extends Controller
 
         $filter = null;
 
-        if (isset ($extra["filtered"])) {
-            $users = $extra["filtered"];
-            $filter = $extra["filter"];
+        if (isset ($extra["filter"]) && $extra["filter"] != "all") {
+            $res = $this->user->getUsersByStatus($extra["filter"], $extra["searchName"] ?? null);
+            $users = $res["data"];
+            $error = $res["error"] ?? null;
         } else {
-            $res = $this->user->getUsers();
+            $res = $this->user->getUsers($extra["searchName"] ?? null);
             $users = $res["data"];
             $error = $res["error"] ?? null;
         }
@@ -96,11 +97,12 @@ class UserController extends Controller
             $error = $extra["error"];
         }
 
-        if (isset ($extra["searchName"])) {
-            $users = $this->user->filterUser($extra["searchName"], $users);
-        }
-
-        $this->view("user/handle/user-list-view", ["users" => $users, "filter" => $filter, "error" => $error]);
+        $this->view("user/handle/user-list-view", [
+            "users" => $users,
+            "filter" => $filter,
+            "error" => $error,
+            "searchName" => $extra["searchName"] ?? null
+        ]);
 
     }
 
@@ -115,19 +117,8 @@ class UserController extends Controller
 
         $filter = $_GET["filter"] ?? "all";
         $searchName = $_GET["search"] ?? "";
-        $res = $this->user->getUsers();
-        $allUser = $res["data"];
-        $error = $res["error"] ?? null;
 
-        if ($filter == "waiting") {
-            $allUser = $this->user->getWaitingUser($allUser);
-        } else if ($filter == "valid") {
-            $allUser = $this->user->getValideUser($allUser);
-        } else if ($filter == "refused") {
-            $allUser = $this->user->getRefusedUser($allUser);
-        }
-
-        $this->index(["filtered" => $allUser, "filter" => $filter, "searchName" => $searchName, "error" => $error]);
+        $this->index(["filter" => $filter, "searchName" => $searchName]);
     }
 
     /** method to toggle details of an user
