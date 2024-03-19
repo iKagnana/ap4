@@ -20,8 +20,11 @@ class OrderController extends Controller
      */
     public function index($extra = null)
     {
-        $res = $_SESSION["userRole"] < 2 ? $this->order->getOrder() : $this->order->getUserOrders($_SESSION["userId"]);
-
+        if (isset ($extra["filter"]) && $extra["filter"] != "all") {
+            $res = $_SESSION["userRole"] < 2 ? $this->order->getFilteredOrder($extra["filter"], $extra["searchName"] ?? null) : $this->order->getFilteredUserOrder($extra["filter"], $_SESSION["userId"]);
+        } else {
+            $res = $_SESSION["userRole"] < 2 ? $this->order->getOrder($extra["searchName"] ?? null) : $this->order->getUserOrders($_SESSION["userId"]);
+        }
         $filter = null;
         $error = null;
 
@@ -35,10 +38,6 @@ class OrderController extends Controller
 
         if (isset ($extra["error"])) {
             $error = $res["error"];
-        }
-
-        if (isset ($extra["searchName"])) {
-            $orders = $this->order->getByUser($orders, $extra["searchName"]);
         }
 
         $data = ["all" => $orders, "error" => $error, "filter" => $filter];
@@ -81,19 +80,8 @@ class OrderController extends Controller
     {
         $filter = $_GET["filter"] ?? "all";
         $searchName = $_GET["search"] ?? "";
-        $res = $this->order->getOrder();
-        $allOrders = $res["data"];
-        $error = $res["error"] ?? null;
 
-        if ($filter == "waiting") {
-            $allOrders = $this->order->getTodoOrders($allOrders);
-        } else if ($filter == "valid") {
-            $allOrders = $this->order->getValidedOrders($allOrders);
-        } else if ($filter == "refused") {
-            $allOrders = $this->order->getRefusedOrders($allOrders);
-        }
-
-        $this->index(["filtered" => $allOrders, "filter" => $filter, "searchName" => $searchName, "error" => $error]);
+        $this->index(["filter" => $filter, "searchName" => $searchName]);
     }
 
     /** method to search for product

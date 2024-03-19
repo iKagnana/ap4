@@ -153,12 +153,14 @@ class Order
 
     ######### GET
     /** function to retreive order data 
+     * @param ?string $applicant
      * @return Order[] 
      */
-    public function getOrder()
+    public function getOrder($applicant = null)
     {
         try {
-            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro");
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro WHERE users.lastname_u LIKE :applicant or users.firstname_u LIKE :applicant");
+            $this->db->bind("applicant", "%" . $applicant . "%" ?? null);
             $result = $this->db->fetchAll();
         } catch (PDOException $e) {
             return ["data" => [], "error" => "Impossible de récupérer les commandes."];
@@ -187,6 +189,48 @@ class Order
 
 
     }
+
+    /** function to retreive order data filtered with status and/or applicant's name
+     * @param string $status
+     * @param ?string $applicant
+     * @return Order[] 
+     */
+    public function getFilteredOrder($status, $applicant = null)
+    {
+        try {
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro WHERE orders.status = :status AND orders.id_u LIKE :applicant ");
+            $this->db->bind("status", $status);
+            $this->db->bind("applicant", "%" . $applicant . "%" ?? null);
+            $result = $this->db->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return ["data" => [], "error" => "Impossible de récupérer les commandes."];
+        }
+
+        $allOrders = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $order = new Order();
+            $order->setOrderGet(
+                $result[$i]["date_o"],
+                $result[$i]["price_o"],
+                $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                $result[$i]["id_u_User"],
+                $result[$i]["status"],
+                $result[$i]["reason"],
+                $result[$i]["id_o"],
+                $result[$i]["name_pro"],
+            );
+
+            $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+            $order->setProducts($products);
+            array_push($allOrders, $order);
+        }
+
+        return ["data" => $allOrders];
+
+
+    }
+
 
     /** function to retreive only user's order
      * @param int $id user id
@@ -220,6 +264,46 @@ class Order
             $order->setProducts($products);
             array_push($allOrders, $order);
         }
+        return ["data" => $allOrders];
+
+
+    }
+
+    /** function to retreive user's order data with specific status
+     * @param int $id user's id
+     * @param string $status
+     * @return Order[] 
+     */
+    public function getFilteredUserOrder($id, $status)
+    {
+        try {
+            $this->db->query("SELECT orders.*, users.lastname_u, users.firstname_u, users.id_u, provider.name_pro FROM orders JOIN users ON orders.id_u = users.id_u LEFT JOIN provider ON provider.id_pro = orders.id_pro WHERE orders.id_u = :id and orders.status = :status");
+            $this->db->bind("id", $id);
+            $this->db->bind("status", $status);
+            $result = $this->db->fetchAll();
+        } catch (PDOException $e) {
+            return ["data" => [], "error" => "Impossible de récupérer les commandes."];
+        }
+
+        $allOrders = [];
+        for ($i = 0; $i < count($result); $i++) {
+            $order = new Order();
+            $order->setOrderGet(
+                $result[$i]["date_o"],
+                $result[$i]["price_o"],
+                $result[$i]["lastname_u"] . " " . $result[$i]["firstname_u"],
+                $result[$i]["id_u_User"],
+                $result[$i]["status"],
+                $result[$i]["reason"],
+                $result[$i]["id_o"],
+                $result[$i]["name_pro"],
+            );
+
+            $products = $order->getProductsByOrderId($result[$i]["id_o"]);
+            $order->setProducts($products);
+            array_push($allOrders, $order);
+        }
+
         return ["data" => $allOrders];
 
 

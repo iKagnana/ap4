@@ -86,7 +86,7 @@ class Product
     {
         try {
             $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE name_p LIKE :searchName");
-            $this->db->bind("searchName", $searchName . '%' ?? "");
+            $this->db->bind("searchName", "%" . $searchName . '%' ?? "");
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
             echo $exception->getMessage();
@@ -119,7 +119,7 @@ class Product
     {
         try {
             $this->db->query("SELECT products.*, name_cat FROM products INNER JOIN categories ON products.id_cat = categories.id_cat WHERE access_level <= :accessLevel and name_p LIKE :searchName");
-            $this->db->bind("searchName", $searchName . '%' ?? "");
+            $this->db->bind("searchName", "%" . $searchName . '%' ?? "");
             $this->db->bind("accessLevel", $_SESSION["userLevelAccess"]);
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
@@ -154,7 +154,7 @@ class Product
             INNER JOIN categories ON products.id_cat = categories.id_cat
             WHERE products.id_cat = :cat and name_p LIKE :searchName");
             $this->db->bind("cat", $category);
-            $this->db->bind("searchName", $searchName . '%' ?? "");
+            $this->db->bind("searchName", "%" . $searchName . '%' ?? "");
             $result = $this->db->fetchAll();
         } catch (PDOException $exception) {
             return ["data" => [], "error" => "Nous n'avons pas pu récupérer les produits de la catégorie correspondante."];

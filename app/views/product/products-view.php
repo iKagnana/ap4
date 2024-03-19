@@ -18,7 +18,7 @@
 
                 <div class="textfield-label">
                     <label for=" searchbar">Rechercher</label>
-                    <input type="text" name="search" id="searchbar">
+                    <?php echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>"; ?>
                 </div>
                 <div class="textfield-label">
                     <label for="filterBy">Catégorie</label>

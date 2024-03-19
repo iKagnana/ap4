@@ -16,19 +16,23 @@
             <form class="form-filter-user padding-one" id="filter" action="http://localhost:8089/order/filter"
                 method="GET">
 
-                <div class="textfield-label">
-                    <label for=" searchbar">Rechercher par demandeur</label>
-                    <input type="text" name="search" id="searchbar">
-                </div>
+                <?php if ($_SESSION["userId"] < 2) {
+                    echo "<div class='textfield-label'>";
+                    echo "<label for='searchbar'>Rechercher par demandeur</label>";
+                    echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>";
+                    echo "</div>";
+                }
+                ?>
+
                 <div class="textfield-label">
                     <label for="filterBy">Status</label>
 
                     <select name="filter" id="filterBy">
                         <?php
                         echo "<option value='all'>Tous</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "waiting" ? "<option value='waiting' selected>En attente de validation</option>" : "<option value='waiting' >En attente de validation</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "valid" ? "<option value='valid' selected>Validé</option>" : "<option value='valid' >Validé</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "refused" ? "<option value='refused' selected>Refusé</option>" : "<option value='refused' >Refusé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente de validation</option>" : "<option value='En attente de validation' >En attente de validation</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
+                        echo isset ($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
                         ?>
                     </select>
                 </div>
@@ -38,6 +42,9 @@
             <form class=" filter-footer" action="http://localhost:8089/order" method="GET">
                 <button class="button-outlined" type="submit">Réinitialiser les filtres</button>
             </form>
+        </div>
+        <div>
+            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
         <?php
         echo "<div class='padding-one'>

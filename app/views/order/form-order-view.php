@@ -5,7 +5,7 @@
             <form class="flex-row-container" action="http://localhost:8089/order/search" method="post">
                 <label for="searchName">Rechercher par produit :</label>
                 <div class="m-1">
-                    <input class="half-width" type="text" name="search" id="searchName">
+                    <?php isset ($data["searchName"]) ? "<input class='half-width' type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input class='half-width' type='text' name='search' id='searchbar'>"; ?>
                     <button class="styled-button" type="submit">
                         <span class="styled-span">Rechercher</span>
                     </button>

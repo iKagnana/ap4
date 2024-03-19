@@ -37,6 +37,7 @@ class ProductController extends Controller
             "categories" => $allCats,
             "error" => $error,
             "filterCat" => $extra["filterCat"] ?? null,
+            "searchName" => $extra["searchName"] ?? null
         ];
         $this->view("product/products-view", $data);
     }
@@ -64,7 +65,7 @@ class ProductController extends Controller
         $this->view("product/form-product-view", [
             "allCat" => $res["data"],
             "error" => $error ?? null,
-            "form" => $newProduct ?? null
+            "form" => $newProduct ?? null,
         ]);
     }
 
