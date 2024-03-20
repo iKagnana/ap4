@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 8.0.36)
 # Database: ap4
-# Generation Time: 2024-03-19 11:38:06 +0000
+# Generation Time: 2024-03-20 09:53:50 +0000
 # ************************************************************
 
 
@@ -204,7 +204,8 @@ LOCK TABLES `provider` WRITE;
 
 INSERT INTO `provider` (`id_pro`, `name_pro`, `email_pro`)
 VALUES
-	(1,'MatMed','matmed@mail.com');
+	(1,'MatMed','matmed@mail.com'),
+	(2,'Pharmacie des Lys','pharmacie-lys@hotmail.com');
 
 /*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -236,7 +237,9 @@ INSERT INTO `users` (`id_u`, `lastname_u`, `firstname_u`, `email_u`, `password`,
 VALUES
 	(1,'ITH','Kagnana','ikagnana@gmail.com','$2y$10$yP8ek7JYk9aJjwROAlqGUObbKR.AWRBSbEW/Q.K3jbpv3zPBxpH8i',0,3,'Validé','GSB'),
 	(2,'Doe','John','j.doe@mail.com','$2y$10$VVOoCZ0N.iX0LxQN2Llu4.oTjwwY3PfngviW1zc0urU8PY82VPvwa',1,1,'Refusé','GSB'),
-	(5,'Dupont','Jean','d.jean@fidele.com','$2y$10$b8SdYnGlQq4n87Isqj8eme0o9DSbKpd.wSccOT4NN73jLcw9VSuK6',2,2,'Validé','Fidele');
+	(5,'Dupont','Jean','d.jean@fidele.com','$2y$10$b8SdYnGlQq4n87Isqj8eme0o9DSbKpd.wSccOT4NN73jLcw9VSuK6',2,2,'Validé','Fidele'),
+	(9,'Tapis','Bernard','b.tapis@gsb.com','$2y$10$QLmzkWuhStBUCw1nAcmTuePmqJy47XR4M56FHOj8378obZmtP25Bm',1,1,'Validé','GSB'),
+	(11,'Lecomte','Julien','lecomte.julien@gsb.com','$2y$10$X6Cqspny.pV2/EzH9u02UOL3IgP4ESWw.qAO94.Z9R0S71c2Ozfg2',0,3,'Validé','GSB');
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;

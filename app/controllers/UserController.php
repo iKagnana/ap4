@@ -28,43 +28,42 @@ class UserController extends Controller
         $enterprise = $_POST["enterprise"];
         $role = $_POST["role"] ?? null;
 
-        if (isset ($_POST["type"]) && $_POST["type"] == 1) {
+        if (isset ($_POST["role"]) && $_POST["role"] == 1) {
+            echo "ehfziefhzuie";
             $enterprise = "GSB";
         }
 
-        if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
-            $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
-            if (isset ($check["error"])) {
-                $this->view("user/create-account-view", ["error" => $check["error"], "form" => $newUser]);
-                return;
-            }
-            if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
-                $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
-                $this->view("user/create-account-view", ["error" => $error, "form" => $newUser]);
-                return;
-            }
-            $res = $newUser->createUser();
-            $this->view("user/login-view", ["error" => $res["error"] ?? null]);
-        } else {
-            $levelAccess = $_POST["levelAccess"];
-            $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
-            if (isset ($check["error"])) {
-                $this->form(["error" => $check["error"], "form" => $newUser]);
-                return;
-            }
+        // if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
+        //     $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
+        //     if (isset ($check["error"])) {
+        //         $this->view("user/create-account-view", ["error" => $check["error"], "form" => $newUser]);
+        //         return;
+        //     }
+        //     if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
+        //         $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
+        //         $this->view("user/create-account-view", ["error" => $error, "form" => $newUser]);
+        //         return;
+        //     }
+        //     $res = $newUser->createUser();
+        //     $this->view("user/login-view", ["error" => $res["error"] ?? null]);
+        // } else {
+        //     $levelAccess = $_POST["levelAccess"];
+        //     $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
+        //     if (isset ($check["error"])) {
+        //         $this->form(["error" => $check["error"], "form" => $newUser]);
+        //         return;
+        //     }
 
-            echo json_encode($newUser);
+        //     if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
+        //         $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
+        //         $this->form(["error" => $error, "form" => $newUser]);
+        //         return;
+        //     }
+        //     $res = $newUser->createUserAdmin();
+        //     $error = $res["error"] ?? null;
 
-            if (!preg_match("/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/", $password)) {
-                $error = "Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et un spécial caractère. Il doit également avoir une longueur minimum de 8 caractères.";
-                $this->form(["error" => $error, "form" => $newUser]);
-                return;
-            }
-            $res = $newUser->createUserAdmin();
-            $error = $res["error"] ?? null;
-
-            $this->index(["error" => $error ?? null]);
-        }
+        //     $this->index(["error" => $error ?? null]);
+        // }
 
 
     }

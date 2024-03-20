@@ -38,3 +38,8 @@ Connectez vous de préférence avec le compte root pour faire l'importation du s
 
 ## Tester
 Maintenant vous pouvez tester l'application web sur le port 8089.
+
+### Utilisateurs test
+Client :
+email : d.jean@fidele.com
+mdp : test
