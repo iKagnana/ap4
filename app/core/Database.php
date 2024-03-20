@@ -10,9 +10,9 @@ enum ErrorType
 class Database
 {
     private $host = "mysql:host=db";
-    private $dbName = "dbname=ap4";
-    private $user = "user";
-    private $password = "pass";
+    private $dbName;
+    private $user;
+    private $password;
     private $query;
     private $service; # PDO
     private $statement;
@@ -22,10 +22,9 @@ class Database
      */
     public function __construct()
     {
-        // $this->host = getenv("DB_HOST");
-        // $this->dbName = getenv("DB_NAME");
-        // $this->user = getenv("DB_USER");
-        // $this->password = getenv("DB_PASS");
+        $this->dbName = "dbname=" . getenv("MYSQL_DATABASE");
+        $this->user = getenv("MYSQL_USER");
+        $this->password = getenv("MYSQL_PASSWORD");
         # set DSN
         $dsn = $this->host . ";" . $this->dbName;
         try {

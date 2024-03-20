@@ -2,14 +2,14 @@
 <div class="page-container">
     <div class="left-side">
         <div class="flex-col-container">
-            <form class="flex-row-container" action="http://localhost:8089/order/search" method="post">
-                <label for="searchName">Rechercher par produit :</label>
-                <div class="m-1">
-                    <?php isset ($data["searchName"]) ? "<input class='half-width' type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input class='half-width' type='text' name='search' id='searchbar'>"; ?>
-                    <button class="styled-button" type="submit">
-                        <span class="styled-span">Rechercher</span>
-                    </button>
-                </div>
+            <?php echo "<form class='flex-row-container' action=$host/order/search method='post'>"; ?>
+            <label for="searchName">Rechercher par produit :</label>
+            <div class="m-1">
+                <?php echo isset ($data["searchName"]) ? "<input class='half-width' type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input class='half-width' type='text' name='search' id='searchbar'>"; ?>
+                <button class="styled-button" type="submit">
+                    <span class="styled-span">Rechercher</span>
+                </button>
+            </div>
             </form>
         </div>
         <table class="table-scroll">
@@ -99,13 +99,13 @@
                 echo "<td>" . $addedProduct["category"]["name"] . "</td>";
                 echo "<td>" . $addedProduct["totalPrice"] . "</td>";
                 echo "<td>
-                            <form action='http://localhost:8089/order/substract' method='GET'>
+                            <form action='$host/order/substract' method='GET'>
                                 <input hidden type='text' name='id' value=" . $addedProduct["id"] . ">
                                 <button class='button-outlined'>
                                 <svg  xmlns='http://www.w3.org/2000/svg'  width=20  height=20  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M5 12l14 0' /></svg>
                                 </button>
                             </form>
-                            <form action='http://localhost:8089/order/remove' method='GET'>
+                            <form action='$host/order/remove' method='GET'>
                                 <input hidden type='text' name='id' value=" . $addedProduct["id"] . ">
                                 <button class='button-outlined' type='submit'>
                     <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
@@ -118,15 +118,15 @@
         </tbody>
     </table>
 </div>
-<form id='cart' action="http://localhost:8089/order/create" method="post">
-    <button class="styled-button" type="submit">
-        <span class="styled-span">Valider</span>
-    </button>
+<?php echo "<form id='cart' action=$host/order/create method='post'>"; ?>
+<button class="styled-button" type="submit">
+    <span class="styled-span">Valider</span>
+</button>
 </form>
-<form action="http://localhost:8089/order/reset" method="POST">
-    <button class="styled-button" type="submit">
-        <span class="styled-span">Vider le panier</span>
-    </button>
+<?php echo "<form id='cart' action=$host/order/reset method='post'>"; ?>
+<button class="styled-button" type="submit">
+    <span class="styled-span">Vider le panier</span>
+</button>
 </form>
 </div>
 </div>

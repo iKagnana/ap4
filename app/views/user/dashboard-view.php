@@ -5,27 +5,27 @@
         <div class="flex-row-container">
             <?php
             if (isset ($_SESSION["userRole"]) && $_SESSION["userRole"] < 2) {
-                echo "<a class='dashboard-item' href='http://localhost:8089/product'>";
+                echo "<a class='dashboard-item' href='$host/product'>";
                 echo "<div>
                     Stocks
                 </div>
             </a>";
             }
             ?>
-            <a class="dashboard-item" href="http://localhost:8089/order">
-                <div>
-                    Commandes
-                </div>
+            <?php echo "<a class='dashboard-item' href='$host/order'>"; ?>
+            <div>
+                Commandes
+            </div>
             </a>
             <?php
             if (isset ($_SESSION["userRole"]) && $_SESSION["userRole"] == 0) {
-                echo "<a class='dashboard-item' href='http://localhost:8089/user'>";
+                echo "<a class='dashboard-item' href='$host/user'>";
                 echo "<div>
                     Utilisateur
                 </div>
             </a>";
 
-                echo "<a class='dashboard-item' href='http://localhost:8089/provider'>";
+                echo "<a class='dashboard-item' href='$host/provider'>";
                 echo "<div>
                     Fournisseur
                 </div>

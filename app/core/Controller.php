@@ -22,6 +22,7 @@ class Controller
      */
     public function view($view, $data = [])
     {
+        $host = getenv("HOST");
         $viewPath = "../app/views/" . $view . ".php";
         if (file_exists($viewPath)) {
             require_once ($viewPath);

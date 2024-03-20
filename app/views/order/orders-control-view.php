@@ -31,7 +31,7 @@
 
                 if (isset ($data["selectedTodo"]) && $data["selectedTodo"] == $order->id) {
                     echo "<td>
-                <form action='http://localhost:8089/order/control' method='GET'>
+                <form action='$host/order/control' method='GET'>
                     <button class='button-outlined' type='submit'>
                 <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
                 </button>
@@ -60,7 +60,7 @@
                     echo "</td></tr>";
                 } else if (isset ($data["onDoingItem"]) && $data["onDoingItem"] == $order->id) {
                     echo "<tr>
-                <form form='treat' action='http://localhost:8089/order/treatment' method='POST'>
+                <form form='treat' action='$host/order/treatment' method='POST'>
                     <td colspan=3>
                     <label for='status'>Status :</label>
                         <select name='status'>
@@ -78,7 +78,7 @@
                 </td>
             ";
                     echo " </form>
-                    <form form='cancel' action='http://localhost:8089/order/control'>
+                    <form form='cancel' action='$host/order/control'>
                         <button class='button-outlined' type='submit'>
                         <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
                         </button>
@@ -86,10 +86,10 @@
                     </tr>";
                 } else {
                     echo "<td>
-                <form action='http://localhost:8089/order/detail' method='POST'>
+                <form action='$host/order/detail' method='POST'>
                     <button class='button-outlined' name='selectedTodo' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
-                <form action='http://localhost:8089/order/detail' method='POST'>
+                <form action='$host/order/detail' method='POST'>
                     <button class='button-outlined' name='onDoingItem' type='submit' value=" . $order->id . ">Contrôler</button>
                 </form>
             </td>";
@@ -124,7 +124,7 @@
 
                 if (isset ($data["selectedDone"]) && $data["selectedDone"] == $order->id) {
                     echo "<td>
-                <form action='http://localhost:8089/order/control' method='GET'>
+                <form action='$host/order/control' method='GET'>
                     <button class='button-outlined' type='submit'>
                     <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
                     </button>
@@ -153,7 +153,7 @@
                     echo "</td></tr>";
                 } else {
                     echo "<td>
-                <form action='http://localhost:8089/order/detail' method='POST'>
+                <form action='$host/order/detail' method='POST'>
                     <button class='button-outlined' name='selectedDone' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";

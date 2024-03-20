@@ -13,34 +13,33 @@
                     </svg>
                 </button>
             </div>
-            <form class="form-filter-user padding-one" id="filter" action="http://localhost:8089/order/filter"
-                method="GET">
+            <?php echo "<form class='form-filter-user padding-one' id='filter' action=$host/order/filter method='GET'>"; ?>
 
-                <?php if ($_SESSION["userId"] < 2) {
-                    echo "<div class='textfield-label'>";
-                    echo "<label for='searchbar'>Rechercher par demandeur</label>";
-                    echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>";
-                    echo "</div>";
-                }
-                ?>
+            <?php if ($_SESSION["userId"] < 2) {
+                echo "<div class='textfield-label'>";
+                echo "<label for='searchbar'>Rechercher par demandeur</label>";
+                echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>";
+                echo "</div>";
+            }
+            ?>
 
-                <div class="textfield-label">
-                    <label for="filterBy">Status</label>
+            <div class="textfield-label">
+                <label for="filterBy">Status</label>
 
-                    <select name="filter" id="filterBy">
-                        <?php
-                        echo "<option value='all'>Tous</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente de validation</option>" : "<option value='En attente de validation' >En attente de validation</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
-                        echo isset ($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
-                        ?>
-                    </select>
-                </div>
+                <select name="filter" id="filterBy">
+                    <?php
+                    echo "<option value='all'>Tous</option>";
+                    echo isset ($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente de validation</option>" : "<option value='En attente de validation' >En attente de validation</option>";
+                    echo isset ($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
+                    echo isset ($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
+                    ?>
+                </select>
+            </div>
 
 
             </form>
-            <form class=" filter-footer" action="http://localhost:8089/order" method="GET">
-                <button class="button-outlined" type="submit">Réinitialiser les filtres</button>
+            <?php echo "<form class=' filter-footer' action=$host/order method='GET'>"; ?>
+            <button class="button-outlined" type="submit">Réinitialiser les filtres</button>
             </form>
         </div>
         <div>
@@ -71,7 +70,7 @@
             echo "<td>" . $order->reason . "</td>";
             if (isset ($data["openedItem"]) && $data["openedItem"] == $order->id) {
                 echo "<td>
-                <form action='http://localhost:8089/order' method='GET'>
+                <form action='$host/order' method='GET'>
                     <button class='button-outlined' type='submit'>
                     <svg  xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M18 6l-12 12' /><path d='M6 6l12 12' /></svg>
                     </button>
@@ -106,7 +105,7 @@
                 echo "</td></tr>";
             } else {
                 echo "<td>
-                <form action='http://localhost:8089/order/detail' method='POST'>
+                <form action='$host/order/detail' method='POST'>
                     <button class='button-outlined' name='item' type='submit' value=" . $order->id . ">Détails</button>
                 </form>
             </td>";

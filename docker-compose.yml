@@ -14,6 +14,8 @@ services:
       - db
     networks:
       - app-network
+    env_file:
+      - .env
     tty: true
 
   db:
@@ -21,16 +23,18 @@ services:
     container_name: ap4db
     command: --default-authentication-plugin=mysql_native_password
     environment: 
-      MYSQL_ROOT_PASSWORD: pass
-      MYSQL_DATABASE: ap4
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - 3307:3306
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - app-network
+    env_file:
+      - .env
 
   phpmyadmin:
     image: phpmyadmin
