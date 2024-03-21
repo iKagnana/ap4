@@ -2,7 +2,7 @@
 ?>
 <div class="page-container">
     <div class="flex-row full-width">
-        <img class=" cover" src="assets/GSBStock.png" alt="image couverture">
+        <?php echo "<img class='cover' src='$host/assets/GSBStock.png' alt='image couverture'>"; ?>
         <div class="full-width form-center-item justify-center">
             <span class="small-title">Connectez-vous</span>
             <?php echo "<form class='form-center-item' action='$host/login/askLogin' method='post'>" ?>
@@ -26,6 +26,9 @@
                 </svg>
                 <input class="styled-input" type="password" name="password" placeholder="Mot de passe">
             </div>
+            <div>
+                <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+            </div>
             <br>
             <button class="styled-button" type="submit">
                 <span class="styled-span">Se connecter</span>
@@ -38,9 +41,6 @@
                 <span class="styled-span">Créer un compte</span>
             </button>
             </form>
-        </div>
-        <div>
-            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
     </div>
 </div>
