@@ -21,6 +21,8 @@ class App
             }
 
             unset($url[0]);
+        } else {
+            die ("La vue n'existe pas.");
         }
 
         # set controller instance

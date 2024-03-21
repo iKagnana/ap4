@@ -98,7 +98,7 @@ class OrderController extends Controller
     public function control($extra = null)
     {
         if (!$this->checkAccess("admin")) {
-            $this->view("error");
+            $this->view("error/prohibited-view");
             return; # force exit
         }
 
