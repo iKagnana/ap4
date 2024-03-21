@@ -27,7 +27,7 @@
                 <?php
                 foreach ($data["allProducts"] as $product) {
                     echo "<tr>";
-                    echo "<form action='http://localhost:8089/order/addProduct' method='post'>";
+                    echo "<form action='$host/order/addProduct' method='post'>";
                     echo "<td>" . $product->name . "</td>";
                     echo "<td>" . $product->price . "</td>";
                     echo "<td>" . $product->category["name"] . "</td>";
