@@ -12,10 +12,10 @@ Dans ce projet, ajouter un .env à la racine.
 Ceci est un exemple de valeur utilisée dans l'application. Remplacez les champs SQL par ceux de votre choix et l'hôte correspondant.
 ```
 HOST = http://localhost:8089
-MYSQL_ROOT_PASSWORD = pass
+MYSQL_ROOT_PASSWORD = votreMotDePasseRoot
 MYSQL_DATABASE = ap4
-MYSQL_USER = user
-MYSQL_PASSWORD = pass
+MYSQL_USER = votreUtilisateur
+MYSQL_PASSWORD = votreMotDePasseUser
 ```
 
 
