@@ -29,14 +29,14 @@ class User
     public function executeBeginningScripts()
     {
         try {
-            $this->db->query("CREATE TABLE entreprise (id_u int NOT NULL, n_siret VARCHAR(100) NOT NULL, codeAPE VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID FOREIGN KEY (id_u) REFERENCES users(id_u));");
+            $this->db->query("DROP TABLE IF EXISTS entreprise; CREATE TABLE entreprise (id_u int NOT NULL, n_siret VARCHAR(100) NOT NULL, codeAPE VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID FOREIGN KEY (id_u) REFERENCES users(id_u));");
             $this->db->fetchAll();
         } catch (Exception $e) {
             return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
         }
 
         try {
-            $this->db->query("CREATE TABLE particulier (id_u int NOT NULL, metier VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID2 FOREIGN KEY (id_u) REFERENCES users(id_u));");
+            $this->db->query("DROP TABLE IF EXISTS particulier; CREATE TABLE particulier (id_u int NOT NULL, metier VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID2 FOREIGN KEY (id_u) REFERENCES users(id_u));");
             $this->db->fetchAll();
         } catch (Exception $e) {
             return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
