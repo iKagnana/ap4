@@ -26,6 +26,38 @@ class User
         $this->db = new Database();
     }
 
+    public function executeBeginningScripts()
+    {
+        try {
+            $this->db->query("CREATE TABLE entreprise (id_u int NOT NULL, n_siret VARCHAR(100) NOT NULL, codeAPE VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID FOREIGN KEY (id_u) REFERENCES users(id_u));");
+            $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
+        }
+
+        try {
+            $this->db->query("CREATE TABLE particulier (id_u int NOT NULL, metier VARCHAR(100) NOT NULL, PRIMARY KEY (id_u), CONSTRAINT FK_UserID2 FOREIGN KEY (id_u) REFERENCES users(id_u));");
+            $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
+        }
+
+        try {
+            $this->db->query("INSERT INTO entreprise (id_u, n_siret, codeAPE) VALUES (1, '362 521 879 00034', '43.22A.'), (2, '444 511 879 00034', '49.32Z')");
+            $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
+        }
+
+        try {
+            $this->db->query("INSERT INTO particulier (id_u, metier) VALUES (5, 'Pharmacien'), (9, 'Médecin'), (11, 'Infirmier')");
+            $this->db->fetchAll();
+        } catch (Exception $e) {
+            return ["data" => [], "error" => "Nous n'avons pas pu récupérer les informations."];
+        }
+
+    }
+
 
     /** Set user
      * @param string $enterprise 
@@ -52,7 +84,7 @@ class User
         $this->role = $role;
 
         if (
-            !isset ($lastname) || !isset ($firstname) || !isset ($email) || !isset ($password) || !isset ($role) ||
+            !isset($lastname) || !isset($firstname) || !isset($email) || !isset($password) || !isset($role) ||
             $lastname == "" || $firstname == "" || $email == ""
         ) {
             return ["error" => "Certains champs sont vides."];

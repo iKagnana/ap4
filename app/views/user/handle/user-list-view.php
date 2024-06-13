@@ -18,7 +18,7 @@
 
             <div class="textfield-label">
                 <label for=" searchbar">Rechercher</label>
-                <?php echo isset ($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>"; ?>
+                <?php echo isset($data["searchName"]) ? "<input type='text' name='search' id='searchbar' value=" . $data["searchName"] . ">" : "<input type='text' name='search' id='searchbar'>"; ?>
             </div>
             <div class="textfield-label">
                 <label for="filterBy">Status</label>
@@ -26,9 +26,9 @@
                 <select name="filter" id="filterBy">
                     <?php
                     echo "<option value='all'>Tous</option>";
-                    echo isset ($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente</option>" : "<option value='En attente de validation' >En attente</option>";
-                    echo isset ($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
-                    echo isset ($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
+                    echo isset($data["filter"]) && $data["filter"] == "En attente de validation" ? "<option value='En attente de validation' selected>En attente</option>" : "<option value='En attente de validation' >En attente</option>";
+                    echo isset($data["filter"]) && $data["filter"] == "Validé" ? "<option value='Validé' selected>Validé</option>" : "<option value='Validé' >Validé</option>";
+                    echo isset($data["filter"]) && $data["filter"] == "Refusé" ? "<option value='Refusé' selected>Refusé</option>" : "<option value='Refusé' >Refusé</option>";
                     ?>
                 </select>
             </div>
@@ -39,34 +39,73 @@
         </div>
 
         <div>
-            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
 
         <table>
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Entreprise</th>
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Niveau d'accès</th>
                     <th>Status</th>
+                    <th>Métier</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                foreach ($data["users"] as $user) {
+                foreach ($data["particuliers"] as $user) {
                     echo "<tr>";
                     echo "<td>$user->id </td>";
-                    echo "<td>$user->enterprise </td>";
                     echo "<td>$user->lastname </td>";
                     echo "<td>$user->firstname </td>";
                     echo "<td>$user->email </td>";
                     echo "<td>$user->role </td>";
                     echo "<td>$user->levelAccess </td>";
                     echo "<td>$user->status </td>";
+                    echo "<td>$user->metier </td>";
+                    echo "<td>";
+                    echo "<form action='$host/user/details'>";
+                    echo "<button class='button-outlined' name='id' value=$user->id>";
+                    echo "<div><svg xmlns='http://www.w3.org/2000/svg'  width='20'  height='20'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4' /><path d='M13.5 6.5l4 4' /></svg></div>";
+                    echo "</button>";
+                    echo "</form>";
+                    echo "</td>";
+                }
+                ?>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Niveau d'accès</th>
+                    <th>Status</th>
+                    <th>Numéro Siret</th>
+                    <th>Code APE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($data["entreprises"] as $user) {
+                    echo "<tr>";
+                    echo "<td>$user->id </td>";
+                    echo "<td>$user->lastname </td>";
+                    echo "<td>$user->firstname </td>";
+                    echo "<td>$user->email </td>";
+                    echo "<td>$user->role </td>";
+                    echo "<td>$user->levelAccess </td>";
+                    echo "<td>$user->status </td>";
+                    echo "<td>$user->n_siret </td>";
+                    echo "<td>$user->codeAPE </td>";
                     echo "<td>";
                     echo "<form action='$host/user/details'>";
                     echo "<button class='button-outlined' name='id' value=$user->id>";

@@ -18,7 +18,7 @@
         </form>
 
         <div>
-            <?php echo isset ($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
+            <?php echo isset($data["error"]) ? "<span class='text-error'>" . $data["error"] . "</span>" : ""; ?>
         </div>
 
         <?php echo "<form class='form-center-item' action=$host/user/update method=post>"; ?>

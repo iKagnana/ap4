@@ -4,10 +4,14 @@ require_once ("../app/models/User.php");
 class UserController extends Controller
 {
     private $user; # used for function db
+    private $entreprise; # used for function db
+    private $particulier; # used for function db
 
     public function __construct()
     {
         $this->user = $this->model("User");
+        $this->entreprise = $this->model("Entreprise");
+        $this->particulier = $this->model("Particulier");
     }
 
     /** page to create an account
@@ -28,14 +32,14 @@ class UserController extends Controller
         $enterprise = $_POST["enterprise"];
         $role = $_POST["role"] ?? null;
 
-        if (isset ($_POST["role"]) && $_POST["role"] == 1) {
+        if (isset($_POST["role"]) && $_POST["role"] == 1) {
             echo "ehfziefhzuie";
             $enterprise = "GSB";
         }
 
-        if (isset ($_POST["origin"]) && $_POST["origin"] == "user") {
+        if (isset($_POST["origin"]) && $_POST["origin"] == "user") {
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role);
-            if (isset ($check["error"])) {
+            if (isset($check["error"])) {
                 $this->view("user/create-account-view", ["error" => $check["error"], "form" => $newUser]);
                 return;
             }
@@ -49,7 +53,7 @@ class UserController extends Controller
         } else {
             $levelAccess = $_POST["levelAccess"];
             $check = $newUser->setUser($enterprise, $lastname, $firstname, $email, $password, $role, $levelAccess, "Validé");
-            if (isset ($check["error"])) {
+            if (isset($check["error"])) {
                 $this->form(["error" => $check["error"], "form" => $newUser]);
                 return;
             }
@@ -82,7 +86,7 @@ class UserController extends Controller
 
         $filter = null;
 
-        if (isset ($extra["filter"]) && $extra["filter"] != "all") {
+        if (isset($extra["filter"]) && $extra["filter"] != "all") {
             $res = $this->user->getUsersByStatus($extra["filter"], $extra["searchName"] ?? null);
             $users = $res["data"];
             $error = $res["error"] ?? null;
@@ -92,12 +96,18 @@ class UserController extends Controller
             $error = $res["error"] ?? null;
         }
 
-        if (isset ($extra["error"])) {
+        $resEntreprise = $this->entreprise->getUsers($extra["searchName"] ?? null);
+        $resParticulier = $this->particulier->getUsers($extra["searchName"] ?? null);
+        $entreprises = $resEntreprise["data"];
+        $particuliers = $resParticulier["data"];
+
+        if (isset($extra["error"])) {
             $error = $extra["error"];
         }
 
         $this->view("user/handle/user-list-view", [
-            "users" => $users,
+            "entreprises" => $entreprises,
+            "particuliers" => $particuliers,
             "filter" => $filter,
             "error" => $error,
             "searchName" => $extra["searchName"] ?? null
@@ -141,7 +151,7 @@ class UserController extends Controller
             }
         }
 
-        if (isset ($selected)) {
+        if (isset($selected)) {
             $this->view("user/handle/user-details-view", ["selected" => $selected]);
         } else {
             $this->index(["error" => $error]);
@@ -195,7 +205,7 @@ class UserController extends Controller
      */
     public function form($extra = null)
     {
-        if (isset ($extra["form"])) {
+        if (isset($extra["form"])) {
             $newUser = $extra["form"];
         }
         $this->view("user/handle/form-user-view", ["error" => $extra["error"] ?? null, "form" => $newUser ?? null]);
